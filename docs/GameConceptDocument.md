@@ -696,8 +696,9 @@ The economy has distinct axes: **Clearance** (a global spend-to-act budget), and
 
 📝 GUIDANCE: The intended visual style and mood in a few words, plus any references. This guides every later asset and effect decision.
 
-**Visual style & mood:** [ … ]  
-**References / touchstones:** [ … ]
+**Visual style & mood:** **Stylized illustration / noir.** Hand-illustrated, high-contrast, moody palette (muted earth tones with pools of warm desk-lamp light and deep shadow); period graphic-design flavor on the documents themselves (typewriter faces, official letterhead, microfiche grain, rubber-stamp ink). Atmosphere is quiet institutional dread — bureaucratic, late-night, rain-on-the-window noir — never supernatural. Readability comes first: documents are legible, the desk uncluttered enough to think in.
+
+**References / touchstones:** *Papers, Please* (bureaucratic UI dread), *Return of the Obra Dinn* (high-contrast deduction clarity), *Disco Elysium* (illustrated mood + palette), period detective/noir graphic design and 1970s–80s municipal paperwork.
 
 -----
 
@@ -706,20 +707,16 @@ The economy has distinct axes: **Clearance** (a global spend-to-act budget), and
 📝 GUIDANCE: Key moments that need visual feedback, grouped by event. Feedback on success and failure is almost always worth specifying early.
 
 #### Player Feedback Effects
+- **Key feedback moments:** a **contradiction/corroboration flag** snapping onto a document (a clear, restrained mark — never an explanation); a **consequence landing** in the Decision Ledger (a stamped entry, the line drawn back to its verdict); **Heat rising** with a faction (a subtle reddening/heat tell on that faction's indicator); a **publish ripple** as records go public; the **theory-level whisper** (a soft, ambiguous gut-cue, not a checkmark). Clarity without telling the player what anything *means*.
 
-- **Visual response when the player is hit, succeeds, or fails:** [ … clarity here makes the game feel responsive … ]
-
-#### Enemy / Object Feedback Effects
-
-- **Visual (and paired audio) response when enemies or objects are defeated or activated:** [ … ]
+#### Record / Object Feedback Effects
+- **Reveals & tells (visual + paired audio):** a **record arriving** (it drops onto the desk); **tampering/redaction** surfacing (a blacked-out bar, a mismatched seam); a **cache** opening; a **retaliation** event intruding (a surveillance note, a revoked-clearance stamp). Each pairs with a tactile period sound (§13.3).
 
 -----
 
 ### 13.3 Sound Effects
 
-📝 GUIDANCE: The key sounds the game needs, organized by event. A simple mapping of game events to sound needs is a good starting inventory.
-
-**Sound effect inventory (by event):** [ … ]
+**Sound effect inventory (by event):** The analog desk is the instrument — **paper shuffle/slap** (moving documents), **typewriter & teletype** (requests submitting, records generating), **microfiche reader whir** (analog search), **rotary phone dial & ring** (calling a contact), **rubber stamp thunk** (committing a verdict/official act), **file-drawer roll & slam** (filing), **pencil scratch** (annotating), a soft **chime/clack** for a contradiction flag, a heavier **stamp** for a consequence landing, and **ambient room tone** (clock, distant office, rain). Sound carries the tactility "paperwork is play" promises.
 
 -----
 
@@ -727,11 +724,13 @@ The economy has distinct axes: **Clearance** (a global spend-to-act budget), and
 
 📝 GUIDANCE: Music direction per context (exploration, tension, combat, menus). Note mood and, if known, specific tracks or composers.
 
-|Context                    |Mood / direction|Specific tracks (once chosen)|
-|---------------------------|----------------|-----------------------------|
-|[ … e.g. Exploration ]     |[ … ]           |[ … ]                        |
-|[ … e.g. Combat / Tension ]|[ … ]           |[ … ]                        |
-|[ … e.g. Hub / Menus ]     |[ … ]           |[ … ]                        |
+|Context|Mood / direction|Specific tracks (once chosen)|
+|-------|----------------|-----------------------------|
+|Investigation (the Desk)|Sparse, contemplative noir — muted upright bass, brushed kit, lonely piano/sax; mostly *space* to think|TBD|
+|Rising tension (high Heat / nearing the secret)|Low drones and dissonance creep in under the jazz; pulse tightens; dread, not action|TBD|
+|Going public / a consequence landing|A short stab or swell that marks the weight of the act|TBD|
+|The Office / menus|Quiet, institutional, late-night ambient — almost silence|TBD|
+|Endgame (the final choice)|The full theme resolves — heavy, unresolved, morally grey|TBD|
 
 -----
 
@@ -813,6 +812,7 @@ The economy has distinct axes: **Clearance** (a global spend-to-act budget), and
 
 |Date |Decision & reasoning                                                      |
 |-----|--------------------------------------------------------------------------|
+|2026-06-02|**§13 Audio & Visual Identity locked.** Art = **stylized illustration / noir** (hand-illustrated, high-contrast, muted palette + desk-lamp light, period document graphic design; quiet institutional dread, no supernatural; readability first). Refs: Papers Please, Obra Dinn, Disco Elysium, period noir/municipal paperwork. VFX: contradiction flags, consequence-landing stamps, per-faction Heat tells, publish ripple, ambiguous whisper cue; record/tamper/redaction/retaliation reveals. SFX: the analog desk as instrument (paper, typewriter/teletype, microfiche whir, rotary phone, rubber stamp, file drawer, pencil, room tone). Music: sparse contemplative noir-jazz on the Desk → drones/dread at high Heat → stabs for publish/consequence → near-silence in the Office → heavy unresolved endgame theme.|
 |2026-06-02|**§12 Controls & UI locked.** Input-agnostic actions (select/move/annotate docs, build the Board, request via the slip, search, call contacts, official acts, publish, commit verdict, Ledger/Factions, advance calendar/lie low) — bindings deferred to §14. Menus = hub-and-spoke from **the Office** (Desk · Case/Board select · Registry/search · Ledger · Factions · Calendar). HUD: clearance, date, per-faction Heat, alerts, contradiction flags. Camera = **top-down desk** (2D, document-centric, tactile; no 3D traversal). Screens: Settings (accessibility-forward; difficulty via assists), End-of-Day Summary (no score), Play/Desk, Case & Board select; engagement prompts N/A (premium PC, no nags).|
 |2026-06-02|**§11 Flow & Onboarding locked.** 11.1 Tutorial: teach **by doing** via a gentle starter case (Buried Witness) — read→lead→request (introduces clearance)→flagged contradiction→factual finding→first disposition with an immediate consequence; theory-whisper as strong training wheels that ease off; advanced systems (hunches, Heat, factions, going public, calendar) introduced one at a time. 11.2 Scaling: the four §3.2 levers, triggered by proximity to the secret + progress; per-faction systems entangle further; constant = always solvable. 11.3 Session loop on a **calendar (days/weeks)** — clearance cycles, cases age, consequences land on dates; lying low costs days. **Win = definitive endgame: a final morally-grey choice about the secret (expose / bury / leverage); final choice + faction state → multiple endings; no clean victory.**|
 |2026-06-02|**Per-faction sub-systems (refinement).** Each faction (Unit, press, political elite/powerful, public, neutral) is a full sub-system with its **own Standing, own Heat/Exposure gauge (§9.1), and own Contacts & favors network (§9.2/§10)**. Heat and favors are no longer global — you can be hot with the elite and cold with the press; a press contact can't open an elite's sealed file. Updates §2.4, §9.1, §9.2.|
