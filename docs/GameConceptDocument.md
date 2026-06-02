@@ -153,10 +153,21 @@ The four pillars below are tie-breakers: when two features compete, the one that
 
 ### 2.2 Interface
 
-📝 GUIDANCE: What the player sees and how they read the game state at a glance. Describe the on-screen information and its priority. A rough sketch or wireframe is welcome here — describe it in words first and attach an image when one exists.
+**Information shown on screen.** The interface is a **detective's desk**, not a dashboard — the game is framed as working a physical case (the "paperwork is play" UX principle). Core surfaces:
 
-**Information shown on screen:** [ … ]  
-**What must be readable instantly vs. on demand:** [ … ]
+- **The Desk (play space):** the documents you've pulled, spread out, readable and annotatable; period-accurate artifacts (typed reports, carbon copies, microfiche printouts, photographs).
+- **The Case File:** the active cold case's original folder plus everything you've gathered for it.
+- **The Board:** a corkboard deduction space where entities (people, places, phone numbers, businesses) and documents are tokens the player connects with string; the **timeline and relationship web** live here.
+- **The Request slip:** choose an entity + a record type, see the **clearance cost**, confirm. Leads appear as highlighted, requestable references inside documents; "hunch" requests are entered free-form.
+- **Clearance meter:** the rationed investigative resource — always glanceable.
+- **The Decision Ledger:** past verdicts and the consequences that have since surfaced, each drawn back to the verdict that caused it; quiet until a consequence lands, then it notifies.
+- **Analog search (card catalog / microfiche index):** a *diegetic* search layer that fits the late-20th-century setting, so finding records is immersive and usable at once.
+
+**Organization — auto by default, manual by choice.** The game does the heavy lifting: it auto-files documents, extracts entities as draggable tokens, and maintains the search index and an auto-timeline of dated facts. But the player may **re-file and reorganize anything whenever they want** — an *optional* layer of control to arrange documents around their own thinking, engaged only if they feel they need it. Principle: **automate the filing, never the thinking** — the game never draws interpretive connections or reaches conclusions for the player (Pillar 2), it only removes clerical drudgery unless the player chooses to take the wheel.
+
+**What must be readable instantly vs. on demand:**
+- *Instant (always glanceable):* clearance remaining; the active case; new-document and new-consequence alerts; the **contradiction/corroboration flag** when a freshly-pulled document touches existing evidence (the flag shows *that* a relationship exists, never what it means).
+- *On demand:* full document text; the Board (timeline / relationship web); the Decision Ledger history; the request catalog and analog search.
 
 -----
 
@@ -780,6 +791,7 @@ The four pillars below are tie-breakers: when two features compete, the one that
 
 |Date |Decision & reasoning                                                      |
 |-----|--------------------------------------------------------------------------|
+|2026-06-02|**§2.2 Interface locked.** Framed as a detective's **desk** (paperwork-is-play): Desk, Case File, Board (string-corkboard timeline/relationship web), Request slip, Clearance meter, Decision Ledger, and a *diegetic* **analog search** (card-catalog/microfiche) that makes search fit the era. Organization = **auto by default, manual by choice** — game auto-files/indexes/extracts entities + auto-timeline, but the player can optionally re-file/reorganize anytime. Principle: automate the filing, never the thinking (Pillar 2). Instant-read: clearance, active case, alerts, contradiction flags. On-demand: full docs, Board, Ledger, search.|
 |2026-06-02|**§2.1 Core Mechanic locked.** Loop = request → cross-reference → deduce → two-layer verdict. Requestable surface = **leads + hunches hybrid** (documents surface cheap requestable leads; free-form "hunch" requests on any nameable entity cost more clearance) — solves signal-vs-noise while preserving request-anyone and "deduction, not direction". Renderer constraint: expresses only the facts a given record would legitimately contain; never leaks the solution or invents (Pillar 1). Verdict = **two-layer**: factual solution (who/how, checked vs. ground truth) + disposition (morally-grey, fires the scheduled consequences). Central tension: spend finite clearance for uncertain info toward a committal, incomplete-information verdict.|
 |2026-06-02|**§1.4 audience + consequence-feel steer.** Primary audience = deduction purists (*Obra Dinn* / *Golden Idol* / *Her Story*), with crossover to systems-sim and narrative/moral-choice players; PC-first, niche-but-passionate, depth over a low skill floor. Comparables: Obra Dinn, Golden Idol, Papers Please, Her Story/Contradiction, Disco Elysium. Rating ~M / PEGI 16–18 for theme. **Delayed-consequence feel (steers §2–§3): signpost the risk, hide the specifics, plus a Decision Ledger** that links each surfaced consequence back to the verdict that caused it — dread-with-agency, chosen over fully-hidden or investigate-first.|
 |2026-06-02|**Back story: "The Registry."** Alt-St. Louis (late-20th-century, analog) is defined by a total-records municipal archive — the Registry — whose contents ARE the procgen ground-truth graph. Player = revived Cold Case Unit investigator with rationed clearance; verdicts are written back into the Registry as official truth. The Registry's origin/purpose is the deferred systemic secret. **Added stakes (user direction):** the Registry is mysterious AND scary — actions carry real consequences with **variable latency** (immediate / next-day / months+), and verdicts are **morally grey** (no clean/just answer; decide on partial info). Theme: "the world never lies, but the truth never absolves." Two systems flagged for §2–§3: delayed variable-latency consequences (must be procgen ground truth, not LLM-invented) and a morally-grey verdict system. |
