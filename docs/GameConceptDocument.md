@@ -309,52 +309,45 @@ For this game a "level" is a **case**, and §5.1 is the procedural **ground-trut
 
 ### 5.2 Pacing of Challenge
 
-📝 GUIDANCE: How challenge is distributed and introduced across a level or run. New mechanics should be introduced safely, then combined and intensified.
-
-**Pacing of challenge introduction:** [ … ]
+**Pacing of challenge introduction:** *Within a case:* early leads are clear and low-ambiguity (teach the request → cross-reference loop by doing) → the mid-case opens branches, the first contradictions, and partial truths → the late case is the hard commit on incomplete information (factual solution + disposition). *Across the game:* the four §3.2 levers ramp — the world resists more near the truth, case complexity grows, safety nets (the theory-level whisper, hints) thin, and stakes intensify. New record types and analysis tools are introduced safely in isolation, then combined and layered. Difficulty is always *complexity and ambiguity*, never an unsolvable gate (Pillar 1).
 
 -----
 
 ### 5.3 Advancing
 
-📝 GUIDANCE: The rules for moving forward — how the player progresses to the next space, what gates progress, and whether backtracking or branching is possible. Connectivity rules belong here.
+**How the player advances:** **Open parallel caseload** — several cold cases are open at once; the player works them in parallel and chooses which thread to pull. Leads, entities, and contradictions from one case can crack another, so progress is web-shaped, not linear (Pillar 4). *(The MVP still starts with a single case to prove the engine; the parallel caseload is the vision layer.)* Advancing the *whole game* means accumulating closed cases and institutional rank, which unlock higher-sensitivity record types and new districts — and surface more of the systemic secret.
 
-**How the player advances:** [ … ]  
-**Gates / conditions / branching rules:** [ … ]
+**Gates / conditions / branching rules:** Soft-gated by **clearance** and **rank/access** rather than hard walls: you can attempt anything you can reach, but sensitive records and districts open as you rise (§2.3). **Closed cases can reopen** when a later consequence or new evidence surfaces (the city remembers) — you may revisit and revise a verdict, but **harm already suffered stands** (consequential, not terminal — §3.2). Branching is emergent: the order you pull threads and the dispositions you choose shape which leads, consequences, and reopenings appear.
 
 -----
 
-### 5.4 Zone / Level Breakdown
+### 5.4 Case Anatomy & Archetypes
 
-📝 GUIDANCE: One subsection per major level, zone, or generated space. For each: its identity, what the player encounters, and any unique rules. Duplicate the block below as many times as needed; rename freely.
+*(Reinterpreted — headings are a scaffold. Because cases are procedurally generated, this is not four hand-authored levels but the **anatomy of a case** plus **case archetypes** the grammars produce.)*
 
-#### Zone / Level 1 — [ … ]
+**Anatomy of a generated case.** A case is a slice of the fact graph: a **crime** (the true sequence), a cast of **entities** with **relationships**, a spread of **records** of varying fidelity (true / partial / biased / false, each falsehood attributed), a guaranteed **solution path** (verified — §5.1), a set of **leads** wiring it together, one or more **dispositions** the player can enter, and **scheduled consequences** hung off those dispositions. Each case carries one or more **threads into the secret backbone** (Pillar 4) and is sited in a district whose social texture (§4.2) colours its records and lie-patterns.
 
-- **Identity & theme:** [ … ]
-- **What the player encounters:** [ … ]
-- **Unique rules or mechanics introduced here:** [ … ]
-- **How it connects to what comes before and after:** [ … ]
+**Case archetypes (grammars — add freely):**
 
-#### Zone / Level 2 — [ … ]
+#### The Staged Accident
+- **Shape:** a death ruled accidental that the physical/record evidence quietly contradicts.
+- **Lie-pattern:** an authoritative record (autopsy, official report) is *biased or falsified*; the truth hides in mundane corroborating records.
+- **District lean:** the Heights (cover-ups) or the Works (industrial "mishaps").
 
-- **Identity & theme:** [ … ]
-- **What the player encounters:** [ … ]
-- **Unique rules or mechanics introduced here:** [ … ]
-- **How it connects to what comes before and after:** [ … ]
+#### The Convenient Disappearance
+- **Shape:** a person vanished; was it flight, foul play, or erasure?
+- **Lie-pattern:** records *omit* and *misdirect*; absence of a record is itself a clue.
+- **District lean:** the North Wards (the forgotten) or the Riverfront (bodies move).
 
-#### Zone / Level 3 — [ … ]
+#### The Buried Witness
+- **Shape:** a key witness was never interviewed — or was, and lied.
+- **Lie-pattern:** a *false statement* whose seams show against phone, travel, or property records.
+- **District lean:** anywhere; a workhorse archetype for teaching cross-referencing.
 
-- **Identity & theme:** [ … ]
-- **What the player encounters:** [ … ]
-- **Unique rules or mechanics introduced here:** [ … ]
-- **How it connects to what comes before and after:** [ … ]
-
-#### Zone / Level 4 — [ … ]
-
-- **Identity & theme:** [ … ]
-- **What the player encounters:** [ … ]
-- **Unique rules or mechanics introduced here:** [ … ]
-- **How it connects to what comes before and after:** [ … ]
+#### The Scrubbed Record
+- **Shape:** the trail runs into redactions and sealed files — someone tampered with the Registry itself.
+- **Lie-pattern:** the *Registry as unreliable narrator*; the tampering is the lead. Difficulty-scales near the secret.
+- **District lean:** Downtown / the Gateway (institutional power).
 
 -----
 
@@ -833,6 +826,7 @@ For this game a "level" is a **case**, and §5.1 is the procedural **ground-trut
 
 |Date |Decision & reasoning                                                      |
 |-----|--------------------------------------------------------------------------|
+|2026-06-02|**§5 Levels completed.** §5.2 Pacing: within-case clear→branching→hard-commit; across-game the four difficulty levers ramp; mechanics introduced safely then combined. §5.3 Advancing: **open parallel caseload** (work several cases at once, leads cross-pollinate; MVP starts single), soft-gated by clearance + rank/access (no hard walls); **closed cases can reopen** when consequences/evidence surface, but harm already done stands (resolves the §2.3/§2.4 reopening question). §5.4 reinterpreted as **case anatomy + archetypes** (Staged Accident, Convenient Disappearance, Buried Witness, Scrubbed Record) — each a grammar with a lie-pattern, district lean, and threads into the secret.|
 |2026-06-02|**§5.1 ground-truth engine locked.** A "level" = a **case**. Generation = **hybrid**: authored case grammars + the systemic-secret backbone, procedurally filled with entities/events/relationships/records. Atoms: entities, events (timestamped/causal), relationships, the Crime (true sequence), records (tracked fidelity — true/partial/biased/false, falsehoods attributed), leads (requestable edges). Assembly order: generate ground truth from a seed → project the record layer with grounded distortions → **verify a solution path exists** (solver/checker; regenerate/patch otherwise — Pillar 1) → thread interlinks into the secret (Pillar 4) → LLM renders only at request time. Red herrings grounded; concrete generator tech deferred to §14 (simulation-first flagged as the stretch to prototype).|
 |2026-06-02|**§4 World locked.** Two worlds: the Registry's **information** space (where deduction happens) and the physical alt-St.-Louis the records describe. **"Open world" = open *information*-world, not free-roam geography** (major scope decision). Areas: the Unit (hub/desk), the Registry/Stacks (queried, not walked), the City (records + a map; vision adds map-based curated visits; MVP records-only; no free-roam streets). Districts = **fictionalized analogues**: Downtown/Gateway (institutional power, the guarded secret), the North Wards (neglected, origin of cold cases, moral weight), the Heights (wealthy enclaves, cover-ups, the "powerful"), the Riverfront/Works (industrial, economic crime, disappearances). Resolves the §1.4 real-vs-fictional question.|
 |2026-06-02|**§3 Challenge locked.** Challenge is cognitive + institutional, not combat: deduction difficulty, lying/partial records, signal-vs-noise. Adversaries = institutional *resistance* (liars, cover-ups, gatekeepers, the powerful) — reinterprets §6–§8. Terrain = the Registry (sealed records, redactions, dead ends, volume). Pressure = clearance scarcity, time/consequence, multi-factional, moral weight. Difficulty scales on **all four levers** (world resists near the truth + complexity ramps + safety nets thin + stakes intensify); always solvable (Pillar 1) — difficulty is interpretation, not luck. Failure = **consequential, not terminal** (no game-over; wrong verdicts ripple permanently; botched cases stay botched). Added **§3.3** formalizing the delayed variable-latency consequence system (scheduled ground-truth events; signposted; Decision Ledger; confirmation-by-doing; bounded live threads; causal latency).|
