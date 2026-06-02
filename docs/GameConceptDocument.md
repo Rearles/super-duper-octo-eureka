@@ -642,32 +642,26 @@ The economy has distinct axes: **Clearance** (a global spend-to-act budget), and
 
 📝 GUIDANCE: Map intentions to inputs without committing to a specific device yet. List the actions — concrete bindings can come after platform is decided.
 
-**Actions to bind (input-agnostic):** [ … ]  
+**Actions to bind (input-agnostic):** select / move / spread documents; annotate (highlight, margin notes); pin entities & documents to the Board and draw/label connections; open the Request slip (choose entity + record type; lead or hunch) and submit; query the analog search/index; call a contact; take an official act (subpoena, name a person of interest); **publish / go public**; commit a verdict (factual + disposition); open the Decision Ledger and the Factions screen; advance the calendar / lie low; re-file & reorganize.  
 **Note — concrete bindings deferred until platform is decided in Technical Foundation.**
 
 -----
 
 ### 12.2 Menus
 
-📝 GUIDANCE: The menu structure — main menu, pause, and how the player navigates between major states. A simple flow diagram described in words is enough to start.
-
-**Menu structure & navigation:** [ … ]
+**Menu structure & navigation:** Hub-and-spoke from **the Office**. Main menu (New / Continue / Settings) → the Office, the central state, from which the player reaches: the **Desk** (active case), **Case & Board select** (the open parallel caseload), the **Registry / analog search**, the **Decision Ledger**, the **Factions screen** (per-faction standing, Heat, and contacts), and the **Calendar**. A pause overlay is available throughout. Everything returns to the Office.
 
 -----
 
 ### 12.3 HUD
 
-📝 GUIDANCE: The persistent in-action display. List each element, what it communicates, and its priority. Cross-reference the Interface section.
-
-**HUD elements & priority:** [ … ]
+**HUD elements & priority:** Persistent on the Desk (cross-ref §2.2): **clearance meter**; **active case + date** (the calendar); **per-faction Heat** indicators (compact, glanceable); **alerts** for a new document or a newly-landed consequence; and **contradiction/corroboration flags** on documents (showing *that* a relationship exists, never what it means). *Instant:* clearance, date, Heat, alerts, flags. *On demand:* the Board, the Ledger, full document text, and the analog search.
 
 -----
 
 ### 12.4 Camera
 
-📝 GUIDANCE: Perspective and camera behavior (first-person, top-down, side-on, etc.) and how it moves or frames the action. This choice has wide design consequences — decide deliberately.
-
-**Perspective & camera behavior:** [ … ]
+**Perspective & camera behavior:** **Top-down desk** — a 2D, top-down view of a physical desk: documents spread out, the corkboard Board, the card catalog. The camera pans and zooms across the desk surface; switching to the Board or the analog search is a framed transition to that surface. Document-centric and readability-first, with tactile drag-and-arrange ("paperwork is play"). No 3D world traversal — consistent with the open-*information*-world decision (§4.1).
 
 -----
 
@@ -676,24 +670,19 @@ The economy has distinct axes: **Clearance** (a global spend-to-act budget), and
 📝 GUIDANCE: Every distinct screen the game presents. The list below is inherited from the reference structure as a checklist — add, remove, or rename to match the actual UX.
 
 #### Settings Page
+- **Options exposed to the player:** audio; controls/rebinding (post-§14); **accessibility** — text size, dyslexia-friendly font, colorblind-safe flag colors, reduced motion, and adjustable assist (theory-whisper strength, optional softer timers). Difficulty is expressed through these assists, not a "hard mode."
 
-- **Options exposed to the player:** [ … audio, controls, accessibility, etc. … ]
+#### End-of-Day Summary
+- **What is shown after a day ends:** consequences that landed (Ledger updates), the clearance budget cycle, per-faction Heat/standing shifts, which cases aged, and what's pending tomorrow. **No score** — a ledger of what changed, not a grade.
 
-#### Gameplay Summary Screen
+#### Play Screen (the Desk)
+- **The primary in-action screen:** the top-down desk with HUD, documents, and access to the Board (cross-ref §2.2 and §12.3).
 
-- **What is shown after a session ends:** [ … performance, rewards, stats worth surfacing … ]
+#### Case & Board Select
+- **How the player chooses where to work:** pick among the **open parallel caseload** (§5.3); open a case's Board; see which cases are aging or have new developments.
 
-#### Play Screen
-
-- **The primary in-action screen:** [ … cross-reference HUD and Interface … ]
-
-#### Level / Stage Select
-
-- **If applicable, how the player chooses where to play:** [ … ]
-
-#### Rate Us / Engagement Prompts
-
-- **Optional prompts:** [ … note placement so they do not interrupt flow … ]
+#### Engagement Prompts
+- **Optional prompts:** *N/A.* This is a premium PC title — no "rate us," nags, or monetization prompts. The slot is intentionally left empty.
 
 -----
 
@@ -824,6 +813,7 @@ The economy has distinct axes: **Clearance** (a global spend-to-act budget), and
 
 |Date |Decision & reasoning                                                      |
 |-----|--------------------------------------------------------------------------|
+|2026-06-02|**§12 Controls & UI locked.** Input-agnostic actions (select/move/annotate docs, build the Board, request via the slip, search, call contacts, official acts, publish, commit verdict, Ledger/Factions, advance calendar/lie low) — bindings deferred to §14. Menus = hub-and-spoke from **the Office** (Desk · Case/Board select · Registry/search · Ledger · Factions · Calendar). HUD: clearance, date, per-faction Heat, alerts, contradiction flags. Camera = **top-down desk** (2D, document-centric, tactile; no 3D traversal). Screens: Settings (accessibility-forward; difficulty via assists), End-of-Day Summary (no score), Play/Desk, Case & Board select; engagement prompts N/A (premium PC, no nags).|
 |2026-06-02|**§11 Flow & Onboarding locked.** 11.1 Tutorial: teach **by doing** via a gentle starter case (Buried Witness) — read→lead→request (introduces clearance)→flagged contradiction→factual finding→first disposition with an immediate consequence; theory-whisper as strong training wheels that ease off; advanced systems (hunches, Heat, factions, going public, calendar) introduced one at a time. 11.2 Scaling: the four §3.2 levers, triggered by proximity to the secret + progress; per-faction systems entangle further; constant = always solvable. 11.3 Session loop on a **calendar (days/weeks)** — clearance cycles, cases age, consequences land on dates; lying low costs days. **Win = definitive endgame: a final morally-grey choice about the secret (expose / bury / leverage); final choice + faction state → multiple endings; no clean victory.**|
 |2026-06-02|**Per-faction sub-systems (refinement).** Each faction (Unit, press, political elite/powerful, public, neutral) is a full sub-system with its **own Standing, own Heat/Exposure gauge (§9.1), and own Contacts & favors network (§9.2/§10)**. Heat and favors are no longer global — you can be hot with the elite and cold with the press; a press contact can't open an elite's sealed file. Updates §2.4, §9.1, §9.2.|
 |2026-06-02|**§10 Economy locked.** Axes: **Clearance** (global spend-to-act budget — recurring institutional allotment + rank + economical-play carry; closing cases/standing raise it) and, **per faction**, Heat/Exposure, Favors, Standing. Spending: clearance on requests/official acts/expediting; per-faction favors on that faction's contacts; Heat is the hidden price of risky/visible acts (per affected faction). Literal money minimal. §10.3 reinterpreted as acquisition tables (access/tools by rank/clearance; per-faction contacts & favors). Earning: periodic budget + performance.|
