@@ -117,7 +117,7 @@ The four pillars below are tie-breakers: when two features compete, the one that
 
 **Intended rating / content considerations:** Mature themes — crime, death, autopsy detail, and morally-grey institutional harm — handled with restraint, not gratuitously. Likely **M / PEGI 16–18 for theme** rather than graphic content. Dread is institutional, not supernatural or gory.
 
-**Open questions & decisions:** Exact ESRB/PEGI rating TBD. How closely to model real St. Louis geography/history vs. invent freely (it's an *alternate* city, so we have license). Whether to fictionalize institution names. Sensitivity if cases touch real social issues (poverty, policing, displacement) — to be handled deliberately, not exploitatively.
+**Open questions & decisions:** Exact ESRB/PEGI rating TBD. ~~How closely to model real St. Louis vs. invent~~ → **resolved in §4.2: fictionalized analogues — no real names/geography.** Whether to fictionalize institution names (lean yes, per §4.2). Sensitivity if cases touch real social issues (poverty, policing, displacement) — to be handled deliberately, not exploitatively.
 
 -----
 
@@ -259,22 +259,27 @@ For a deduction game, challenge is **informational and institutional**, not comb
 
 ### 4.1 Terrain & Areas
 
-📝 GUIDANCE: The distinct kinds of space in the game (hub, exploration areas, set-piece/finale spaces) and the role each plays. Describe how the player moves between them.
+The game has two senses of "world": the Registry's **informational space** (where deduction actually happens) and the **physical alternate St. Louis** the records describe. **"Open world" here means the openness of *information*** — you can investigate anyone or anywhere through records — *not* free-roam geography.
 
-**Area types and their purpose:** [ … ]  
-**How areas connect / how the player travels between them:** [ … ]
+**Area types and their purpose:**
+- **The Unit (hub):** the Cold Case Unit office — your desk, the Board, the case files. Home base; most play happens here.
+- **The Registry / the Stacks:** the archive you query — card catalog, microfiche, records. Navigated by *request and search*, not on foot; the game's primary "space."
+- **The City (alt-St. Louis):** districts and case locations, experienced through the records that describe them and a **map**. The *vision* adds **map-based visits** to key locations for curated, non-free-roam scenes (interviews, site inspections); the *MVP* references the city through records only. No free-roam streets.
+
+**How areas connect / how the player travels between them:** The Unit/desk is the spine. From it the player queries the Registry (information) and consults the city map. In the vision, selecting a location opens a curated scene, and travel may cost time/clearance (pressure). In the MVP, "travel" is abstracted into records — the city comes to the desk.
 
 -----
 
 ### 4.2 Environments
 
-📝 GUIDANCE: Group the world into zones or biomes if applicable. For each: theme, what the player does there, and how it differs mechanically from the others. Add or remove zones freely — three is just a starting scaffold.
+Districts are **fictionalized analogues** of St. Louis character — no real names or exact geography — preserving the city's soul while granting license for the alternate-history secret. Each district's social texture *feeds* the kinds of cases found there and the systemic secret beneath them. (Scaffold — add/cut districts freely.)
 
-|Zone / area   |Theme|Gameplay role|
-|--------------|-----|-------------|
-|Zone 1 — [ … ]|[ … ]|[ … ]        |
-|Zone 2 — [ … ]|[ … ]|[ … ]        |
-|Zone 3 — [ … ]|[ … ]|[ … ]        |
+|Zone / area|Theme|Gameplay role|
+|-----------|-----|-------------|
+|**Downtown / the Gateway**|Institutional heart — the Registry's seat, courts, civic power; bureaucratic and monumental|Where the systemic secret is most guarded; high-clearance and sealed records; turf of institutional power and gatekeepers|
+|**The North Wards**|Neglected, over-policed, under-served; the forgotten parts of the city|Origin of most cold cases (the abandoned); the human cost and the heaviest moral weight; cases the city let go cold|
+|**The Heights (enclaves)**|Wealthy, insulated, well-connected; old money and influence|Cover-ups, influence-peddling, sealed/scrubbed records; home turf of the "powerful" faction|
+|**The Riverfront / Works**|Industrial docks, factories, rail and transit; where money, goods — and bodies — move|Economic crime, labor disputes, disappearances, smuggling; working-class lives and deaths|
 
 -----
 
@@ -821,6 +826,7 @@ For a deduction game, challenge is **informational and institutional**, not comb
 
 |Date |Decision & reasoning                                                      |
 |-----|--------------------------------------------------------------------------|
+|2026-06-02|**§4 World locked.** Two worlds: the Registry's **information** space (where deduction happens) and the physical alt-St.-Louis the records describe. **"Open world" = open *information*-world, not free-roam geography** (major scope decision). Areas: the Unit (hub/desk), the Registry/Stacks (queried, not walked), the City (records + a map; vision adds map-based curated visits; MVP records-only; no free-roam streets). Districts = **fictionalized analogues**: Downtown/Gateway (institutional power, the guarded secret), the North Wards (neglected, origin of cold cases, moral weight), the Heights (wealthy enclaves, cover-ups, the "powerful"), the Riverfront/Works (industrial, economic crime, disappearances). Resolves the §1.4 real-vs-fictional question.|
 |2026-06-02|**§3 Challenge locked.** Challenge is cognitive + institutional, not combat: deduction difficulty, lying/partial records, signal-vs-noise. Adversaries = institutional *resistance* (liars, cover-ups, gatekeepers, the powerful) — reinterprets §6–§8. Terrain = the Registry (sealed records, redactions, dead ends, volume). Pressure = clearance scarcity, time/consequence, multi-factional, moral weight. Difficulty scales on **all four levers** (world resists near the truth + complexity ramps + safety nets thin + stakes intensify); always solvable (Pillar 1) — difficulty is interpretation, not luck. Failure = **consequential, not terminal** (no game-over; wrong verdicts ripple permanently; botched cases stay botched). Added **§3.3** formalizing the delayed variable-latency consequence system (scheduled ground-truth events; signposted; Decision Ledger; confirmation-by-doing; bounded live threads; causal latency).|
 |2026-06-02|**§2.4 Scoring locked + Pillar 1 sharpened.** **No score / no karma meter.** Truth split: ground truth (consistent, solvable) vs. records (can be wrong/partial/biased/falsified; each falsehood a deterministic, discoverable fact; the LLM renders faithfully, never invents). Factual feedback = **confirmation by doing**: a pre-commit *theory-level whisper* (your overall theory rings true or off — never which piece) + specific/partial truths resolve only when the player ACTS on a belief (final verdict OR intermediate official acts: subpoena, naming a person of interest, sensitive request) and the world reacts. Standing = **multi-factional reputation** (Unit, press, powerful, public) — competing lenses, no "good" axis. Rewards = economical deduction (clearance surplus), rank/access, narrative revelation; never points. Pillar 1 gloss (§1.2) updated to the ground-truth-vs-record-layer reading.|
 |2026-06-02|**§2.3 Player Abilities locked.** Core desk verbs: request (lead/hunch), read/annotate, cross-reference, build the Board, search the analog index, commit two-layer verdict. Secondary: optional re-file, bookmark leads, review the Ledger, cross-case compare. Progression = **light institutional rank** (unlocks higher-sensitivity record types + new parts of the city/Registry — access, not power; keeps deduction central). Analysis tools = **raw-data only** (overlay/compare/transcribe/list; never interpret — Pillar 2). City-exploration verbs deferred to §4/§15. Open Q: re-opening closed cases when consequences surface.|
