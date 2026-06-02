@@ -40,7 +40,7 @@ The tech stack (engine, language, platform, architecture) is intentionally undec
 11. Game Flow & Onboarding
 12. Controls & User Interface
 13. Audio & Visual Identity
-14. Technical Foundation *(intentionally left open)*
+14. Technical Foundation
 15. Scope & Roadmap
 
 -----
@@ -736,7 +736,7 @@ The economy has distinct axes: **Clearance** (a global spend-to-act budget), and
 
 ## 14. Technical Foundation
 
-> ⚠️ **This section is intentionally left open.** Engine, language, platform, and architecture are to be decided collaboratively with Claude Code — and only after the design above has taken enough shape to make those choices informed rather than assumed. Do not fill this in by default.
+> ✅ **Decided 2026-06-02**, after the design took shape (as intended). Summary: **TypeScript end-to-end**, a **web app** (HTML/Canvas + PixiJS; desktop via Tauri later), with a **pure deterministic core engine** and the **LLM as a cached, swappable presentation adapter** (with a no-LLM template fallback). Rationale and risks below.
 
 -----
 
@@ -748,20 +748,29 @@ The economy has distinct axes: **Clearance** (a global spend-to-act budget), and
 
 💬 EXPLORE WITH CLAUDE CODE: Explicitly decide what you want to learn or test here — this project exists partly to explore unfamiliar technology, so weigh novelty against risk on purpose.
 
-**Hard requirements the tech must satisfy:** [ … ]  
-**What you want to explore / learn:** [ … ]  
-**Constraints (team size, timeline, target platforms, budget):** [ … ]
+**Hard requirements the tech must satisfy (ranked):**
+1. A **deterministic, seeded procgen fact graph + record layer** (entities/events/relationships/crime; records with tracked fidelity). *(§5.1)*
+2. A **solvability checker** — verifies ≥1 solution path from obtainable records. *(§5.1, Pillar 1)*
+3. A **grounded document renderer** that expresses only provided facts (never invents/contradicts). *(truth-model)*
+4. A **per-faction simulation** (standing/Heat/contacts) and a **calendar/consequence scheduler**. *(§9–§11)*
+5. A **document-heavy, tactile 2D top-down desk UI** (drag, annotate, corkboard/string, lots of legible text). *(§12)*
+6. **PC-first**, solo/small-team buildable, fast to iterate.
+
+**What you want to explore / learn:** procedural narrative generation + constraint-style solvability checking; **grounded LLM rendering** (RAG / structured prompting that cannot hallucinate); deterministic simulation + event scheduling; *(stretch)* **simulation-first** world generation.
+
+**Constraints (team size, timeline, target platforms, budget):** solo / small team; greenfield repo (`super-duper-octo-eureka`); PC-first; LLM cost/latency/offline considerations (mitigated by caching + a no-LLM fallback); no fixed deadline — depth and learning over speed.
 
 -----
 
-### 14.2 Engine / Stack — TO BE DECIDED
+### 14.2 Engine / Stack — Decided
 
-📝 GUIDANCE: Do not fill this in until the discussion in 14.1 has happened. Record the chosen stack and, crucially, the reasoning behind it.
+**Engine / framework:** A **web app** — no game engine. A pure **TypeScript** core library (fact graph, generator, solver, sim, scheduler) with a web presentation layer: HTML/DOM for documents, **Canvas / PixiJS** for the corkboard Board, and a lightweight UI framework (React or Svelte) for the shell. Desktop packaging via **Tauri** (or Electron) later.
 
-**Engine / framework:** [ … ]  
-**Language(s):** [ … ]  
-**Target platform(s):** [ … ]  
-**Rationale (why this, over the alternatives considered):** [ … ]
+**Language(s):** **TypeScript** end-to-end (strict mode) — one language across engine, UI, and tooling.
+
+**Target platform(s):** **PC-first** (desktop via Tauri; runnable in-browser for development and demos).
+
+**Rationale (why this, over the alternatives considered):** A document-deduction game *is* a text/UI app — documents are rendered text, the desk is HTML/Canvas, the fact graph is plain TS, and the LLM is an API call. Web gives the fastest iteration and the most approachable ecosystem for the novel parts (procgen, solver, grounded RAG rendering). **Godot/Unity** would make the paperwork-heavy UI *harder* while offering nothing for the procgen/LLM core (which is engine-agnostic regardless). TS keeps one language across the whole stack and makes the deterministic core trivially unit-testable.
 
 -----
 
@@ -771,8 +780,15 @@ The economy has distinct axes: **Clearance** (a global spend-to-act budget), and
 
 💬 EXPLORE WITH CLAUDE CODE: Identify the single riskiest technical assumption and build the smallest possible prototype to validate it before committing.
 
-**High-level architecture:** [ … ]  
-**Top technical risks & how to de-risk them:** [ … ]
+**High-level architecture:** A **pure, deterministic core engine** (fact-graph model · case generator · solvability checker · per-faction sim · calendar/consequence scheduler) with **no UI or LLM dependencies** — fully unit-testable and replayable from a seed. Around it, two adapter layers: (a) a **renderer interface** with two implementations — a **template renderer** (no LLM, always available) and an **LLM renderer** (API-backed, cached by deterministic key) — so the LLM is *presentation only* and the game runs correctly without it; and (b) the **web UI** (desk, Board, Ledger, factions, calendar) consuming engine state. Rendered documents are cached so each is generated once.
+
+**Top technical risks & how to de-risk them:**
+- **Grounded rendering without hallucination** *(highest risk, most novel):* constrain the LLM to a structured fact payload + strict instructions, **validate output against the facts**, and fall back to the template renderer on any drift. De-risk with an early spike rendering 2–3 document types from a fixed fact set.
+- **Generating provably-solvable cases:** build the generator and solver *together*; the checker gates every case (regenerate/patch on failure). De-risk with a tiny single-case generator first.
+- **Believable interlinking / the secret backbone at scale:** start with one standalone case; add interlinking only after the single-case loop is fun.
+- **(Stretch) simulation-first generation:** prototype in isolation; never block the MVP on it.
+
+**Smallest validating prototype:** generate one tiny case's fact graph from a seed → verify solvability → render ~3 documents (template first, then LLM) → play the **request → contradiction → two-layer verdict** loop in a barebones desk UI. *(This is the §15 MVP seed.)*
 
 -----
 
@@ -812,6 +828,7 @@ The economy has distinct axes: **Clearance** (a global spend-to-act budget), and
 
 |Date |Decision & reasoning                                                      |
 |-----|--------------------------------------------------------------------------|
+|2026-06-02|**§14 Technical Foundation DECIDED** (the deferred, design-informed call). Stack = **TypeScript end-to-end, web app** (HTML/DOM docs + Canvas/PixiJS Board + React/Svelte shell; desktop via Tauri later); no game engine. Architecture = **pure deterministic core engine** (fact graph · generator · solvability checker · per-faction sim · calendar/scheduler), UI- and LLM-independent and seed-replayable; **LLM as a cached, swappable renderer adapter with a no-LLM template fallback** (LLM is presentation only — the game is correct without it). Top risks: grounded rendering without hallucination (validate vs. facts + fallback) and provably-solvable generation (generator+solver co-built, checker gates every case). Smallest prototype = one tiny solvable case → ~3 rendered docs → the request→contradiction→verdict loop (= the §15 MVP seed). Chosen over Godot/Unity (worse for a document UI, no benefit to the procgen/LLM core).|
 |2026-06-02|**§13 Audio & Visual Identity locked.** Art = **stylized illustration / noir** (hand-illustrated, high-contrast, muted palette + desk-lamp light, period document graphic design; quiet institutional dread, no supernatural; readability first). Refs: Papers Please, Obra Dinn, Disco Elysium, period noir/municipal paperwork. VFX: contradiction flags, consequence-landing stamps, per-faction Heat tells, publish ripple, ambiguous whisper cue; record/tamper/redaction/retaliation reveals. SFX: the analog desk as instrument (paper, typewriter/teletype, microfiche whir, rotary phone, rubber stamp, file drawer, pencil, room tone). Music: sparse contemplative noir-jazz on the Desk → drones/dread at high Heat → stabs for publish/consequence → near-silence in the Office → heavy unresolved endgame theme.|
 |2026-06-02|**§12 Controls & UI locked.** Input-agnostic actions (select/move/annotate docs, build the Board, request via the slip, search, call contacts, official acts, publish, commit verdict, Ledger/Factions, advance calendar/lie low) — bindings deferred to §14. Menus = hub-and-spoke from **the Office** (Desk · Case/Board select · Registry/search · Ledger · Factions · Calendar). HUD: clearance, date, per-faction Heat, alerts, contradiction flags. Camera = **top-down desk** (2D, document-centric, tactile; no 3D traversal). Screens: Settings (accessibility-forward; difficulty via assists), End-of-Day Summary (no score), Play/Desk, Case & Board select; engagement prompts N/A (premium PC, no nags).|
 |2026-06-02|**§11 Flow & Onboarding locked.** 11.1 Tutorial: teach **by doing** via a gentle starter case (Buried Witness) — read→lead→request (introduces clearance)→flagged contradiction→factual finding→first disposition with an immediate consequence; theory-whisper as strong training wheels that ease off; advanced systems (hunches, Heat, factions, going public, calendar) introduced one at a time. 11.2 Scaling: the four §3.2 levers, triggered by proximity to the secret + progress; per-faction systems entangle further; constant = always solvable. 11.3 Session loop on a **calendar (days/weeks)** — clearance cycles, cases age, consequences land on dates; lying low costs days. **Win = definitive endgame: a final morally-grey choice about the secret (expose / bury / leverage); final choice + faction state → multiple endings; no clean victory.**|
