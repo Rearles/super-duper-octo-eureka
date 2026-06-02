@@ -182,6 +182,7 @@ City-exploration verbs (walking the streets, visiting locations) belong to the o
 - **Build the Board** — add entity and document tokens, draw and label connections, assemble the timeline / relationship web.
 - **Search** the diegetic card-catalog / microfiche index.
 - **Commit a verdict** — the two-layer factual solution + disposition.
+- **Publish (Go Public)** — make a Registry record *public*. **Every faction then reacts** to what you publish (the press runs exposés, true or not; the powerful, the public, and others move per their interests — §6.1), applying pressure you trigger but cannot fully control. A consequential act (§2.4): publishing can confirm, contradict, or backfire.
 
 **Secondary / contextual actions:**
 - **Re-file / reorganize** documents — the optional manual control over auto-filing.
@@ -202,7 +203,7 @@ City-exploration verbs (walking the streets, visiting locations) belong to the o
 **How performance is measured.** There is **no score and no morality / karma meter** — a number that rewarded the "right" choice would collapse the game's moral greyness into an optimization target. Performance lives on two separate planes:
 
 - **Factual accuracy — checkable, but *confirmed by doing*.** The world holds a consistent ground truth, so factual conclusions *can* be right or wrong — but the game never grades them with a checklist. Instead: (a) a pre-commit **theory-level whisper** — before committing, the player learns only that their *current overall theory* contains some truth (or feels off), never which piece (the fairness valve that keeps reasoning from becoming flailing); and (b) **confirmation by doing** — specific and partially-correct beliefs resolve *only when the player acts on them* within the Registry, either by committing a verdict/disposition or through **intermediate official acts** (issuing a subpoena, formally naming a person of interest, requesting a sensitive record on a belief), at which point the world reacts and confirms or contradicts what they believed via a consequence. Truth is earned through commitment, not handed over.
-- **Standing — multi-factional reputation.** Distinct powers — the Cold Case Unit, the press, the powerful, and the public — react to the player's dispositions, creating competing pressures that feed back into access and consequences. No single "good" axis; each faction is a lens, none is right. This gives "no clean answer" mechanical teeth without grading morality.
+- **Standing — multi-factional reputation.** Distinct powers — the Cold Case Unit, the press, the political elite / the powerful, the public, and neutral parties — react both to the player's **dispositions** *and* to **the information the player makes public** (§6.1), creating competing pressures that feed back into access and consequences. No single "good" axis; each faction is a lens, none is right. This gives "no clean answer" mechanical teeth without grading morality.
 
 **Rewards for strong play.** Sharp, *economical* deduction is its own reward, surfaced through the **clearance economy** (Pillar 3 / §10): solving with fewer wasted requests leaves surplus clearance. Beyond that the player gains **institutional rank / access** (more record types, more of the city — §2.3), **standing shifts** with the factions, and **narrative revelation** — more of the Registry's larger secret (Pillar 4). Growth and revelation, never points.
 
@@ -359,9 +360,16 @@ For this game a "level" is a **case**, and §5.1 is the procedural **ground-trut
 
 ### 6.1 Boss Conventions
 
-📝 GUIDANCE: Rules that apply to all bosses — how they take damage, how attacks are telegraphed, invulnerability/recovery windows, phase changes, feedback on hits.
+*(Reinterpreted — "bosses" are **major obstructing powers**, not combat. They are authored figures/institutions woven into the secret backbone; you overcome them with evidence, leverage, or the press — never violence.)*
 
-**Shared boss rules:** [ … ]
+**Shared rules (how an obstruction works and resolves):**
+- **What they are:** powerful, authored figures or institutions tied to the secret backbone, who obstruct the player's approach to the truth.
+- **Escalation (phases):** they begin as *passive* obstruction (denied access, buried records) and, as the player closes in, shift to *active retaliation* — surveillance, clearance revocation, threats, endangering sources, even framing — routed through the consequence system (§3.3). The "telegraph" is the rising heat the player can feel before it lands.
+- **How they are overcome (no HP — three levers, each with a cost):**
+  1. **Evidence** — amass undeniable ground-truth that forces exposure.
+  2. **Leverage** — use findings as a deal or threat; morally grey and consequence-laden.
+  3. **Going Public** — make Registry records *public*. **Every faction reacts to what you publish**, each per its own interests (for / against / neutral): the **press** runs exposés (**true or not**); the **political elite and the powerful** move to protect themselves, retaliate, or reposition; the **public** shifts; neutral parties take sides. This outside pressure can **crack *or* harden** an obstruction. Factions act **only** on what the player makes public — so the player triggers the cascade but cannot fully control it, and a distorted exposé or an elite backlash can harm the innocent or misfire.
+- **Resolution:** "defeat" = the obstruction collapses or the power is exposed/neutralized — usually at a moral or factional cost, never cleanly. Because going public moves *all* the forces at once, resolving one obstruction can inflame another (Pillar 4).
 
 -----
 
@@ -369,33 +377,27 @@ For this game a "level" is a **case**, and §5.1 is the procedural **ground-trut
 
 📝 GUIDANCE: One subsection per boss. Capture the boss’s role in the story, its mechanical gimmick, and how the player is expected to beat it. Duplicate as needed.
 
-#### Boss 1 — [ … ]
+*(Concrete bosses are authored alongside the secret; these are archetypal roles the backbone draws on.)*
 
-- **Role:** [ … where this boss sits in the game and its narrative/mechanical significance … ]
-- **Behavior & gimmick:** [ … the central mechanic that defines the fight … ]
-- **Intended counterplay:** [ … what the player must learn or acquire to win … ]
-- **Stats / tuning:** [ … health, damage, phases, timing — fill in once tuning begins … ]
+#### The Gatekeeper (institutional)
+- **Role:** controls access to sealed/sensitive records — the wall between the player and a buried truth.
+- **Behavior & escalation:** denies and delays; later revokes clearance and flags the player's requests.
+- **Intended counterplay:** rank/access, leverage, or routing around via alternate records; publishing can force a policy crack.
 
-#### Boss 2 — [ … ]
+#### The Untouchable (the powerful)
+- **Role:** a connected figure the system protects; central to a secret thread, likely a capstone.
+- **Behavior & escalation:** insulated by others' lies and scrubbed records; retaliates with threats or framing as the player nears the truth.
+- **Intended counterplay:** undeniable evidence or press exposure — at cost; leverage offers a greyer path.
 
-- **Role:** [ … ]
-- **Behavior & gimmick:** [ … ]
-- **Intended counterplay:** [ … ]
-- **Stats / tuning:** [ … ]
+#### The Insider
+- **Role:** someone close — within the Unit or the Registry — who misleads or obstructs; a betrayal thread.
+- **Behavior & escalation:** feeds false leads, buries the player's filings, watches their moves.
+- **Intended counterplay:** catch the inconsistency in their *own* record trail; isolate them.
 
-#### Boss 3 — [ … ]
-
-- **Role:** [ … ]
-- **Behavior & gimmick:** [ … ]
-- **Intended counterplay:** [ … ]
-- **Stats / tuning:** [ … ]
-
-#### Boss 4 — [ … ]
-
-- **Role:** [ … ]
-- **Behavior & gimmick:** [ … ]
-- **Intended counterplay:** [ … ]
-- **Stats / tuning:** [ … ]
+#### The Registry's Keepers
+- **Role:** the institution itself near the core secret — the final, systemic obstruction.
+- **Behavior & escalation:** the archive turns against the player (tampering, redactions, surveillance at scale).
+- **Intended counterplay:** the endgame — expose the system using its own ground truth, choosing what to make public and what it costs.
 
 -----
 
@@ -409,13 +411,15 @@ For this game a "level" is a **case**, and §5.1 is the procedural **ground-trut
 
 📝 GUIDANCE: A single table for at-a-glance balancing. Columns are a starting suggestion — adapt to whatever stats matter for this game (speed, range, behavior type, reward).
 
-|Enemy|Health|Damage|Reward|Behavior / role|
-|-----|------|------|------|---------------|
-|[ … ]|[ … ] |[ … ] |[ … ] |[ … ]          |
-|[ … ]|[ … ] |[ … ] |[ … ] |[ … ]          |
-|[ … ]|[ … ] |[ … ] |[ … ] |[ … ]          |
-|[ … ]|[ … ] |[ … ] |[ … ] |[ … ]          |
-|[ … ]|[ … ] |[ … ] |[ … ] |[ … ]          |
+*(Columns adapted — there is no combat. "Persistence" = how stubbornly it recurs; "Threat" = how it hurts your investigation; "Handled by" = the counter.)*
+
+|Obstructor|Persistence|Threat to the investigation|Handled by|Role|
+|----------|-----------|---------------------------|----------|----|
+|**The Liar**|Low–med (a specific false statement)|Misdirection; a false lead|Cross-reference against hard records to expose the seam|The core puzzle adversary|
+|**The Gatekeeper**|Recurring|Blocks leads; drains clearance/time|Rank/access, leverage, alternate records|Friction & pacing|
+|**The Fixer**|High|Corrupts the record layer (scrubs, plants)|Catch the tampering (Scrubbed Record); find the original|Escalation near power|
+|**The Biased Official**|Systemic|Subtly false "authoritative" records|Triangulate against neutral sources|Hidden unreliability|
+|**The Frightened Witness**|Situational|Missing or withheld testimony|Corroborate elsewhere; reassure or (greyly) pressure|Human/moral texture|
 
 -----
 
@@ -423,40 +427,37 @@ For this game a "level" is a **case**, and §5.1 is the procedural **ground-trut
 
 📝 GUIDANCE: A short profile per enemy. The goal is to capture what makes each one a distinct decision for the player to handle. Duplicate as needed.
 
-#### Enemy 1 — [ … ]
+*(Profiles adapted: "behavior" = how it manifests in records; "threat" = how it hurts the investigation; "tell" = how you catch it.)*
 
-- **Role / what makes it distinct:** [ … ]
-- **Movement & behavior:** [ … ]
-- **Attack & threat to the player:** [ … ]
-- **Stats:** [ … keep in sync with the overview table … ]
+#### The Liar
+- **What makes it distinct:** a person whose record (statement, interview) deviates from ground truth — the seam that teaches cross-referencing.
+- **Behavior in records:** a confident false account that doesn't square with phone, travel, or property records.
+- **Threat:** a tempting false lead that wastes clearance if trusted.
+- **Tell / how handled:** the contradiction flag when their statement meets a hard record; confirmation-by-doing if you act on the lie.
 
-#### Enemy 2 — [ … ]
+#### The Gatekeeper
+- **What makes it distinct:** controls a chokepoint of access rather than lying.
+- **Behavior in records:** denials, delays, "request refused / clearance required" responses.
+- **Threat:** blocks leads, drains clearance and time.
+- **Tell / how handled:** rank, leverage, or an alternate record route; publishing can force the gate.
 
-- **Role / what makes it distinct:** [ … ]
-- **Movement & behavior:** [ … ]
-- **Attack & threat to the player:** [ … ]
-- **Stats:** [ … ]
+#### The Fixer
+- **What makes it distinct:** actively *corrupts* the record layer on power's behalf (the §5.4 Scrubbed Record at human scale).
+- **Behavior in records:** scrubbed files, planted documents, suspiciously clean trails.
+- **Threat:** poisons the evidence; can frame the innocent.
+- **Tell / how handled:** tampering leaves seams (gaps, mismatched provenance); find the original or a witness to the scrub.
 
-#### Enemy 3 — [ … ]
+#### The Biased Official
+- **What makes it distinct:** records skewed by prejudice or interest — *systemically* unreliable while looking authoritative.
+- **Behavior in records:** an autopsy, report, or ruling slanted to a foregone conclusion.
+- **Threat:** false confidence in an "official" source.
+- **Tell / how handled:** triangulate against neutral records; notice the pattern across their output.
 
-- **Role / what makes it distinct:** [ … ]
-- **Movement & behavior:** [ … ]
-- **Attack & threat to the player:** [ … ]
-- **Stats:** [ … ]
-
-#### Enemy 4 — [ … ]
-
-- **Role / what makes it distinct:** [ … ]
-- **Movement & behavior:** [ … ]
-- **Attack & threat to the player:** [ … ]
-- **Stats:** [ … ]
-
-#### Enemy 5 — [ … ]
-
-- **Role / what makes it distinct:** [ … ]
-- **Movement & behavior:** [ … ]
-- **Attack & threat to the player:** [ … ]
-- **Stats:** [ … ]
+#### The Frightened Witness
+- **What makes it distinct:** withholds out of fear rather than malice — the human/moral texture.
+- **Behavior in records:** absences, recantations, vague statements.
+- **Threat:** a missing piece you must source elsewhere.
+- **Tell / how handled:** corroborate around them, reassure, or (greyly) pressure — with consequences for how you treat them.
 
 -----
 
@@ -466,35 +467,32 @@ For this game a "level" is a **case**, and §5.1 is the procedural **ground-trut
 
 -----
 
-#### Obstacle 1 — [ … ]
+*(Obstacles here are **informational and bureaucratic hazards**, not physical traps.)*
 
-- **What it is and where it appears:** [ … ]
-- **Effect on the player:** [ … ]
-- **How the player can avoid, disarm, or use it (and any risk in doing so):** [ … ]
+#### Sealed / redacted records
+- **What it is and where it appears:** sensitive files behind clearance or actively redacted; common in Downtown / the Gateway.
+- **Effect on the player:** blocks a lead; a wall in the evidence chain.
+- **How the player can avoid, disarm, or use it (and any risk in doing so):** open via rank, leverage, or press pressure — but a redaction's *existence* is itself a clue (someone wanted this hidden).
 
-#### Obstacle 2 — [ … ]
+#### Dead-ends (grounded mundane leads)
+- **What it is and where it appears:** real but irrelevant records — the truthful noise of an honest world; anywhere.
+- **Effect on the player:** spends clearance for no payoff.
+- **How the player can avoid, disarm, or use it:** judgment about *what to pull*; not all truth is useful — eliminating a thread is still progress.
 
-- **What it is and where it appears:** [ … ]
-- **Effect on the player:** [ … ]
-- **How the player can avoid, disarm, or use it:** [ … ]
+#### Surveillance flags
+- **What it is and where it appears:** acting on or publishing sensitive records near the secret draws attention.
+- **Effect on the player:** raises heat → triggers obstructor retaliation (§6.1).
+- **How the player can avoid, disarm, or use it:** move carefully — or bait it deliberately to provoke a revealing reaction.
 
-#### Obstacle 3 — [ … ]
+#### Clearance walls
+- **What it is and where it appears:** high-sensitivity record types and districts.
+- **Effect on the player:** hard cost/rank gate on access.
+- **How the player can avoid, disarm, or use it:** advance rank, spend clearance, or find a lower-clearance route to the same fact.
 
-- **What it is and where it appears:** [ … ]
-- **Effect on the player:** [ … ]
-- **How the player can avoid, disarm, or use it:** [ … ]
-
-#### Obstacle 4 — [ … ]
-
-- **What it is and where it appears:** [ … ]
-- **Effect on the player:** [ … ]
-- **How the player can avoid, disarm, or use it:** [ … ]
-
-#### Obstacle 5 — [ … ]
-
-- **What it is and where it appears:** [ … ]
-- **Effect on the player:** [ … ]
-- **How the player can avoid, disarm, or use it:** [ … ]
+#### Decoy document floods
+- **What it is and where it appears:** broad or hunch requests that return a deluge of mundane truth.
+- **Effect on the player:** signal-in-noise; drains clearance and attention.
+- **How the player can avoid, disarm, or use it:** targeted requests and raw-data analysis tools (§2.3) to filter; precision beats volume.
 
 -----
 
@@ -826,6 +824,7 @@ For this game a "level" is a **case**, and §5.1 is the procedural **ground-trut
 
 |Date |Decision & reasoning                                                      |
 |-----|--------------------------------------------------------------------------|
+|2026-06-02|**§6–§8 Institutional Resistance locked** (reinterpreted; no combat). §6 "bosses" = **major obstructing powers** (authored, secret-backbone): the Gatekeeper, the Untouchable, the Insider, the Registry's Keepers; escalate passive → active retaliation; overcome by **evidence / leverage / the press**. **Going-Public mechanic:** the player can **Publish** Registry records; **every faction reacts** to what's made public per its interests (the press runs exposés true-or-not; the political elite/powerful protect or retaliate; the public and neutral parties shift), pressuring obstructions — factions act *only* on player-published info (agency preserved) and can distort or backfire, and resolving one obstruction can inflame another. §7 enemies = recurring **obstructor types** (Liar, Gatekeeper, Fixer, Biased Official, Frightened Witness) — each a record-layer behavior with a tell. §8 obstacles = informational/bureaucratic hazards (sealed/redacted records, grounded dead-ends, surveillance flags, clearance walls, decoy floods). Retaliation escalates near the truth. Added **Publish** to §2.3 abilities.|
 |2026-06-02|**§5 Levels completed.** §5.2 Pacing: within-case clear→branching→hard-commit; across-game the four difficulty levers ramp; mechanics introduced safely then combined. §5.3 Advancing: **open parallel caseload** (work several cases at once, leads cross-pollinate; MVP starts single), soft-gated by clearance + rank/access (no hard walls); **closed cases can reopen** when consequences/evidence surface, but harm already done stands (resolves the §2.3/§2.4 reopening question). §5.4 reinterpreted as **case anatomy + archetypes** (Staged Accident, Convenient Disappearance, Buried Witness, Scrubbed Record) — each a grammar with a lie-pattern, district lean, and threads into the secret.|
 |2026-06-02|**§5.1 ground-truth engine locked.** A "level" = a **case**. Generation = **hybrid**: authored case grammars + the systemic-secret backbone, procedurally filled with entities/events/relationships/records. Atoms: entities, events (timestamped/causal), relationships, the Crime (true sequence), records (tracked fidelity — true/partial/biased/false, falsehoods attributed), leads (requestable edges). Assembly order: generate ground truth from a seed → project the record layer with grounded distortions → **verify a solution path exists** (solver/checker; regenerate/patch otherwise — Pillar 1) → thread interlinks into the secret (Pillar 4) → LLM renders only at request time. Red herrings grounded; concrete generator tech deferred to §14 (simulation-first flagged as the stretch to prototype).|
 |2026-06-02|**§4 World locked.** Two worlds: the Registry's **information** space (where deduction happens) and the physical alt-St.-Louis the records describe. **"Open world" = open *information*-world, not free-roam geography** (major scope decision). Areas: the Unit (hub/desk), the Registry/Stacks (queried, not walked), the City (records + a map; vision adds map-based curated visits; MVP records-only; no free-roam streets). Districts = **fictionalized analogues**: Downtown/Gateway (institutional power, the guarded secret), the North Wards (neglected, origin of cold cases, moral weight), the Heights (wealthy enclaves, cover-ups, the "powerful"), the Riverfront/Works (industrial, economic crime, disappearances). Resolves the §1.4 real-vs-fictional question.|
