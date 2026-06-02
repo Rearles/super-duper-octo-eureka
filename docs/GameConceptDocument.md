@@ -504,54 +504,50 @@ For this game a "level" is a **case**, and §5.1 is the procedural **ground-trut
 
 ### 9.1 Health Mechanics
 
-📝 GUIDANCE: Starting health, how it changes, how the player heals or dies, and how survivability scales with progression. State numbers once tuning starts.
+*(Reinterpreted — no combat, no HP. The player's "health" is **Heat / Exposure**: how much hostile attention they've drawn.)*
 
-**Starting health & how it changes:** [ … ]  
-**Healing & death rules:** [ … ]
+**Heat / Exposure (the vulnerability gauge):** starts cold. Heat rises with **risky and visible acts** — pulling high-sensitivity records, intermediate official acts (subpoenas, naming a person of interest), **going public**, and pressing the powerful. The nearer the secret, the faster it climbs (§3.2).
+
+**Cooling, retaliation & "death":** high heat triggers obstructor **retaliation** (§6.1) — surveillance, clearance revocation, threats, endangered sources, framing — scaled to how hot you are. The player cools heat by **lying low** (quieter threads, letting time pass). There is **no death / game-over** (consequential, not terminal — §3.2): maxing heat forces hard consequences — a suspension, a burned source, a lost avenue — that you carry forward, not a fail screen.
 
 -----
 
-### 9.2 Power-ups
+### 9.2 Contacts & Favors
 
-📝 GUIDANCE: Temporary boosts that change the player’s capabilities for a limited time or use. For each: effect, duration/trigger, and how the player obtains it.
+*(Reinterpreted — a **contacts & favors network** rather than "power-ups".)*
 
-**Power-up list & effects:** [ … ]
+**The network:** the player cultivates sources — a records clerk, a tipster, a sympathetic journalist, a coroner, a fixer-turned-informant — and can **call on them** for temporary help: fast-tracking a record, a quiet leak, emergency clearance, a warning before retaliation lands. Each call has a **cost** (a favor owed, money, standing, or a cooldown), and contacts carry their own loyalties (faction-tied), so leaning on one may cost you with another. Cultivated through cases and dispositions; they hand you **access, never answers** — deduction stays the player's job (Pillar 2).
 
 -----
 
 ### 9.3 Pick-ups
 
-📝 GUIDANCE: Items collected during play. The two subsections below are inherited from the reference structure as examples — replace with whatever categories this game actually uses.
+*(Reinterpreted — "pick-ups" are found leads/materials, not health items.)*
 
-#### Health Pickups
+#### Found leads & materials
+- **What they are and where the player finds them:** unsolicited inputs — an anonymous tip, a leaked or misfiled document, a contact's gift. They inject new leads or records *without* a clearance cost — but, like all records, may be true, partial, or planted (the truth-model applies).
 
-- **What they restore, how they look, and where the player finds them:** [ … ]
-
-#### Special Pickup — [ … e.g. Smart Bomb, Power Surge, etc. … ]
-
-- **Effect:** [ … ]
-- **When it is worth using:** [ … ]
-- **How it is acquired:** [ … ]
+#### Caches
+- **Effect:** a bundle of related records that opens a thread quickly.
+- **When it is worth using:** when stuck, or to leap ahead — but a cache can be **bait** (a Fixer's plant) that raises Heat or misdirects.
+- **How it is acquired:** from contacts, whistleblowers, or earned by progress within a case.
 
 -----
 
 ### 9.4 Upgrades Screen
 
-📝 GUIDANCE: The interface and systems for permanent character growth — what can be upgraded, how it is presented, and how upgrades are unlocked or purchased.
+*(Reinterpreted — "upgrades" = institutional growth, not body stats.)*
 
-#### Body / Core Upgrades
+#### Rank & record access
+- **Permanent growth:** rising in the Cold Case Unit unlocks higher-sensitivity record types and new districts/Registry areas (§2.3) — *access*, not power.
 
-- **Permanent improvements to the character:** [ … health, capacity, movement, etc. … ]
+#### Analysis tools
+- **What grows:** unlock raw-data tools (timeline overlay, handwriting compare, transcription, entity cross-listing — §2.3) that sharpen the eyes but never interpret (Pillar 2).
 
-#### Health Bar Upgrades
+#### Contacts & standing
+- **What grows:** the contacts network (§9.2) and faction standing — relationships, not stats. *(No movement/"speed" upgrades — there is no traversal; that template slot is N/A.)*
 
-- **How maximum health grows and what drives it:** [ … ]
-
-#### Speed Upgrades
-
-- **[ to be determined — does movement or action speed upgrade, and if so, how? ]**
-
-**Open questions & decisions:** [ … track the progression economy here — it is easy to make upgrades feel too slow or too fast … ]
+**Open questions & decisions:** Tune the progression economy (rank/clearance pace) so access opens neither too slow nor too fast. Whether **Heat** and **clearance** are one resource or two (→ §10). Whether contacts can be permanently burned.
 
 -----
 
@@ -824,6 +820,7 @@ For this game a "level" is a **case**, and §5.1 is the procedural **ground-trut
 
 |Date |Decision & reasoning                                                      |
 |-----|--------------------------------------------------------------------------|
+|2026-06-02|**§9 Player locked** (reinterpreted, no HP). 9.1 "health" = **Heat / Exposure** gauge: rises with risky/visible acts (sensitive pulls, official acts, going public, pressing the powerful), faster near the secret; high heat → obstructor retaliation; cool by lying low; **no death/game-over** (maxing heat forces hard consequences carried forward). 9.2 = **Contacts & Favors** network (sources called on for access/leaks/clearance/warnings at a cost; faction-tied; access never answers). 9.3 pick-ups = found leads/materials + caches (no clearance cost; may be true/partial/planted; caches can be bait). 9.4 upgrades = rank + record access, raw-data tools, contacts/standing (no speed/body stats). Open: is Heat separate from clearance (→§10); can contacts be burned.|
 |2026-06-02|**§6–§8 Institutional Resistance locked** (reinterpreted; no combat). §6 "bosses" = **major obstructing powers** (authored, secret-backbone): the Gatekeeper, the Untouchable, the Insider, the Registry's Keepers; escalate passive → active retaliation; overcome by **evidence / leverage / the press**. **Going-Public mechanic:** the player can **Publish** Registry records; **every faction reacts** to what's made public per its interests (the press runs exposés true-or-not; the political elite/powerful protect or retaliate; the public and neutral parties shift), pressuring obstructions — factions act *only* on player-published info (agency preserved) and can distort or backfire, and resolving one obstruction can inflame another. §7 enemies = recurring **obstructor types** (Liar, Gatekeeper, Fixer, Biased Official, Frightened Witness) — each a record-layer behavior with a tell. §8 obstacles = informational/bureaucratic hazards (sealed/redacted records, grounded dead-ends, surveillance flags, clearance walls, decoy floods). Retaliation escalates near the truth. Added **Publish** to §2.3 abilities.|
 |2026-06-02|**§5 Levels completed.** §5.2 Pacing: within-case clear→branching→hard-commit; across-game the four difficulty levers ramp; mechanics introduced safely then combined. §5.3 Advancing: **open parallel caseload** (work several cases at once, leads cross-pollinate; MVP starts single), soft-gated by clearance + rank/access (no hard walls); **closed cases can reopen** when consequences/evidence surface, but harm already done stands (resolves the §2.3/§2.4 reopening question). §5.4 reinterpreted as **case anatomy + archetypes** (Staged Accident, Convenient Disappearance, Buried Witness, Scrubbed Record) — each a grammar with a lie-pattern, district lean, and threads into the secret.|
 |2026-06-02|**§5.1 ground-truth engine locked.** A "level" = a **case**. Generation = **hybrid**: authored case grammars + the systemic-secret backbone, procedurally filled with entities/events/relationships/records. Atoms: entities, events (timestamped/causal), relationships, the Crime (true sequence), records (tracked fidelity — true/partial/biased/false, falsehoods attributed), leads (requestable edges). Assembly order: generate ground truth from a seed → project the record layer with grounded distortions → **verify a solution path exists** (solver/checker; regenerate/patch otherwise — Pillar 1) → thread interlinks into the secret (Pillar 4) → LLM renders only at request time. Red herrings grounded; concrete generator tech deferred to §14 (simulation-first flagged as the stretch to prototype).|
