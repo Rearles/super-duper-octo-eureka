@@ -73,12 +73,19 @@ The fantasy is the *real* detective's fantasy: not gunplay, but the patient, add
 
 ### 1.2 Genre & Pillars
 
-📝 GUIDANCE: Name the genre (or genre blend) and 3–4 design pillars — short phrases that every later decision should serve. Pillars are tie-breakers: when two features compete, the one that supports a pillar wins.
+**Genre / blend:** A systemic detective / deduction game — the reasoning core of *Return of the Obra Dinn* and *The Case of the Golden Idol*, set on a procedurally-generated, internally-consistent case-world (the systemic integrity of an immersive sim, the document-work of *Papers, Please*) rather than a hand-authored, finite puzzle. An investigative sandbox, not a visual novel.
 
-**Genre / blend:** [ … ]  
-**Pillar 1:** [ … ]  
-**Pillar 2:** [ … ]  
-**Pillar 3:** [ … ]
+The four pillars below are tie-breakers: when two features compete, the one that serves a pillar wins. Each rules something out on purpose.
+
+**Pillar 1 — "The world never lies."** Ground truth is sacrosanct: every document is consistent, every contradiction is real and meaningful, and every case is solvable from the evidence alone. *Rules out:* ungrounded red herrings, unsolvable "gotcha" mysteries, anything the LLM invents.
+
+**Pillar 2 — "Deduction, not direction."** The player drives the investigation by reasoning; the game never dictates whom to suspect or what to pull next. *Rules out:* quest markers, objective checklists, "go interview X" hand-holding.
+
+**Pillar 3 — "Every request has a price."** Investigation is resource-bound and conclusions are committal — pulling a thread costs something, and being wrong has consequences the world remembers. *Rules out:* free infinite querying, consequence-free guessing, brute-forcing every document.
+
+**Pillar 4 — "The city is the case."** Cases interlink; each truth exposes a larger structure, and the world persists and remembers. *Rules out:* disposable one-off cases, a static backdrop, resets that erase consequence.
+
+> Atmosphere/noir is treated as flavor, not a pillar. "Paperwork is play" (the tactile pleasure of handling, annotating, and connecting documents) is a first-class UX principle under §12, not a pillar.
 
 -----
 
@@ -757,6 +764,7 @@ The fantasy is the *real* detective's fantasy: not gunplay, but the patient, add
 
 |Date |Decision & reasoning                                                      |
 |-----|--------------------------------------------------------------------------|
+|2026-06-02|**Design pillars locked (4):** "The world never lies" (integrity / hallucination-proof as a design law), "Deduction, not direction" (player-driven, no quest markers), "Every request has a price" (cost + consequence), "The city is the case" (interlinked, persistent world). Atmosphere kept as flavor; "Paperwork is play" demoted to a §12 UX principle rather than a 5th pillar. Genre framed as systemic detective/deduction on a procgen case-world (Obra Dinn / Golden Idol × Papers Please / immersive sim).|
 |2026-06-02|**Case structure: interlinked web → one truth.** Cases share people/places/threads and assemble into a single larger truth, giving the open world purpose. Alternatives: anthology of standalone cases (kept as the MVP-friendly *starting* shape), or fully emergent sim-generated links (too unpredictable to guarantee satisfying). Vision = interlinked; MVP = one standalone case.|
 |2026-06-02|**Central tension: investigation has a cost + stakes of being wrong.** Requests draw on a limited investigative resource, and conclusions can be wrong with consequences the world remembers. Rejected pure free-for-all sandbox (signal/noise drowning risk) as the *primary* driver, though signal-in-noise remains a secondary texture. Makes deduction a chain of real decisions.|
 |2026-06-02|**Setting tone: grounded + a systemic secret.** Real-feeling alt-St. Louis, no supernatural; the "alternate" is institutional/historical, exposed layer by layer through solved cases. Chosen over a speculative/weird twist (small risk to the pure-deduction promise) and pure realism (no payoff for "reveals about the world"). Protects the real-deduction hook while giving the world a punchline.|
