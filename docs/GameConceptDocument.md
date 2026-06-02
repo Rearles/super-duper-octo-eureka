@@ -614,26 +614,21 @@ The economy has distinct axes: **Clearance** (a global spend-to-act budget), and
 
 📝 GUIDANCE: How new players learn — what is taught, in what order, and how (explicit instruction, guided first run, learn-by-doing). The best tutorials teach through play rather than text walls.
 
-💬 EXPLORE WITH CLAUDE CODE: What is the minimum the player must understand before the game is fun, and can that be taught without stopping play?
-
-**What the tutorial teaches & how:** [ … ]
+**What the tutorial teaches & how:** Taught **by doing**, through a gentle **starter case** — your first reopened file as a new Unit hire (a *Buried Witness* archetype: low ambiguity, a single clean contradiction). The case walks the player through the core loop without text walls: read the file → follow a highlighted lead → request a record (introducing **clearance**) → spot the contradiction the game flags → commit a small **factual finding**, then a first **disposition** that produces a visible, immediate consequence (introducing the Ledger and stakes). The **theory-level whisper** runs with extra-strong training wheels here, dialing back as competence shows. Advanced systems (hunch requests, Heat, factions, going public, the calendar) are introduced one at a time across the first few cases — safely, then combined (§5.2).
 
 -----
 
 ### 11.2 Challenge Scaling
 
-📝 GUIDANCE: How the game grows with the player over a full playthrough — what gets harder, what stays constant, and what triggers escalation. Connect this to the Difficulty Philosophy in Section 3.
-
-**What scales and what triggers it:** [ … ]
+**What scales and what triggers it:** Escalation follows the four §3.2 levers, triggered by **proximity to the systemic secret** and accumulated progress: (1) the **world resists more** — guarding factions' Heat climbs faster, access tightens, records get scrubbed; (2) **case complexity ramps** — more entities, deeper lies, more interlinking; (3) **safety nets thin** — the theory-whisper and hints recede; (4) **stakes intensify** — longer-latency, heavier consequences. The per-faction systems (§2.4/§9/§10) grow more entangled as you accrue standing, Heat, and contacts across factions. What stays **constant**: every case remains solvable (Pillar 1), and difficulty is always complexity/ambiguity, never an unsolvable gate.
 
 -----
 
 ### 11.3 Session Loop & Game Flow
 
-📝 GUIDANCE: The shape of a typical session and the overall arc to completion. Describe the loop the player repeats and the long-term goal that gives it direction.
+**Session loop:** A session is shaped by the **calendar** (days/weeks). Within a day: review the open parallel caseload → pull threads (spend clearance) → cross-reference and build the Board → take official acts or go public (raising per-faction Heat) → manage exposure and call contacts → commit findings/dispositions. Time advances in days: **clearance budgets cycle**, **cases age**, and **scheduled consequences land on the calendar** (§3.3) — so a session both progresses cases and absorbs the fallout of past ones. Lying low to cool a faction's Heat costs days, trading progress for safety.
 
-**Session loop:** [ … ]  
-**Path to completion / win condition:** [ … ]
+**Path to completion / win condition:** The interlinked cases thread toward the **core of the Registry's secret** (Pillar 4). The finale is a **definitive endgame**: a climactic, morally-grey **final choice** about the secret — *expose it, bury it, or leverage it* — resolved through the systems the player has been using (evidence, going public, factions). The final choice **plus the accumulated faction state** determines the ending, so there are multiple endings without multiple authored arcs. There is no score to maximize and no clean victory — only the truth you found and what you chose to do with it.
 
 -----
 
@@ -829,6 +824,7 @@ The economy has distinct axes: **Clearance** (a global spend-to-act budget), and
 
 |Date |Decision & reasoning                                                      |
 |-----|--------------------------------------------------------------------------|
+|2026-06-02|**§11 Flow & Onboarding locked.** 11.1 Tutorial: teach **by doing** via a gentle starter case (Buried Witness) — read→lead→request (introduces clearance)→flagged contradiction→factual finding→first disposition with an immediate consequence; theory-whisper as strong training wheels that ease off; advanced systems (hunches, Heat, factions, going public, calendar) introduced one at a time. 11.2 Scaling: the four §3.2 levers, triggered by proximity to the secret + progress; per-faction systems entangle further; constant = always solvable. 11.3 Session loop on a **calendar (days/weeks)** — clearance cycles, cases age, consequences land on dates; lying low costs days. **Win = definitive endgame: a final morally-grey choice about the secret (expose / bury / leverage); final choice + faction state → multiple endings; no clean victory.**|
 |2026-06-02|**Per-faction sub-systems (refinement).** Each faction (Unit, press, political elite/powerful, public, neutral) is a full sub-system with its **own Standing, own Heat/Exposure gauge (§9.1), and own Contacts & favors network (§9.2/§10)**. Heat and favors are no longer global — you can be hot with the elite and cold with the press; a press contact can't open an elite's sealed file. Updates §2.4, §9.1, §9.2.|
 |2026-06-02|**§10 Economy locked.** Axes: **Clearance** (global spend-to-act budget — recurring institutional allotment + rank + economical-play carry; closing cases/standing raise it) and, **per faction**, Heat/Exposure, Favors, Standing. Spending: clearance on requests/official acts/expediting; per-faction favors on that faction's contacts; Heat is the hidden price of risky/visible acts (per affected faction). Literal money minimal. §10.3 reinterpreted as acquisition tables (access/tools by rank/clearance; per-faction contacts & favors). Earning: periodic budget + performance.|
 |2026-06-02|**§9 Player locked** (reinterpreted, no HP). 9.1 "health" = **Heat / Exposure** gauge: rises with risky/visible acts (sensitive pulls, official acts, going public, pressing the powerful), faster near the secret; high heat → obstructor retaliation; cool by lying low; **no death/game-over** (maxing heat forces hard consequences carried forward). 9.2 = **Contacts & Favors** network (sources called on for access/leaks/clearance/warnings at a cost; faction-tied; access never answers). 9.3 pick-ups = found leads/materials + caches (no clearance cost; may be true/partial/planted; caches can be bait). 9.4 upgrades = rank + record access, raw-data tools, contacts/standing (no speed/body stats). Open: is Heat separate from clearance (→§10); can contacts be burned.|
