@@ -53,15 +53,21 @@ The tech stack (engine, language, platform, architecture) is intentionally undec
 
 ### 1.1 High Level Concept
 
-📝 GUIDANCE: One to two paragraphs capturing the core fantasy in plain language — what the player does, the setting, the moment-to-moment loop, and the single thing that makes this game distinct. Write this before anything else and revisit it whenever scope shifts.
+> _Working title (provisional): **Mound City** — candidates still open (see §15.3)._
 
-💬 EXPLORE WITH CLAUDE CODE: Draft three one-sentence pitches at different levels of ambition, then pick and expand the strongest.
+A cold-case detective game set in an alternate Saint Louis, Missouri. You work forgotten cases from a basement of files: review what little exists — witness statements, interviews, autopsy reports, physical evidence, brittle old records — then request *new* records on almost anyone or anything: the phone bill of a witness no one ever interviewed, a property deed, employment history, financials, travel. Behind every document is a **procedurally-generated ground truth** — a deterministic, internally-consistent simulation of the city, its people, and what really happened. A language model dresses that ground truth into believable documents but can **never alter a fact**, so the world always holds together and every case is genuinely solvable by deduction. Closing a case doesn't just clear it: each one peels back a layer of a hidden structure inside the city, and the cases are **interlinked** — shared people, places, and threads assembling, case by case, into a single larger truth.
 
-💬 EXPLORE WITH CLAUDE CODE: Pressure-test the hook — what is the player doing in the first 60 seconds, and why would they keep playing?
+The fantasy is the *real* detective's fantasy: not gunplay, but the patient, addictive work of pulling a thread, catching a contradiction, and watching a buried truth surface — in a world honest enough to reward the effort.
 
-**Pitch (one sentence):** [ … ]  
-**Core loop (what the player repeats):** [ … ]  
-**What makes it distinct:** [ … ]
+**Pitch (one sentence):** In an alternate St. Louis, request any record on anyone to crack decades-old cold cases — backed by a procedurally-generated, hallucination-proof reality where every document is true, every contradiction is real, and every case is solvable.
+
+**Core loop (what the player repeats):** Review the case file → form a question → spend a limited investigative resource to request records (LLM-dressed ground truth) → cross-reference for contradictions and corroboration → build the timeline and relationship web → follow the strongest lead → commit to a conclusion and close the case → uncover the next thread of the city's larger truth.
+
+**What makes it distinct:** Infinite, request-anything investigation with **zero fabricated truth** — the generative depth of an LLM married to the logical integrity of a hand-authored mystery. Curiosity costs something (investigation is resource-bound) and conclusions carry weight (you can be wrong, and the city remembers), so deduction is a chain of real decisions, not a sandbox.
+
+**Tone & setting:** Grounded, investigative, slow-burn. Believable on the surface; a systemic secret underneath. No supernatural — the "alternate" is institutional and historical, something solved cases progressively expose.
+
+**Ambition framing:** The *vision* is an open, living alternate-St. Louis of interlinked cases building to one truth. The *MVP* is a single, fully-solvable case that proves the engine — a deterministic ground-truth fact graph plus a grounded LLM renderer that can dress facts but never contradict them. (See §15.)
 
 -----
 
@@ -751,8 +757,10 @@ The tech stack (engine, language, platform, architecture) is intentionally undec
 
 |Date |Decision & reasoning                                                      |
 |-----|--------------------------------------------------------------------------|
-|[ … ]|[ … what was decided, what alternatives were weighed, and why this won … ]|
-|[ … ]|[ … ]                                                                     |
+|2026-06-02|**Case structure: interlinked web → one truth.** Cases share people/places/threads and assemble into a single larger truth, giving the open world purpose. Alternatives: anthology of standalone cases (kept as the MVP-friendly *starting* shape), or fully emergent sim-generated links (too unpredictable to guarantee satisfying). Vision = interlinked; MVP = one standalone case.|
+|2026-06-02|**Central tension: investigation has a cost + stakes of being wrong.** Requests draw on a limited investigative resource, and conclusions can be wrong with consequences the world remembers. Rejected pure free-for-all sandbox (signal/noise drowning risk) as the *primary* driver, though signal-in-noise remains a secondary texture. Makes deduction a chain of real decisions.|
+|2026-06-02|**Setting tone: grounded + a systemic secret.** Real-feeling alt-St. Louis, no supernatural; the "alternate" is institutional/historical, exposed layer by layer through solved cases. Chosen over a speculative/weird twist (small risk to the pure-deduction promise) and pure realism (no payoff for "reveals about the world"). Protects the real-deduction hook while giving the world a punchline.|
+|2026-06-02|**Engine architecture: deterministic procgen ground-truth fact graph + grounded LLM renderer.** Procedural generation (no LLM) authors a consistent, solvable fact graph; the LLM only renders facts as documents and may never contradict them. This is the novel, defensible core and the first thing to prototype. Ambition: open-world vision, but MVP = one fully-solvable case proving this engine.|
 
 -----
 
