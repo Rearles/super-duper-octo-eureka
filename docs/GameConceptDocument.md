@@ -1,8 +1,8 @@
-# [GAME TITLE] — Game Concept Document
+# Mound City *(working title)* — Game Concept Document
 
 **Author:** [ … ]  
 **Studio:** [ … ]  
-**Version:** 0.1 · Draft · 2026-06-02
+**Version:** 1.0 · Design complete (pre-production) · 2026-06-02
 
 -----
 
@@ -804,8 +804,13 @@ The economy has distinct axes: **Clearance** (a global spend-to-act budget), and
 
 💬 EXPLORE WITH CLAUDE CODE: Trace the absolute minimum set of mechanics, one enemy, and one space needed to test whether the core loop works — build that first.
 
-**What the MVP must include:** [ … ]  
-**What is explicitly deferred:** [ … ]
+**What the MVP must include:** The smallest build that proves the **core loop is fun** — does *requesting records, catching a real contradiction, and committing a verdict* feel good? Concretely:
+- The **deterministic core engine** for **one** procgen case: a small fact graph + record layer (with at least one lie to catch) + the **solvability checker**.
+- The **template renderer** (no LLM yet) turning facts into a handful of readable documents.
+- A **barebones top-down desk UI**: read documents, follow a lead, submit a request (spending a simple clearance), see a flagged contradiction, build a minimal Board.
+- The **two-layer verdict** (factual finding + a single disposition) with **one immediate consequence** to prove the act has weight.
+
+**What is explicitly deferred:** the LLM renderer (template first); per-faction systems (Heat/contacts/standing); the calendar and delayed/variable-latency consequences; interlinked cases and the secret backbone; going public / the press; hunch requests, rank/tools progression; multiple case archetypes; audio/visual polish; the whole open-information city beyond one case. *Be ruthless — prove the loop before building the world.*
 
 -----
 
@@ -813,12 +818,12 @@ The economy has distinct axes: **Clearance** (a global spend-to-act budget), and
 
 📝 GUIDANCE: A rough sequence of build targets from prototype to complete. Keep it light — milestones, not a schedule. Reorder as the project teaches you what matters.
 
-|Milestone     |Goal — what “done” means                                  |
-|--------------|----------------------------------------------------------|
-|Prototype     |Prove the core loop in the roughest playable form.        |
-|Vertical slice|One area, fully realized, representative of final quality.|
-|Content build |Breadth — remaining zones, enemies, systems.              |
-|Polish & ship |Tuning, feedback, audio/visual finish, release prep.      |
+|Milestone|Goal — what "done" means|
+|---------|------------------------|
+|**Prototype** (= MVP slice §15.1)|The core engine for one solvable case + template renderer + barebones desk UI; the request → contradiction → two-layer-verdict loop is playable and *fun*.|
+|**Vertical slice**|One case, fully realized to target quality: LLM rendering (with the no-LLM fallback) + Heat/retaliation + one faction + a delayed consequence + the noir art/audio pass.|
+|**Content build**|Breadth: interlinked cases + the secret backbone, more case archetypes, the full per-faction web (standing/Heat/contacts), the calendar, going-public/the press, rank/tools progression.|
+|**Polish & ship**|Tuning (clearance/Heat/consequence pacing), accessibility, audio/visual finish, the definitive endgame, release prep (Tauri desktop build).|
 
 -----
 
@@ -828,6 +833,7 @@ The economy has distinct axes: **Clearance** (a global spend-to-act budget), and
 
 |Date |Decision & reasoning                                                      |
 |-----|--------------------------------------------------------------------------|
+|2026-06-02|**§15 Scope & Roadmap locked — GCD v1.0 complete.** **MVP** = the §14 smallest prototype: deterministic core engine for ONE solvable case + template renderer (no LLM) + barebones top-down desk UI + the request→contradiction→two-layer-verdict loop + one immediate consequence. Deferred from MVP: LLM rendering, per-faction systems, calendar/delayed consequences, interlinking/the secret, going-public/press, hunches, progression, multiple archetypes, A/V polish, the wider city. Milestones: Prototype (=MVP) → Vertical slice (one polished case + LLM + Heat + one faction + a delayed consequence + art pass) → Content build (interlinking, archetypes, full faction web, calendar, press, progression) → Polish & ship (tuning, accessibility, the endgame, Tauri desktop). Next: bridge to `create-plan` for the Prototype.|
 |2026-06-02|**§14 Technical Foundation DECIDED** (the deferred, design-informed call). Stack = **TypeScript end-to-end, web app** (HTML/DOM docs + Canvas/PixiJS Board + React/Svelte shell; desktop via Tauri later); no game engine. Architecture = **pure deterministic core engine** (fact graph · generator · solvability checker · per-faction sim · calendar/scheduler), UI- and LLM-independent and seed-replayable; **LLM as a cached, swappable renderer adapter with a no-LLM template fallback** (LLM is presentation only — the game is correct without it). Top risks: grounded rendering without hallucination (validate vs. facts + fallback) and provably-solvable generation (generator+solver co-built, checker gates every case). Smallest prototype = one tiny solvable case → ~3 rendered docs → the request→contradiction→verdict loop (= the §15 MVP seed). Chosen over Godot/Unity (worse for a document UI, no benefit to the procgen/LLM core).|
 |2026-06-02|**§13 Audio & Visual Identity locked.** Art = **stylized illustration / noir** (hand-illustrated, high-contrast, muted palette + desk-lamp light, period document graphic design; quiet institutional dread, no supernatural; readability first). Refs: Papers Please, Obra Dinn, Disco Elysium, period noir/municipal paperwork. VFX: contradiction flags, consequence-landing stamps, per-faction Heat tells, publish ripple, ambiguous whisper cue; record/tamper/redaction/retaliation reveals. SFX: the analog desk as instrument (paper, typewriter/teletype, microfiche whir, rotary phone, rubber stamp, file drawer, pencil, room tone). Music: sparse contemplative noir-jazz on the Desk → drones/dread at high Heat → stabs for publish/consequence → near-silence in the Office → heavy unresolved endgame theme.|
 |2026-06-02|**§12 Controls & UI locked.** Input-agnostic actions (select/move/annotate docs, build the Board, request via the slip, search, call contacts, official acts, publish, commit verdict, Ledger/Factions, advance calendar/lie low) — bindings deferred to §14. Menus = hub-and-spoke from **the Office** (Desk · Case/Board select · Registry/search · Ledger · Factions · Calendar). HUD: clearance, date, per-faction Heat, alerts, contradiction flags. Camera = **top-down desk** (2D, document-centric, tactile; no 3D traversal). Screens: Settings (accessibility-forward; difficulty via assists), End-of-Day Summary (no score), Play/Desk, Case & Board select; engagement prompts N/A (premium PC, no nags).|
