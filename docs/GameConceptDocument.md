@@ -91,13 +91,13 @@ The four pillars below are tie-breakers: when two features compete, the one that
 
 ### 1.3 Back Story
 
-📝 GUIDANCE: The narrative premise and world context. Enough fiction to motivate the mechanics and tone — not a full script. Establish the situation, the player’s role in it, and the stakes.
+**Setting / premise:** Alternate Saint Louis, **late 20th century** — a city defined by the **Registry**, a vast municipal apparatus that has, since a turning point in the city's history (specifics deferred), indexed near-everything about everyone: residents, calls, deeds, transactions, deaths. Records are **analog** — paper, microfiche, phone logs, typed reports — which is both the game's tactile texture and a deliberate boundary on the simulation. The Registry is powerful, opaque, and quietly menacing: a bureaucracy with momentum of its own. Its origin and true purpose are the city's **systemic secret** — the shape is pinned (an institutional structure that solved cases progressively expose), the specifics left as design space.
 
-💬 EXPLORE WITH CLAUDE CODE: Does the story justify the core loop, or is it decoration? The strongest premises make the mechanics feel inevitable.
+**Player's role:** An investigator in a just-revived **Cold Case Unit**, granted **rationed clearance** to query the Registry. You reopen the cases the institutions let go cold. Crucially, your verdicts are **written back into the Registry** as official truth — you don't merely find answers, you *enter* them, and the city acts on what you enter.
 
-**Setting / premise:** [ … ]  
-**Player’s role:** [ … ]  
-**Stakes / goal:** [ … ]
+**Stakes / goal:** Short-term, close cold cases by deduction. But the Registry is not a neutral tool: acting within it carries **real, morally grey consequences**. There is always an answer to *find* (Pillar 1 — the world never lies), but rarely a *just* one — closing a case can shield the powerful, harm the innocent, or expose the vulnerable, and you must often decide on **partial information**. Consequences are **real and time-delayed**: some land immediately, some the next day, some not for months — so you act under uncertainty and live with the ripples. Long-term, uncover what the Registry is, who built it, and what it is for. No clean resolutions — only answers, each with a price.
+
+> **Theme:** *The world never lies, but the truth never absolves.* Factual truth is always discoverable; moral outcome is always compromised. Two systems to be designed in §2–§3 carry this: (a) a **delayed, variable-latency consequence system** (the Registry "acts" on an unpredictable clock — and those consequences must themselves be procgen ground truth, never LLM-invented), and (b) a **morally-grey verdict system** where no option is the clean/just answer.
 
 -----
 
@@ -764,6 +764,7 @@ The four pillars below are tie-breakers: when two features compete, the one that
 
 |Date |Decision & reasoning                                                      |
 |-----|--------------------------------------------------------------------------|
+|2026-06-02|**Back story: "The Registry."** Alt-St. Louis (late-20th-century, analog) is defined by a total-records municipal archive — the Registry — whose contents ARE the procgen ground-truth graph. Player = revived Cold Case Unit investigator with rationed clearance; verdicts are written back into the Registry as official truth. The Registry's origin/purpose is the deferred systemic secret. **Added stakes (user direction):** the Registry is mysterious AND scary — actions carry real consequences with **variable latency** (immediate / next-day / months+), and verdicts are **morally grey** (no clean/just answer; decide on partial info). Theme: "the world never lies, but the truth never absolves." Two systems flagged for §2–§3: delayed variable-latency consequences (must be procgen ground truth, not LLM-invented) and a morally-grey verdict system. |
 |2026-06-02|**Design pillars locked (4):** "The world never lies" (integrity / hallucination-proof as a design law), "Deduction, not direction" (player-driven, no quest markers), "Every request has a price" (cost + consequence), "The city is the case" (interlinked, persistent world). Atmosphere kept as flavor; "Paperwork is play" demoted to a §12 UX principle rather than a 5th pillar. Genre framed as systemic detective/deduction on a procgen case-world (Obra Dinn / Golden Idol × Papers Please / immersive sim).|
 |2026-06-02|**Case structure: interlinked web → one truth.** Cases share people/places/threads and assemble into a single larger truth, giving the open world purpose. Alternatives: anthology of standalone cases (kept as the MVP-friendly *starting* shape), or fully emergent sim-generated links (too unpredictable to guarantee satisfying). Vision = interlinked; MVP = one standalone case.|
 |2026-06-02|**Central tension: investigation has a cost + stakes of being wrong.** Requests draw on a limited investigative resource, and conclusions can be wrong with consequences the world remembers. Rejected pure free-for-all sandbox (signal/noise drowning risk) as the *primary* driver, though signal-in-noise remains a secondary texture. Makes deduction a chain of real decisions.|
