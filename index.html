@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mound City — MVP prototype</title>
+    <style>
+      body { font-family: ui-monospace, "SF Mono", Menlo, monospace; background:#1a1714; color:#e7ddcf; margin:0; padding:2rem; line-height:1.55; max-width:980px; }
+      h1,h2,h3 { color:#d9b779; font-weight:600; }
+      header p { color:#b6a88f; }
+      .desk,.board,.verdict { border:1px solid #3a342c; padding:1rem 1.25rem; margin:1rem 0; background:#211d18; }
+      .clearance strong { color:#d9b779; }
+      .whisper { color:#9fb6a0; font-style:italic; }
+      .doc pre { background:#15120f; border:1px solid #3a342c; padding:.75rem; white-space:pre-wrap; margin:.5rem 0; }
+      button { font-family:inherit; background:#2c2620; color:#e7ddcf; border:1px solid #5a5040; padding:.4rem .6rem; margin:.25rem .25rem 0 0; cursor:pointer; }
+      button:hover:not(:disabled) { background:#3a332a; }
+      button:disabled { opacity:.4; cursor:not-allowed; }
+      .contradiction { color:#e0a35a; }
+      .outcome { border:1px solid #d9b779; background:#15120f; padding:1rem 1.25rem; margin-top:1rem; color:#e7ddcf; }
+      select { font-family:inherit; background:#15120f; color:#e7ddcf; border:1px solid #5a5040; margin-left:.5rem; padding:.2rem; }
+      label { display:block; margin:.5rem 0; }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

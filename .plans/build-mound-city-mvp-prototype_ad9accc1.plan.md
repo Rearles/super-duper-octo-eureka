@@ -2,7 +2,7 @@
 title: "Build the Mound City MVP prototype — the request → contradiction → verdict core loop"
 type: "feature"
 created: "2026-06-02"
-status: not-started
+status: complete
 related: []
 ---
 
@@ -16,19 +16,19 @@ Key design refs in the doc: §5.1 (generation engine), truth-model (ground truth
 
 ## Todos
 
-- [ ] Scaffold `package.json`, `tsconfig.json` (strict), and Vite — TS web skeleton
-- [ ] Create `src/engine/types.ts` — Entity, Event, Relationship, Record, Fidelity, Case
-- [ ] Create `src/engine/factGraph.ts` — `FactGraph` model with query helpers
-- [ ] Create `src/engine/generator.ts` — seeded one-case generator with one planted lie
-- [ ] Create `src/engine/solver.ts` — `verifySolvable()` confirms a solution path exists
-- [ ] Create `src/engine/templateRenderer.ts` — render facts to plain document text (no LLM)
-- [ ] Create `src/engine/index.ts` — `generateCase(seed)` → verify → expose engine API
-- [ ] Add `src/engine/engine.test.ts` — generation is deterministic, solvable, and renders
-- [ ] Create `src/ui/desk.ts` — desk view: list documents, read, submit a request (spend clearance)
-- [ ] Create `src/ui/board.ts` — minimal Board; flag contradictions between conflicting records
-- [ ] Create `src/ui/verdict.ts` — two-layer verdict (factual + one disposition) firing one consequence
-- [ ] Create `index.html` and `src/main.ts` — mount the desk UI and play one case end-to-end
-- [ ] Verify: `npm install && npm run build && npm test` green; play one case; commit
+- [x] Scaffold `package.json`, `tsconfig.json` (strict), and Vite — TS web skeleton
+- [x] Create `src/engine/types.ts` — Entity, Event, Relationship, Record, Fidelity, Case
+- [x] Create `src/engine/factGraph.ts` — `FactGraph` model with query helpers
+- [x] Create `src/engine/generator.ts` — seeded one-case generator with one planted lie
+- [x] Create `src/engine/solver.ts` — `verifySolvable()` confirms a solution path exists
+- [x] Create `src/engine/templateRenderer.ts` — render facts to plain document text (no LLM)
+- [x] Create `src/engine/index.ts` — `generateCase(seed)` → verify → expose engine API
+- [x] Add `src/engine/engine.test.ts` — generation is deterministic, solvable, and renders
+- [x] Create `src/ui/desk.ts` — desk view: list documents, read, submit a request (spend clearance)
+- [x] Create `src/ui/board.ts` — minimal Board; flag contradictions between conflicting records
+- [x] Create `src/ui/verdict.ts` — two-layer verdict (factual + one disposition) firing one consequence
+- [x] Create `index.html` and `src/main.ts` — mount the desk UI and play one case end-to-end
+- [x] Verify: `npm install && npm run build && npm test` green; play one case; commit
 
 ## Notes
 
@@ -49,6 +49,10 @@ Key design refs in the doc: §5.1 (generation engine), truth-model (ground truth
 - ONE hand-tuned case shape (a "Buried Witness": a false statement vs. a hard record). No interlinking, no factions, no calendar.
 - "Clearance" is a single integer counter for the MVP. One disposition with one immediate, visible consequence — enough to prove the act has weight.
 - Success test: can a fresh player request records, notice the planted contradiction, and reach the correct factual verdict — and does it feel good?
+
+### Build result (2026-06-02)
+
+MVP complete. `npm install` (76 pkgs) → `tsc --noEmit` clean → `vitest run` **8/8 green** (determinism, solvability across 100 seeds, lie-is-catchable, contradiction surfaces only after the right records, clearance spending, correct/incorrect verdicts) → `vite build` succeeds (13 modules, 11 kB). Run locally with `npm run dev`. The core loop — request → catch the planted lie → two-layer verdict → consequence — is playable end-to-end on a barebones top-down desk.
 
 ### Next milestones (post-MVP, see §15.2)
 
