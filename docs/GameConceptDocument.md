@@ -173,11 +173,27 @@ The four pillars below are tie-breakers: when two features compete, the one that
 
 ### 2.3 Player Abilities
 
-📝 GUIDANCE: Everything the player can do, grouped by context (e.g. in-action vs. in-hub). Keep verbs concrete: move, attack, interact, manage resources. Note any abilities that are limited, charged, or unlocked over time.
+City-exploration verbs (walking the streets, visiting locations) belong to the open-world *vision* and are deferred to §4/§15; the core verbs are desk-and-records.
 
-**Primary actions:** [ … ]  
-**Secondary / contextual actions:** [ … ]  
-**Limited or unlockable abilities:** [ … ]
+**Primary actions (at the desk):**
+- **Request** a record — via a surfaced *lead* or a free-form *hunch* — spending clearance.
+- **Read & annotate** documents (highlight, margin notes).
+- **Cross-reference** — place documents side by side; the game flags *that* they corroborate or contradict (never what it means).
+- **Build the Board** — add entity and document tokens, draw and label connections, assemble the timeline / relationship web.
+- **Search** the diegetic card-catalog / microfiche index.
+- **Commit a verdict** — the two-layer factual solution + disposition.
+
+**Secondary / contextual actions:**
+- **Re-file / reorganize** documents — the optional manual control over auto-filing.
+- **Bookmark / flag** a lead to pursue later.
+- **Review the Decision Ledger** — revisit how past verdicts have rippled.
+- **Compare across cases** — entities and timelines recur, since cases interlink.
+- *(Open question: whether and how a closed case can be re-opened when new consequences or evidence surface — see §5 / §11.)*
+
+**Limited or unlockable abilities:**
+- **Clearance** — the rationed resource gating every request (earn/spend in §10).
+- **Institutional rank (progression):** working cases raises your standing in the Cold Case Unit, mainly unlocking **higher-sensitivity record types** (sealed, medical, financial, classified) and **new parts of the city / Registry** — *access*, not raw power. Growth you feel without diluting skill-based deduction.
+- **Analysis tools (raw-data only):** unlockable aids that reveal/compare/search raw information — overlay two timelines, compare handwriting, transcribe a recording, list every document mentioning an entity — but they **never interpret or flag a conclusion** (Pillar 2). They sharpen the player's eyes; they don't think.
 
 -----
 
@@ -791,6 +807,7 @@ The four pillars below are tie-breakers: when two features compete, the one that
 
 |Date |Decision & reasoning                                                      |
 |-----|--------------------------------------------------------------------------|
+|2026-06-02|**§2.3 Player Abilities locked.** Core desk verbs: request (lead/hunch), read/annotate, cross-reference, build the Board, search the analog index, commit two-layer verdict. Secondary: optional re-file, bookmark leads, review the Ledger, cross-case compare. Progression = **light institutional rank** (unlocks higher-sensitivity record types + new parts of the city/Registry — access, not power; keeps deduction central). Analysis tools = **raw-data only** (overlay/compare/transcribe/list; never interpret — Pillar 2). City-exploration verbs deferred to §4/§15. Open Q: re-opening closed cases when consequences surface.|
 |2026-06-02|**§2.2 Interface locked.** Framed as a detective's **desk** (paperwork-is-play): Desk, Case File, Board (string-corkboard timeline/relationship web), Request slip, Clearance meter, Decision Ledger, and a *diegetic* **analog search** (card-catalog/microfiche) that makes search fit the era. Organization = **auto by default, manual by choice** — game auto-files/indexes/extracts entities + auto-timeline, but the player can optionally re-file/reorganize anytime. Principle: automate the filing, never the thinking (Pillar 2). Instant-read: clearance, active case, alerts, contradiction flags. On-demand: full docs, Board, Ledger, search.|
 |2026-06-02|**§2.1 Core Mechanic locked.** Loop = request → cross-reference → deduce → two-layer verdict. Requestable surface = **leads + hunches hybrid** (documents surface cheap requestable leads; free-form "hunch" requests on any nameable entity cost more clearance) — solves signal-vs-noise while preserving request-anyone and "deduction, not direction". Renderer constraint: expresses only the facts a given record would legitimately contain; never leaks the solution or invents (Pillar 1). Verdict = **two-layer**: factual solution (who/how, checked vs. ground truth) + disposition (morally-grey, fires the scheduled consequences). Central tension: spend finite clearance for uncertain info toward a committal, incomplete-information verdict.|
 |2026-06-02|**§1.4 audience + consequence-feel steer.** Primary audience = deduction purists (*Obra Dinn* / *Golden Idol* / *Her Story*), with crossover to systems-sim and narrative/moral-choice players; PC-first, niche-but-passionate, depth over a low skill floor. Comparables: Obra Dinn, Golden Idol, Papers Please, Her Story/Contradiction, Disco Elysium. Rating ~M / PEGI 16–18 for theme. **Delayed-consequence feel (steers §2–§3): signpost the risk, hide the specifics, plus a Decision Ledger** that links each surfaced consequence back to the verdict that caused it — dread-with-agency, chosen over fully-hidden or investigate-first.|
