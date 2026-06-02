@@ -107,14 +107,17 @@ The four pillars below are tie-breakers: when two features compete, the one that
 
 |Comparable title|What’s similar|What’s different|
 |----------------|--------------|----------------|
-|[ … ]           |[ … ]         |[ … ]           |
-|[ … ]           |[ … ]         |[ … ]           |
-|[ … ]           |[ … ]         |[ … ]           |
+|Return of the Obra Dinn|Honest, fully-solvable deduction from evidence; you reach conclusions the game validates|Procgen and effectively infinite cases vs. one authored ship; request-anything records; morally-grey, delayed consequences|
+|The Case of the Golden Idol|Extracting truth from documents and scenes; fill-in-the-blank deduction|Generated, internally-consistent world; open-ended record requests; persistent consequence and a meta-secret|
+|Papers, Please|Bureaucratic document-work; moral greyness; a menacing state apparatus; consequence|Investigation/deduction core (not inspection); deep simulation; you query an archive rather than process a queue|
+|Her Story / Contradiction|Search-driven investigation through records and testimony|A consistent *generated* world (no hallucinated truth) instead of fixed FMV; you can request *new* records, not only search existing ones|
+|Disco Elysium|Detective frame; no clean or just answers; moral weight|Systemic, procgen document-deduction rather than dialogue-driven RPG; the factual truth is always findable|
 
-**Target audience:** [ … ]  
-**Intended rating / content considerations:** [ … ]
+**Target audience:** PC-first, niche-but-passionate. **Primary:** deduction purists (players of *Obra Dinn*, *Golden Idol*, *Her Story*) who want hard, fair, honest deduction as the main course. **Strong crossover:** immersive-sim / systems players drawn to emergent, cascading consequence, and narrative / moral-choice players (*Disco Elysium*, *Papers, Please*) drawn to weight and atmosphere. Not a mass-market title; the design favors depth and integrity over a low skill floor.
 
-**Open questions & decisions:** [ … capture positioning debates and audience assumptions here as they get resolved … ]
+**Intended rating / content considerations:** Mature themes — crime, death, autopsy detail, and morally-grey institutional harm — handled with restraint, not gratuitously. Likely **M / PEGI 16–18 for theme** rather than graphic content. Dread is institutional, not supernatural or gory.
+
+**Open questions & decisions:** Exact ESRB/PEGI rating TBD. How closely to model real St. Louis geography/history vs. invent freely (it's an *alternate* city, so we have license). Whether to fictionalize institution names. Sensitivity if cases touch real social issues (poverty, policing, displacement) — to be handled deliberately, not exploitatively.
 
 -----
 
@@ -764,6 +767,7 @@ The four pillars below are tie-breakers: when two features compete, the one that
 
 |Date |Decision & reasoning                                                      |
 |-----|--------------------------------------------------------------------------|
+|2026-06-02|**§1.4 audience + consequence-feel steer.** Primary audience = deduction purists (*Obra Dinn* / *Golden Idol* / *Her Story*), with crossover to systems-sim and narrative/moral-choice players; PC-first, niche-but-passionate, depth over a low skill floor. Comparables: Obra Dinn, Golden Idol, Papers Please, Her Story/Contradiction, Disco Elysium. Rating ~M / PEGI 16–18 for theme. **Delayed-consequence feel (steers §2–§3): signpost the risk, hide the specifics, plus a Decision Ledger** that links each surfaced consequence back to the verdict that caused it — dread-with-agency, chosen over fully-hidden or investigate-first.|
 |2026-06-02|**Back story: "The Registry."** Alt-St. Louis (late-20th-century, analog) is defined by a total-records municipal archive — the Registry — whose contents ARE the procgen ground-truth graph. Player = revived Cold Case Unit investigator with rationed clearance; verdicts are written back into the Registry as official truth. The Registry's origin/purpose is the deferred systemic secret. **Added stakes (user direction):** the Registry is mysterious AND scary — actions carry real consequences with **variable latency** (immediate / next-day / months+), and verdicts are **morally grey** (no clean/just answer; decide on partial info). Theme: "the world never lies, but the truth never absolves." Two systems flagged for §2–§3: delayed variable-latency consequences (must be procgen ground truth, not LLM-invented) and a morally-grey verdict system. |
 |2026-06-02|**Design pillars locked (4):** "The world never lies" (integrity / hallucination-proof as a design law), "Deduction, not direction" (player-driven, no quest markers), "Every request has a price" (cost + consequence), "The city is the case" (interlinked, persistent world). Atmosphere kept as flavor; "Paperwork is play" demoted to a §12 UX principle rather than a 5th pillar. Genre framed as systemic detective/deduction on a procgen case-world (Obra Dinn / Golden Idol × Papers Please / immersive sim).|
 |2026-06-02|**Case structure: interlinked web → one truth.** Cases share people/places/threads and assemble into a single larger truth, giving the open world purpose. Alternatives: anthology of standalone cases (kept as the MVP-friendly *starting* shape), or fully emergent sim-generated links (too unpredictable to guarantee satisfying). Vision = interlinked; MVP = one standalone case.|
