@@ -220,22 +220,34 @@ City-exploration verbs (walking the streets, visiting locations) belong to the o
 
 ### 3.1 Sources of Challenge
 
-📝 GUIDANCE: Name the broad categories of challenge — adversaries, environmental hazards, time/resource pressure, etc. — and roughly how each contributes to difficulty.
+For a deduction game, challenge is **informational and institutional**, not combat. The primary challenge is **cognitive** — the volume of records, lying/partial/biased documents, separating signal from noise, and assembling a coherent account from fragments under uncertainty.
 
-**Adversaries (overview):** [ … ]  
-**Environmental / terrain challenges (overview):** [ … ]  
-**Pressure systems (time, scarcity, etc.):** [ … ]
+**Adversaries (overview):** Institutional and human *resistance*, not enemies — witnesses and suspects who lie, cover-ups, gatekeepers who deny or delay access, and the powerful who push back as the player closes in on the systemic secret. *(These reinterpret §6–§8 for a detective game: recurring obstructors become "enemies," a powerful obstructing figure becomes a "boss," and sealed/booby-trapped records become "obstacles.")*
+
+**Environmental / terrain challenges (overview):** The Registry itself is the terrain — sealed records, redactions, dead ends, bureaucratic friction, and the sheer volume of the archive. Navigating *informational space* is this game's analogue of navigating a level.
+
+**Pressure systems (time, scarcity, etc.):** Clearance scarcity (every request costs — §10); time/consequence pressure (the world moves and consequences land on a variable clock — §3.3); multi-factional pressure (the Unit, press, powerful, and public react and constrain — §2.4); and moral weight (committing verdicts and official acts on incomplete information, knowing they are effectively irreversible).
 
 -----
 
 ### 3.2 Difficulty Philosophy
 
-📝 GUIDANCE: How hard the game intends to be and how it stays fair. Does difficulty scale with the player, with depth/level, or on a fixed curve? Are there safety valves (retries, checkpoints) or deliberate spikes?
+**Scaling approach:** Difficulty grows on four layered levers: (1) **the world resists near the truth** — as the player approaches the systemic secret, the powerful obstruct more, access tightens, and records get scrubbed or sealed; (2) **case complexity ramps** — more entities, deeper lies, more interlinked threads; (3) **safety nets thin** — later cases offer less of the theory-level whisper and fewer hints, demanding more independent deduction; (4) **stakes intensify** — later choices carry heavier, longer-latency, harder-to-foresee consequences. Difficulty is driven by *complexity and ambiguity*, never by hidden unsolvable gates.
 
-💬 EXPLORE WITH CLAUDE CODE: Sketch a difficulty curve and identify where the player is most likely to quit — then decide what catches them.
+**Fairness / safety mechanisms:** Core guarantee — **always solvable** from the evidence (Pillar 1); the difficulty is interpretation, not luck. Rails: the pre-commit theory-level whisper, requestable leads, contradiction/corroboration flags, and the clearance margin earned by economical play. **Failure is consequential, not terminal:** a wrong verdict ripples permanently — an innocent harmed, factions shifting, the city remembering — but there is no game-over; the player carries the weight forward. Botched cases can stay botched (you cannot un-harm the innocent) — that *irreversibility*, not a fail screen, is the cost.
 
-**Scaling approach:** [ … ]  
-**Fairness / safety mechanisms:** [ … ]
+-----
+
+### 3.3 The Consequence System — delayed & variable-latency
+
+*(Added section — the deferred system from §1.3/§2.4 formalized here, since it is the game's central pressure system.)*
+
+**The Registry acts.** Verdicts and intermediate official acts mutate the ground-truth graph and **schedule future world events deterministically**. Consequences surface on an unpredictable clock: **immediate**, **near** (next day / next case), or **long** (months / many cases later). Every consequence is itself ground truth — never LLM-invented (Pillar 1).
+
+- **Signposted, not random:** committing an act signals *that* it will ripple (the player feels the weight) but never what or when — dread with agency; known-unknowns, not unknown-unknowns.
+- **The Decision Ledger:** every surfaced consequence is recorded against the verdict/act that caused it, drawing the line back to the choice — the "that was me" payload that turns delay into meaning.
+- **Confirmation by doing:** because beliefs resolve only when acted on (§2.4), consequences are *also* how factual truth is confirmed or contradicted after the fact — the same loop serves feedback and dread.
+- **Design constraints (to tune):** bound the number of live consequence-threads so the player never loses the plot; guarantee every scheduled consequence eventually surfaces legibly via the Ledger; make latency feel **causal** (tie it to in-world triggers — a related case opening, enough time passing) rather than arbitrary.
 
 -----
 
@@ -809,6 +821,7 @@ City-exploration verbs (walking the streets, visiting locations) belong to the o
 
 |Date |Decision & reasoning                                                      |
 |-----|--------------------------------------------------------------------------|
+|2026-06-02|**§3 Challenge locked.** Challenge is cognitive + institutional, not combat: deduction difficulty, lying/partial records, signal-vs-noise. Adversaries = institutional *resistance* (liars, cover-ups, gatekeepers, the powerful) — reinterprets §6–§8. Terrain = the Registry (sealed records, redactions, dead ends, volume). Pressure = clearance scarcity, time/consequence, multi-factional, moral weight. Difficulty scales on **all four levers** (world resists near the truth + complexity ramps + safety nets thin + stakes intensify); always solvable (Pillar 1) — difficulty is interpretation, not luck. Failure = **consequential, not terminal** (no game-over; wrong verdicts ripple permanently; botched cases stay botched). Added **§3.3** formalizing the delayed variable-latency consequence system (scheduled ground-truth events; signposted; Decision Ledger; confirmation-by-doing; bounded live threads; causal latency).|
 |2026-06-02|**§2.4 Scoring locked + Pillar 1 sharpened.** **No score / no karma meter.** Truth split: ground truth (consistent, solvable) vs. records (can be wrong/partial/biased/falsified; each falsehood a deterministic, discoverable fact; the LLM renders faithfully, never invents). Factual feedback = **confirmation by doing**: a pre-commit *theory-level whisper* (your overall theory rings true or off — never which piece) + specific/partial truths resolve only when the player ACTS on a belief (final verdict OR intermediate official acts: subpoena, naming a person of interest, sensitive request) and the world reacts. Standing = **multi-factional reputation** (Unit, press, powerful, public) — competing lenses, no "good" axis. Rewards = economical deduction (clearance surplus), rank/access, narrative revelation; never points. Pillar 1 gloss (§1.2) updated to the ground-truth-vs-record-layer reading.|
 |2026-06-02|**§2.3 Player Abilities locked.** Core desk verbs: request (lead/hunch), read/annotate, cross-reference, build the Board, search the analog index, commit two-layer verdict. Secondary: optional re-file, bookmark leads, review the Ledger, cross-case compare. Progression = **light institutional rank** (unlocks higher-sensitivity record types + new parts of the city/Registry — access, not power; keeps deduction central). Analysis tools = **raw-data only** (overlay/compare/transcribe/list; never interpret — Pillar 2). City-exploration verbs deferred to §4/§15. Open Q: re-opening closed cases when consequences surface.|
 |2026-06-02|**§2.2 Interface locked.** Framed as a detective's **desk** (paperwork-is-play): Desk, Case File, Board (string-corkboard timeline/relationship web), Request slip, Clearance meter, Decision Ledger, and a *diegetic* **analog search** (card-catalog/microfiche) that makes search fit the era. Organization = **auto by default, manual by choice** — game auto-files/indexes/extracts entities + auto-timeline, but the player can optionally re-file/reorganize anytime. Principle: automate the filing, never the thinking (Pillar 2). Instant-read: clearance, active case, alerts, contradiction flags. On-demand: full docs, Board, Ledger, search.|
