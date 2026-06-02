@@ -203,7 +203,7 @@ City-exploration verbs (walking the streets, visiting locations) belong to the o
 **How performance is measured.** There is **no score and no morality / karma meter** — a number that rewarded the "right" choice would collapse the game's moral greyness into an optimization target. Performance lives on two separate planes:
 
 - **Factual accuracy — checkable, but *confirmed by doing*.** The world holds a consistent ground truth, so factual conclusions *can* be right or wrong — but the game never grades them with a checklist. Instead: (a) a pre-commit **theory-level whisper** — before committing, the player learns only that their *current overall theory* contains some truth (or feels off), never which piece (the fairness valve that keeps reasoning from becoming flailing); and (b) **confirmation by doing** — specific and partially-correct beliefs resolve *only when the player acts on them* within the Registry, either by committing a verdict/disposition or through **intermediate official acts** (issuing a subpoena, formally naming a person of interest, requesting a sensitive record on a belief), at which point the world reacts and confirms or contradicts what they believed via a consequence. Truth is earned through commitment, not handed over.
-- **Standing — multi-factional reputation.** Distinct powers — the Cold Case Unit, the press, the political elite / the powerful, the public, and neutral parties — react both to the player's **dispositions** *and* to **the information the player makes public** (§6.1), creating competing pressures that feed back into access and consequences. No single "good" axis; each faction is a lens, none is right. This gives "no clean answer" mechanical teeth without grading morality.
+- **Standing — multi-factional reputation.** Distinct powers — the Cold Case Unit, the press, the political elite / the powerful, the public, and neutral parties — react both to the player's **dispositions** *and* to **the information the player makes public** (§6.1), creating competing pressures that feed back into access and consequences. **Each faction is a full sub-system** with its own **Standing**, its own **Heat/Exposure** gauge (§9.1), and its own **Contacts & favors** network (§9.2) — so you can be courted by one faction and hunted by another. No single "good" axis; each faction is a lens, none is right. This gives "no clean answer" mechanical teeth without grading morality.
 
 **Rewards for strong play.** Sharp, *economical* deduction is its own reward, surfaced through the **clearance economy** (Pillar 3 / §10): solving with fewer wasted requests leaves surplus clearance. Beyond that the player gains **institutional rank / access** (more record types, more of the city — §2.3), **standing shifts** with the factions, and **narrative revelation** — more of the Registry's larger secret (Pillar 4). Growth and revelation, never points.
 
@@ -506,9 +506,9 @@ For this game a "level" is a **case**, and §5.1 is the procedural **ground-trut
 
 *(Reinterpreted — no combat, no HP. The player's "health" is **Heat / Exposure**: how much hostile attention they've drawn.)*
 
-**Heat / Exposure (the vulnerability gauge):** starts cold. Heat rises with **risky and visible acts** — pulling high-sensitivity records, intermediate official acts (subpoenas, naming a person of interest), **going public**, and pressing the powerful. The nearer the secret, the faster it climbs (§3.2).
+**Heat / Exposure (per-faction vulnerability gauges):** Heat is tracked **separately for each faction** (§2.4) — you can be hot with the political elite while cold with the press. A faction's Heat rises with acts that antagonize *it specifically* — pulling records it guards, official acts against its interests, **going public** in ways it dislikes, pressing its protected figures. The nearer the secret, the faster the guarding factions heat up (§3.2).
 
-**Cooling, retaliation & "death":** high heat triggers obstructor **retaliation** (§6.1) — surveillance, clearance revocation, threats, endangered sources, framing — scaled to how hot you are. The player cools heat by **lying low** (quieter threads, letting time pass). There is **no death / game-over** (consequential, not terminal — §3.2): maxing heat forces hard consequences — a suspension, a burned source, a lost avenue — that you carry forward, not a fail screen.
+**Cooling, retaliation & "death":** high Heat **with a faction** triggers *that faction's* **retaliation** (§6.1) — surveillance, clearance revocation, threats, endangered sources, framing — scaled to how hot you are with it. The player cools a faction's Heat by **lying low** toward it (quieter threads, time passing). There is **no death / game-over** (consequential, not terminal — §3.2): maxing a faction's Heat forces hard consequences from *that* faction — a suspension, a burned source, a lost avenue — carried forward, not a fail screen.
 
 -----
 
@@ -516,7 +516,7 @@ For this game a "level" is a **case**, and §5.1 is the procedural **ground-trut
 
 *(Reinterpreted — a **contacts & favors network** rather than "power-ups".)*
 
-**The network:** the player cultivates sources — a records clerk, a tipster, a sympathetic journalist, a coroner, a fixer-turned-informant — and can **call on them** for temporary help: fast-tracking a record, a quiet leak, emergency clearance, a warning before retaliation lands. Each call has a **cost** (a favor owed, money, standing, or a cooldown), and contacts carry their own loyalties (faction-tied), so leaning on one may cost you with another. Cultivated through cases and dispositions; they hand you **access, never answers** — deduction stays the player's job (Pillar 2).
+**Per-faction networks:** the player cultivates a **separate** contacts network *within each faction* (§2.4) — a Unit clerk and coroner, a press reporter, an elite insider, community witnesses. Calling a contact spends **that faction's favors** (§10) and draws on that faction alone: a press source can run a leak but cannot open an elite's sealed file. Calls buy temporary help — a fast-tracked record, a quiet leak, emergency clearance, a warning before retaliation lands — at a cost (a favor owed, standing, or a cooldown). Contacts give **access, never answers** (Pillar 2), and leaning hard on one faction can cost standing or raise Heat with a rival.
 
 -----
 
@@ -559,37 +559,46 @@ For this game a "level" is a **case**, and §5.1 is the procedural **ground-trut
 
 ### 10.1 Earning
 
-📝 GUIDANCE: Every source of currency or resources and roughly how much each yields. Note whether income scales with progression.
+The economy has distinct axes: **Clearance** (a global spend-to-act budget), and — tracked **per faction** (§2.4) — **Heat/Exposure**, **Favors**, and **Standing**. Each faction (Unit, press, political elite/powerful, public, neutral) is its own sub-system; you can be hot with one and cold with another.
 
-**Sources of income:** [ … ]
+**Sources of income:**
+- **Clearance** — the primary spendable. A recurring **institutional budget allotment** (a budget cycle), topped by **rank** and by **economical play** (unspent clearance carries — §2.4). Closing cases and good standing raise the allotment.
+- **Favors (per faction)** — earned by serving a faction's interests, by dispositions and publications it approves of, and by cultivating that faction's contacts (§9.2). Spendable **only within that faction**.
+- **Standing (per faction)** — raised by dispositions and published information a faction likes (§2.4); not "spent," but gates access, contact quality, and whether that faction's Heat turns into help or harm.
+- *(Heat is not earned — it accrues as a cost; see §9.1/§10.2.)*
 
 -----
 
 ### 10.2 Spending
 
-📝 GUIDANCE: Everything the player can spend on, and where. Note how prices scale relative to income.
-
-**Sinks (what currency buys):** [ … ]
+**Sinks (what currency buys):**
+- **Clearance** → record requests (leads cheap, hunches costly — §2.1), intermediate official acts (subpoenas, naming a person of interest), and expediting.
+- **Favors (per faction)** → calling that faction's contacts (fast-tracked records, leaks, emergency clearance, warnings — §9.2). Each call draws down *that faction's* favor pool.
+- **Heat (per faction)** is the *hidden price* of risky/visible acts: pulling sensitive records, official acts, and going public raise Heat **with the specific factions affected** — and high faction-Heat buys that faction's retaliation (§6.1). The same act can cool one faction and inflame another.
+- *Price scaling:* costs rise with record sensitivity, proximity to the secret, and how much an act antagonizes a given faction.
 
 -----
 
 ### 10.3 Shop / Acquisition Tables
 
-📝 GUIDANCE: If the game has a shop or item catalog, lay it out below for easy balancing. Duplicate and adapt the table per category (weapons, consumables, upgrades, etc.).
+*(Reinterpreted — there is no shop. These are **acquisition tables**: how access, tools, and faction help are obtained.)*
 
-**Weapons:**
+**Access & tools (by rank / clearance):**
 
-|Item |Effect / stats|Cost |
-|-----|--------------|-----|
-|[ … ]|[ … ]         |[ … ]|
-|[ … ]|[ … ]         |[ … ]|
+|Unlock|What it grants|Cost / gate|
+|------|--------------|-----------|
+|Record-type access tiers|Sealed, medical, financial, classified records|Rank threshold + clearance|
+|New districts / Registry areas|Reach into more of the city|Rank + standing|
+|Raw-data analysis tools|Timeline overlay, handwriting compare, transcription, cross-listing (§2.3)|Rank / case milestones|
 
-**Consumables / misc:**
+**Contacts & favors (per faction — illustrative):**
 
-|Item |Effect|Cost |
-|-----|------|-----|
-|[ … ]|[ … ] |[ … ]|
-|[ … ]|[ … ] |[ … ]|
+|Faction|Example contacts|What a favor buys|Risk|
+|-------|----------------|-----------------|----|
+|The Press|reporter, editor|an exposé run on what you publish|may distort; raises elite Heat|
+|Political elite / powerful|aide, insider|sealed access, a quiet word|greyest; inflames Heat elsewhere|
+|The Public|community figures, witnesses|tips, testimony|low power, low risk|
+|The Unit|clerk, coroner|fast-track, emergency clearance|internal scrutiny / Unit Heat|
 
 💬 EXPLORE WITH CLAUDE CODE: Model the economy in a spreadsheet — feed it expected income per session and check whether the player can afford the intended power curve.
 
@@ -820,6 +829,8 @@ For this game a "level" is a **case**, and §5.1 is the procedural **ground-trut
 
 |Date |Decision & reasoning                                                      |
 |-----|--------------------------------------------------------------------------|
+|2026-06-02|**Per-faction sub-systems (refinement).** Each faction (Unit, press, political elite/powerful, public, neutral) is a full sub-system with its **own Standing, own Heat/Exposure gauge (§9.1), and own Contacts & favors network (§9.2/§10)**. Heat and favors are no longer global — you can be hot with the elite and cold with the press; a press contact can't open an elite's sealed file. Updates §2.4, §9.1, §9.2.|
+|2026-06-02|**§10 Economy locked.** Axes: **Clearance** (global spend-to-act budget — recurring institutional allotment + rank + economical-play carry; closing cases/standing raise it) and, **per faction**, Heat/Exposure, Favors, Standing. Spending: clearance on requests/official acts/expediting; per-faction favors on that faction's contacts; Heat is the hidden price of risky/visible acts (per affected faction). Literal money minimal. §10.3 reinterpreted as acquisition tables (access/tools by rank/clearance; per-faction contacts & favors). Earning: periodic budget + performance.|
 |2026-06-02|**§9 Player locked** (reinterpreted, no HP). 9.1 "health" = **Heat / Exposure** gauge: rises with risky/visible acts (sensitive pulls, official acts, going public, pressing the powerful), faster near the secret; high heat → obstructor retaliation; cool by lying low; **no death/game-over** (maxing heat forces hard consequences carried forward). 9.2 = **Contacts & Favors** network (sources called on for access/leaks/clearance/warnings at a cost; faction-tied; access never answers). 9.3 pick-ups = found leads/materials + caches (no clearance cost; may be true/partial/planted; caches can be bait). 9.4 upgrades = rank + record access, raw-data tools, contacts/standing (no speed/body stats). Open: is Heat separate from clearance (→§10); can contacts be burned.|
 |2026-06-02|**§6–§8 Institutional Resistance locked** (reinterpreted; no combat). §6 "bosses" = **major obstructing powers** (authored, secret-backbone): the Gatekeeper, the Untouchable, the Insider, the Registry's Keepers; escalate passive → active retaliation; overcome by **evidence / leverage / the press**. **Going-Public mechanic:** the player can **Publish** Registry records; **every faction reacts** to what's made public per its interests (the press runs exposés true-or-not; the political elite/powerful protect or retaliate; the public and neutral parties shift), pressuring obstructions — factions act *only* on player-published info (agency preserved) and can distort or backfire, and resolving one obstruction can inflame another. §7 enemies = recurring **obstructor types** (Liar, Gatekeeper, Fixer, Biased Official, Frightened Witness) — each a record-layer behavior with a tell. §8 obstacles = informational/bureaucratic hazards (sealed/redacted records, grounded dead-ends, surveillance flags, clearance walls, decoy floods). Retaliation escalates near the truth. Added **Publish** to §2.3 abilities.|
 |2026-06-02|**§5 Levels completed.** §5.2 Pacing: within-case clear→branching→hard-commit; across-game the four difficulty levers ramp; mechanics introduced safely then combined. §5.3 Advancing: **open parallel caseload** (work several cases at once, leads cross-pollinate; MVP starts single), soft-gated by clearance + rank/access (no hard walls); **closed cases can reopen** when consequences/evidence surface, but harm already done stands (resolves the §2.3/§2.4 reopening question). §5.4 reinterpreted as **case anatomy + archetypes** (Staged Accident, Convenient Disappearance, Buried Witness, Scrubbed Record) — each a grammar with a lie-pattern, district lean, and threads into the secret.|
