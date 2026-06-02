@@ -129,12 +129,25 @@ The four pillars below are tie-breakers: when two features compete, the one that
 
 ### 2.1 Core Mechanic
 
-📝 GUIDANCE: The single most important interaction, described step by step. If there is a central tension (risk vs. reward, time pressure, resource management), name it explicitly and explain how it creates interesting decisions.
+**Core interaction — the request → cross-reference → deduce → verdict loop.**
 
-💬 EXPLORE WITH CLAUDE CODE: Model the core mechanic as inputs → rules → outcomes, then ask what edge cases or degenerate strategies it allows.
+1. **Form a request.** The player picks an *entity* (a person, address, phone number, business, vehicle…) and a *record type* (phone logs, property deed, employment file, autopsy, bank record…) and submits it, spending **clearance** (the rationed investigative resource — see §10). Two ways to choose an entity:
+   - **Leads** — every document surfaces the names, places, dates, and references it mentions as cheap, obvious *requestable leads*. The requestable surface grows from what the player has already learned, so the space is always bounded by their own investigation (no quest markers — Pillar 2).
+   - **Hunches** — the player may also free-form request records on *any entity they can name*, even one never mentioned (e.g. a witness no one interviewed), at **higher clearance cost** and lower hit-rate. This preserves the "request anything about anyone" promise while letting cost do the filtering.
+2. **The world resolves it.** The request is answered against the deterministic **fact graph** (the Registry's ground truth). The LLM **renders** the matching facts as a period-accurate document. Hard constraints: the document is **always true**, it may **only** express the facts that record would *legitimately* contain (the renderer can never leak the solution or invent a fact — Pillar 1), and it may carry **new leads**.
+3. **Cross-reference.** The new document is added to the player's evidence board / case file. The game surfaces *that* a new document corroborates or contradicts existing evidence, but never what it **means**. Signal comes from **juxtaposition**; the skill is noticing and interpreting.
+4. **Deduce & repeat.** The player builds a timeline and relationship web, narrowing toward an account of what happened — spending clearance on each thread.
+5. **Commit a verdict (two layers).**
+   - **Factual solution** — reconstruct the verifiable facts (who / how), checked against ground truth. Because the world never lies, this layer is *fair and knowable* (Pillar 1).
+   - **Disposition** — choose what truth to *enter into the Registry* and what to do about it. This is the **morally-grey act with no clean answer**; committing it **schedules consequences** (delayed, signposted, surfaced later in the Decision Ledger — see §3).
 
-**Core interaction:** [ … ]  
-**Central tension / interesting decision:** [ … ]
+**Central tension / interesting decision:** *Spend finite clearance to pull a thread of uncertain value, building toward a verdict you must commit on incomplete information — then own the consequences.* Every request trades a scarce resource for information that may corroborate, complicate, or be mundane; every verdict forces a factual call **and** a moral one where the right thing to do is never the obviously correct thing. Resource management + risk/reward + honest deduction + moral weight, in one loop.
+
+**Edge cases & degenerate strategies to guard against:**
+- *Brute-forcing every record* → blunted by clearance cost (§10) and, where appropriate, time/consequence pressure (§3): pulling everything is never affordable.
+- *Metagaming the renderer* (coaxing the LLM to reveal more than a document should) → structurally prevented: the renderer can only express facts already in the graph that the specific record would contain; there is no hidden "answer" it knows.
+- *Verdict guess-spamming* → countered by the stakes of being wrong and limited/committal close attempts (§2.4 / §3): a verdict is a consequential act, not a free guess.
+- *Lead explosion / drowning* → bounded by leads-from-what-you-have plus cost; the open "hunch" path is deliberately costlier so it isn't the default.
 
 -----
 
@@ -767,6 +780,7 @@ The four pillars below are tie-breakers: when two features compete, the one that
 
 |Date |Decision & reasoning                                                      |
 |-----|--------------------------------------------------------------------------|
+|2026-06-02|**§2.1 Core Mechanic locked.** Loop = request → cross-reference → deduce → two-layer verdict. Requestable surface = **leads + hunches hybrid** (documents surface cheap requestable leads; free-form "hunch" requests on any nameable entity cost more clearance) — solves signal-vs-noise while preserving request-anyone and "deduction, not direction". Renderer constraint: expresses only the facts a given record would legitimately contain; never leaks the solution or invents (Pillar 1). Verdict = **two-layer**: factual solution (who/how, checked vs. ground truth) + disposition (morally-grey, fires the scheduled consequences). Central tension: spend finite clearance for uncertain info toward a committal, incomplete-information verdict.|
 |2026-06-02|**§1.4 audience + consequence-feel steer.** Primary audience = deduction purists (*Obra Dinn* / *Golden Idol* / *Her Story*), with crossover to systems-sim and narrative/moral-choice players; PC-first, niche-but-passionate, depth over a low skill floor. Comparables: Obra Dinn, Golden Idol, Papers Please, Her Story/Contradiction, Disco Elysium. Rating ~M / PEGI 16–18 for theme. **Delayed-consequence feel (steers §2–§3): signpost the risk, hide the specifics, plus a Decision Ledger** that links each surfaced consequence back to the verdict that caused it — dread-with-agency, chosen over fully-hidden or investigate-first.|
 |2026-06-02|**Back story: "The Registry."** Alt-St. Louis (late-20th-century, analog) is defined by a total-records municipal archive — the Registry — whose contents ARE the procgen ground-truth graph. Player = revived Cold Case Unit investigator with rationed clearance; verdicts are written back into the Registry as official truth. The Registry's origin/purpose is the deferred systemic secret. **Added stakes (user direction):** the Registry is mysterious AND scary — actions carry real consequences with **variable latency** (immediate / next-day / months+), and verdicts are **morally grey** (no clean/just answer; decide on partial info). Theme: "the world never lies, but the truth never absolves." Two systems flagged for §2–§3: delayed variable-latency consequences (must be procgen ground truth, not LLM-invented) and a morally-grey verdict system. |
 |2026-06-02|**Design pillars locked (4):** "The world never lies" (integrity / hallucination-proof as a design law), "Deduction, not direction" (player-driven, no quest markers), "Every request has a price" (cost + consequence), "The city is the case" (interlinked, persistent world). Atmosphere kept as flavor; "Paperwork is play" demoted to a §12 UX principle rather than a 5th pillar. Genre framed as systemic detective/deduction on a procgen case-world (Obra Dinn / Golden Idol × Papers Please / immersive sim).|
