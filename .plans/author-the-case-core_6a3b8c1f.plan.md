@@ -2,7 +2,7 @@
 title: "Author the Case Core: builder + guided interview + procgen base layer"
 type: "feature"
 created: "2026-06-03"
-status: not-started
+status: in-progress
 related: ["faction-tension-systems_4b95a4c5.plan.md", "analyze-install-and-build-the-mound-city-mvp_8e0af0d4.plan.md", "build-mound-city-mvp-prototype_ad9accc1.plan.md"]
 ---
 
@@ -23,7 +23,7 @@ renderer, and UI keep working. This plan is the base layer; the §2.4 faction **
 
 ## Todos
 
-- [ ] Map `generateCase` consumers + `GameCase`/`types.ts`; list what extends vs. breaks
+- [x] Map `generateCase` consumers + `GameCase`/`types.ts`; list what extends vs. breaks
 - [ ] Add authored types to `types.ts`: `CaseCore` (5W+H + `keyFact`), `Faction` (`interests` + `temperament`), `FactionMember`, `Person` (case `role`, `factionId`), `AuthoredWorld`
 - [ ] Create `src/engine/authoring.ts` — `defineCase` / `defineFaction` / `definePerson` builders → validated data
 - [ ] Write `docs/authoring-interview.md` — the structured-choice interview spec (5W+H · factions · key people); feeds the skill
@@ -80,3 +80,29 @@ loads the `AuthoredWorld`, passes `(world, seed)`; seed varies only the dressing
 **Out of scope (→ Plan 2):** the §2.4/§9/§10 faction runtime — Standing, Heat/Exposure, Contacts &
 favors, confirmation-by-doing, official acts, and the factions UI. Also out: multiple archetypes,
 the LLM renderer, calendar/delayed consequences, interlinking.
+
+## Mapping (todo 1 findings)
+
+**`generateCase(seed)` direct callers — BREAK on signature change (`seed` → `world, seed`):**
+- `src/engine/index.ts:32` — `CaseSession` ctor: `this.gameCase = generateCase(seed)`. Fix: load the
+  `AuthoredWorld`, call `generateCase(world, seed)`. **Keep `CaseSession(seed)`'s public signature.**
+- `src/engine/index.ts:8` — re-export of `generateCase` (keep; signature updates).
+- `src/engine/engine.test.ts` — `generateCase(42/43/7/seed)` at lines 8,9,14,15,21,26. Fix: pass a
+  test `world` (the starter `AuthoredWorld`) + seed.
+
+**`GameCase` output shape — EXTEND, don't break (these stay untouched):**
+- `factGraph.ts` (uses `gameCase.entities`, `.records`), `solver.ts` (`.records`/`.solution`/
+  `.suspects`), `templateRenderer.ts` (param currently unused `_gameCase`), `CaseSession.gameCase`.
+- Rule: keep all existing `GameCase` fields (`seed, entities, groundTruth, records, caseFileId,
+  solution, suspects`); new authored types (`CaseCore/Faction/FactionMember/Person/AuthoredWorld`)
+  are **additive**. `Person` extends `Entity`, so authored people slot into `entities` cleanly.
+
+**UI — fully insulated by `CaseSession` (no direct `generateCase`/`GameCase` coupling except one):**
+- `desk.ts` (clearance/whisper/obtainedRecords/render/availableRequests/closed), `board.ts`
+  (contradictions/graph), `verdict.ts` (closed/graph + **`session.gameCase.suspects`** ← only direct
+  `GameCase` field touched by UI), `main.ts` (request/commitVerdict). **As long as `CaseSession(seed)`
+  keeps its signature and `GameCase.suspects` persists, the UI needs zero changes.**
+
+**Net:** the only breaks are the `generateCase` call sites (CaseSession ctor + tests). Everything
+downstream of `CaseSession` is insulated. Build leaf-first: types → builders → starter world →
+`generateCase` refactor → CaseSession internals → tests.
