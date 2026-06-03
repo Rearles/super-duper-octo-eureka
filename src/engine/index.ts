@@ -87,7 +87,7 @@ export class CaseSession {
     this.graph = new FactGraph(this.gameCase);
     this.core = resolveCore(world, this.gameCase);
     for (const f of world.factions) {
-      this.factionState.set(f.id, { factionId: f.id, standing: 0, heat: 0 });
+      this.factionState.set(f.id, { factionId: f.id, standing: 0, heat: 0, favors: 0 });
     }
     this.renderer = opts.renderer ?? new TemplateRenderer();
     this.clearance = opts.clearance ?? 5;
@@ -111,6 +111,7 @@ export class CaseSession {
       if (!state) continue;
       state.standing += r.standingDelta;
       state.heat = Math.max(0, state.heat + r.heatDelta);
+      state.favors = Math.max(0, state.favors + (r.favorDelta ?? 0));
     }
     this.ledger.push({ note, reactions });
   }

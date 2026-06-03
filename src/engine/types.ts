@@ -170,6 +170,8 @@ export interface FactionRuntimeState {
   standing: number;
   /** acute hostile attention; bidirectional (rises on acts against, falls on acts for). `>= 0`. */
   heat: number;
+  /** spendable favors with this faction; earned by fulfilling its requests, spent on its contacts. `>= 0`. */
+  favors: number;
 }
 
 /** One faction's reaction to a player act: the applied deltas + why. */
@@ -178,5 +180,46 @@ export interface FactionReaction {
   name: string;
   standingDelta: number;
   heatDelta: number;
+  /** favors granted/spent by this act (Plan 3); defaults to 0. */
+  favorDelta?: number;
   reason: string;
+}
+
+// ---------------------------------------------------------------------------
+// Faction interaction layer (Plan 3 — requests, contacts, provenance).
+// ---------------------------------------------------------------------------
+
+/** Where a faction's information came from — and how trustworthy it tends to be (§2.5). */
+export type Provenance = "grapevine" | "press" | "direct";
+
+export type RequestStatus = "open" | "fulfilled" | "refused";
+
+/**
+ * A faction-initiated demand backed by a provenance-tagged claim that **may be
+ * false**. The player may fulfill, refuse, or verify it (§2.5). The claim's true
+ * `fidelity` is hidden until `revealed` (by verifying against the Registry).
+ */
+export interface FactionRequest {
+  id: string;
+  factionId: string;
+  /** what the faction wants the player to do with the case */
+  ask: Disposition;
+  /** one-line human summary of the demand */
+  text: string;
+  provenance: Provenance;
+  /** the (maybe-false) claim backing the demand */
+  claim: Claim;
+  /** the claim's true fidelity — hidden from the player until `revealed` */
+  fidelity: Fidelity;
+  /** whether the player has verified (revealed) the claim's fidelity */
+  revealed: boolean;
+  status: RequestStatus;
+}
+
+/** A faction member the player can call for access (never answers — Pillar 2). */
+export interface Contact {
+  factionId: string;
+  personId: string;
+  name: string;
+  title?: string;
 }

@@ -23,7 +23,7 @@ truth-model. assist-project: `fct_c5af1dbb681f`, `fct_77976f74828b`.
 ## Todos
 
 - [x] Map Plan 2's `FactionRuntimeState` + the record fidelity/truth-model seams
-- [ ] Add types — `Contact`, `FavorPool`, `FactionRequest` (provenance + fidelity + claim + ask)
+- [x] Add types — `Contact`, `FavorPool`, `FactionRequest` (provenance + fidelity + claim + ask)
 - [ ] Implement Contacts & Favors — call a contact → spend that faction's favors for access, never answers (Pillar 2)
 - [ ] Implement faction-initiated requests — factions push requests sourced from grapevine/press/their wants
 - [ ] Implement provenance + verify — test a request's claim against the Registry (spend clearance); fidelity from the truth-model
