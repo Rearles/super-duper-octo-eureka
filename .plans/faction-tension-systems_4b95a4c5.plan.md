@@ -30,7 +30,7 @@ doing** (§2.4). The **requests/contacts/provenance** interaction layer is the l
 - [x] Replace binary `correct/incorrect` with confirmation-by-doing — pre-commit theory whisper + reaction-based confirmation
 - [x] Wire into `CaseSession` — verdict/disposition + official acts apply reactions; record shifts in a Ledger
 - [ ] Surface faction state in the UI — per-faction Standing/Heat indicators + outcome/Ledger shifts
-- [ ] Add tests — stakes math, reaction layers, web ripples, Heat bidirectionality, confirmation-by-doing
+- [x] Add tests — stakes math, reaction layers, web ripples, Heat bidirectionality, confirmation-by-doing
 - [ ] Verify — `npm run typecheck`, `npm test` (green), `npm run build`, `npm run preview`
 
 ## Notes
