@@ -278,7 +278,7 @@ export function applyInterFactionWeb(world: AuthoredWorld, direct: FactionReacti
   const net = new Map<string, FactionReaction>(
     world.factions.map((f) => [
       f.id,
-      { factionId: f.id, name: f.name, standingDelta: 0, heatDelta: 0, reason: "" },
+      { factionId: f.id, name: f.name, standingDelta: 0, heatDelta: 0, favorDelta: 0, reason: "" },
     ]),
   );
 
@@ -288,7 +288,8 @@ export function applyInterFactionWeb(world: AuthoredWorld, direct: FactionReacti
     if (!n) continue;
     n.standingDelta += r.standingDelta;
     n.heatDelta += r.heatDelta;
-    if (r.standingDelta !== 0 || r.heatDelta !== 0) n.reason = r.reason;
+    n.favorDelta = (n.favorDelta ?? 0) + (r.favorDelta ?? 0);
+    if (r.standingDelta !== 0 || r.heatDelta !== 0 || (r.favorDelta ?? 0) !== 0) n.reason = r.reason;
   }
 
   // Ripple each nonzero direct standing shift to allies (+) and rivals (−, +heat if helped).
@@ -312,7 +313,9 @@ export function applyInterFactionWeb(world: AuthoredWorld, direct: FactionReacti
     }
   }
 
-  return [...net.values()].filter((n) => n.standingDelta !== 0 || n.heatDelta !== 0);
+  return [...net.values()].filter(
+    (n) => n.standingDelta !== 0 || n.heatDelta !== 0 || (n.favorDelta ?? 0) !== 0,
+  );
 }
 
 /**

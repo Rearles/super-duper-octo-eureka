@@ -148,6 +148,57 @@ export class CaseSession {
     return { ok: true, message: `Their claim checks out as: ${req.fidelity}.`, fidelity: req.fidelity };
   }
 
+  /**
+   * Fulfill a faction's request — side with them: that faction's Standing rises,
+   * Heat cools, and you earn a Favor; rivals shift the other way (§2.5 web). Often
+   * at the truth's expense if their claim was false.
+   */
+  fulfillRequest(requestId: string): { ok: boolean; message: string; reactions: FactionReaction[] } {
+    const req = this.openRequest(requestId);
+    if ("error" in req) return { ok: false, message: req.error, reactions: [] };
+    const faction = this.world.factions.find((f) => f.id === req.req.factionId)!;
+    const stake = factionStake(faction, caseFacts(this.gameCase, this.core));
+    const direct: FactionReaction = {
+      factionId: faction.id,
+      name: faction.name,
+      standingDelta: stake,
+      heatDelta: -stake,
+      favorDelta: 1,
+      reason: `you granted their request to ${req.req.ask}`,
+    };
+    const reactions = applyInterFactionWeb(this.world, [direct]);
+    this.applyReactions(reactions, `Fulfilled ${faction.name}'s request (${req.req.ask})`);
+    req.req.status = "fulfilled";
+    return { ok: true, message: `You side with ${faction.name}.`, reactions };
+  }
+
+  /** Refuse/ignore a faction's request — their Heat rises and standing dips; rivals ease. */
+  refuseRequest(requestId: string): { ok: boolean; message: string; reactions: FactionReaction[] } {
+    const req = this.openRequest(requestId);
+    if ("error" in req) return { ok: false, message: req.error, reactions: [] };
+    const faction = this.world.factions.find((f) => f.id === req.req.factionId)!;
+    const stake = factionStake(faction, caseFacts(this.gameCase, this.core));
+    const direct: FactionReaction = {
+      factionId: faction.id,
+      name: faction.name,
+      standingDelta: -1,
+      heatDelta: stake,
+      reason: `you refused their request to ${req.req.ask}`,
+    };
+    const reactions = applyInterFactionWeb(this.world, [direct]);
+    this.applyReactions(reactions, `Refused ${faction.name}'s request`);
+    req.req.status = "refused";
+    return { ok: true, message: `You turn ${faction.name} down.`, reactions };
+  }
+
+  private openRequest(requestId: string): { req: FactionRequest } | { error: string } {
+    if (this.closed) return { error: "The case is closed." };
+    const req = this.requestList.find((r) => r.id === requestId);
+    if (!req) return { error: "No such request." };
+    if (req.status !== "open") return { error: "That request is already resolved." };
+    return { req };
+  }
+
   /** The faction members the player can call for access (§9.2). */
   contacts(): Contact[] {
     return listContacts(this.world);
