@@ -33,7 +33,7 @@ renderer, and UI keep working. This plan is the base layer; the §2.4 faction **
 - [x] Extend `verifySolvable` so authored-core + generated-layer cases still guarantee a solution path
 - [x] Update `CaseSession` to consume the `AuthoredWorld` (seed drives only the procgen dressing)
 - [x] Update `engine.test.ts` + add `authoring.test.ts` — builder validation, determinism, placed lie, solvable across seeds
-- [ ] Add a golden snapshot test — one fully generated + rendered case at a fixed `(world, seed)`
+- [x] Add a golden snapshot test — one fully generated + rendered case at a fixed `(world, seed)`
 - [ ] Verify — `npm run typecheck`, `npm test` (green), `npm run build`, `npm run preview`
 
 ## Notes

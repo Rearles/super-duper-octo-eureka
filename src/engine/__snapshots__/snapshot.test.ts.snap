@@ -1,0 +1,151 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`golden snapshot > generates a stable case + rendered documents at (buriedWitness, seed 7) 1`] = `
+{
+  "caseFileId": "rec_casefile",
+  "entities": {
+    "across_town": {
+      "id": "across_town",
+      "name": "the Westside bar",
+      "type": "place",
+    },
+    "culprit": {
+      "factionId": "the-heights",
+      "id": "culprit",
+      "name": "Cole Voss",
+      "type": "person",
+    },
+    "flat": {
+      "id": "flat",
+      "name": "the victim's flat on Delmar",
+      "type": "place",
+    },
+    "suspect_b": {
+      "id": "suspect_b",
+      "name": "Otis Mott",
+      "type": "person",
+    },
+    "victim": {
+      "id": "victim",
+      "name": "Mara Hale",
+      "type": "person",
+    },
+    "witness": {
+      "id": "witness",
+      "name": "Sol Crane",
+      "type": "person",
+    },
+    "witness_phone": {
+      "id": "witness_phone",
+      "name": "the witness's telephone line",
+      "type": "phone",
+    },
+  },
+  "groundTruth": [
+    {
+      "object": "victim",
+      "predicate": "killed",
+      "subject": "culprit",
+      "text": "Cole Voss killed Mara Hale.",
+      "truthful": true,
+    },
+    {
+      "object": "flat",
+      "predicate": "location@2300",
+      "subject": "culprit",
+      "text": "Cole Voss was at the victim's flat on Delmar at 2300.",
+      "truthful": true,
+    },
+    {
+      "object": "flat",
+      "predicate": "location@2300",
+      "subject": "witness",
+      "text": "Sol Crane was near the victim's flat on Delmar at 2300.",
+      "truthful": true,
+    },
+  ],
+  "records": [
+    {
+      "clearanceCost": 0,
+      "fidelity": "true",
+      "id": "rec_casefile",
+      "leads": [
+        "witness",
+        "culprit",
+        "suspect_b",
+        "flat",
+      ],
+      "rendered": "Cold Case File — a death at the victim's flat, ruled inconclusive
+[case-file · fidelity recorded internally]
+  • Mara Hale was found dead at the victim's flat on Delmar; ruled inconclusive.",
+      "type": "case-file",
+    },
+    {
+      "clearanceCost": 1,
+      "fidelity": "false",
+      "id": "rec_witness_stmt",
+      "leads": [
+        "witness_phone",
+        "across_town",
+        "culprit",
+      ],
+      "rendered": "Statement of Sol Crane
+[witness-statement · fidelity recorded internally]
+  • Sol Crane states they were at the Westside bar at 2300.
+  • Sol Crane states Cole Voss was with them at the Westside bar at 2300.",
+      "type": "witness-statement",
+    },
+    {
+      "clearanceCost": 1,
+      "fidelity": "true",
+      "id": "rec_phone",
+      "leads": [
+        "flat",
+      ],
+      "rendered": "Telephone records — Sol Crane
+[phone-records · fidelity recorded internally]
+  • Sol Crane's line placed a call from beside the victim's flat on Delmar at 2300.",
+      "type": "phone-records",
+    },
+    {
+      "clearanceCost": 1,
+      "fidelity": "true",
+      "id": "rec_autopsy",
+      "leads": [
+        "flat",
+      ],
+      "rendered": "Autopsy — Mara Hale
+[autopsy · fidelity recorded internally]
+  • Time of death fixed at 2300; struck during a late-night argument.
+  • Mara Hale died at the victim's flat on Delmar.",
+      "type": "autopsy",
+    },
+    {
+      "clearanceCost": 1,
+      "fidelity": "true",
+      "id": "rec_property",
+      "leads": [
+        "witness",
+      ],
+      "rendered": "Property & associations
+[property-record · fidelity recorded internally]
+  • Cole Voss and Sol Crane are long-time associates.",
+      "type": "property-record",
+    },
+  ],
+  "seed": 7,
+  "solution": {
+    "culpritId": "culprit",
+    "keyContradiction": [
+      "rec_witness_stmt",
+      "rec_phone",
+    ],
+    "predicate": "location@2300",
+  },
+  "suspects": [
+    "culprit",
+    "suspect_b",
+    "witness",
+  ],
+}
+`;
