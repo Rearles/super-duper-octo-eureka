@@ -7,6 +7,7 @@ import {
   applyInterFactionWeb,
   caseFacts,
   factionStake,
+  generateRequests,
   listContacts,
   reactToOfficialAct,
   reactToVerdict,
@@ -19,6 +20,7 @@ import type {
   Contact,
   Disposition,
   FactionReaction,
+  FactionRequest,
   FactionRuntimeState,
   GameCase,
 } from "./types";
@@ -66,6 +68,7 @@ export class CaseSession {
   private readonly world: AuthoredWorld;
   private readonly core: CaseCore;
   private readonly factionState = new Map<string, FactionRuntimeState>();
+  private readonly requestList: FactionRequest[];
   /** The Decision Ledger: every act and the faction reactions it caused (§2.2). */
   readonly ledger: LedgerEntry[] = [];
   clearance: number;
@@ -94,6 +97,7 @@ export class CaseSession {
     for (const f of world.factions) {
       this.factionState.set(f.id, { factionId: f.id, standing: 0, heat: 0, favors: 0 });
     }
+    this.requestList = generateRequests(world, this.gameCase, this.core);
     this.renderer = opts.renderer ?? new TemplateRenderer();
     this.clearance = opts.clearance ?? 5;
     this.obtained.add(this.gameCase.caseFileId); // the case file is free
@@ -107,6 +111,11 @@ export class CaseSession {
   /** Display name for a faction id. */
   factionName(id: string): string {
     return this.world.factions.find((f) => f.id === id)?.name ?? id;
+  }
+
+  /** Open and resolved faction requests pushed to the player (§2.5). */
+  requests(): FactionRequest[] {
+    return [...this.requestList];
   }
 
   /** The faction members the player can call for access (§9.2). */

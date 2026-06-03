@@ -6,12 +6,101 @@ import type {
   AuthoredWorld,
   CaseCore,
   CaseRole,
+  Claim,
   Contact,
   Disposition,
   Faction,
   FactionReaction,
+  FactionRequest,
+  Fidelity,
   GameCase,
+  Provenance,
 } from "./types";
+
+/** Compare a claim to canonical ground truth → its true fidelity (hidden until verified). */
+export function verifyClaim(claim: Claim, groundTruth: Claim[]): Fidelity {
+  const match = groundTruth.find(
+    (g) => g.subject === claim.subject && g.predicate === claim.predicate,
+  );
+  if (!match) return "partial"; // unverifiable from ground truth
+  return match.object === claim.object ? "true" : "false";
+}
+
+/**
+ * Each stake-holding faction pushes one **request** (§2.5): an `ask` (the
+ * disposition it wants) backed by a provenance-tagged `claim` that may be false.
+ * A protective/vindictive faction shielding a guilty member spreads a grapevine
+ * "he's innocent" lie; the principled make a direct true case; others run a press
+ * line. The claim's true `fidelity` is computed from ground truth (hidden until verified).
+ */
+export function generateRequests(world: AuthoredWorld, gameCase: GameCase, core: CaseCore): FactionRequest[] {
+  const facts = caseFacts(gameCase, core);
+  const predicate = `location@${core.when}`;
+  const culpritId = gameCase.solution.culpritId;
+  const culpritName = gameCase.entities[culpritId]?.name ?? culpritId;
+  const sceneName = gameCase.entities[core.whereId]?.name ?? core.whereId;
+  const elsewhereId = gameCase.entities["across_town"] ? "across_town" : core.whereId;
+  const elsewhereName = gameCase.entities[elsewhereId]?.name ?? "across town";
+
+  const requests: FactionRequest[] = [];
+  for (const f of world.factions) {
+    if (factionStake(f, facts) <= 0) continue;
+    const memberIsCulprit = f.members.some((m) => m.personId === culpritId);
+
+    let ask: Disposition;
+    let provenance: Provenance;
+    let claim: Claim;
+    let plea: string;
+
+    if (memberIsCulprit && (f.temperament === "protective" || f.temperament === "vindictive")) {
+      ask = "bury";
+      provenance = "grapevine";
+      claim = {
+        subject: culpritId,
+        predicate,
+        object: elsewhereId,
+        truthful: false,
+        text: `${culpritName} was at ${elsewhereName}, not the scene.`,
+      };
+      plea = `bury this — word is ${culpritName} was nowhere near it`;
+    } else if (f.temperament === "principled") {
+      ask = "charge";
+      provenance = "direct";
+      claim = {
+        subject: culpritId,
+        predicate,
+        object: core.whereId,
+        truthful: true,
+        text: `${culpritName} was at ${sceneName}.`,
+      };
+      plea = `charge ${culpritName} — the truth has to stand`;
+    } else {
+      ask = "expose";
+      provenance = "press";
+      claim = {
+        subject: culpritId,
+        predicate,
+        object: core.whereId,
+        truthful: true,
+        text: `${culpritName} was at ${sceneName} that night.`,
+      };
+      plea = `expose it — our sources put ${culpritName} at the scene`;
+    }
+
+    requests.push({
+      id: `req_${f.id}`,
+      factionId: f.id,
+      ask,
+      text: `${f.name}: ${plea}. [${provenance}]`,
+      provenance,
+      claim,
+      fidelity: verifyClaim(claim, gameCase.groundTruth),
+      revealed: false,
+      status: "open",
+    });
+  }
+  return requests;
+}
 
 /** A faction's members are its callable contacts (§9.2). */
 export function listContacts(world: AuthoredWorld): Contact[] {
