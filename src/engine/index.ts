@@ -12,7 +12,14 @@ export * from "./authoring";
 export type { Renderer, Contradiction };
 
 export interface VerdictResult {
+  /**
+   * Internal factual correctness of the accusation — **not a player-facing grade**.
+   * §2.4 confirmation-by-doing: the player learns the truth only through the
+   * world's reaction (`consequence`, and the faction reactions in Plan 2), never
+   * a "correct/incorrect" stamp. Kept for the engine + tests.
+   */
   correct: boolean;
+  /** The world's reaction — how the truth actually surfaces (confirmation-by-doing). */
   consequence: string;
 }
 
@@ -94,13 +101,25 @@ export class CaseSession {
     return this.graph.contradictions([...this.obtained]);
   }
 
-  /** The vague, theory-level whisper — the fairness valve (§2.4). */
+  /**
+   * The vague, theory-level whisper — the §2.4 fairness valve. It reflects how
+   * *ripe* the overall investigation is, never which piece is true and never who
+   * the culprit is. Confirmation of the specific account comes only by acting
+   * (committing a verdict) — see `commitVerdict`.
+   */
   whisper(): string {
-    return this.contradictions().length > 0
-      ? "Something in what you have doesn't add up."
-      : "Nothing yet rings false — keep pulling threads.";
+    if (this.contradictions().length === 0) {
+      return "Nothing yet rings false — keep pulling threads.";
+    }
+    const [a, b] = this.gameCase.solution.keyContradiction;
+    if (this.obtained.has(a) && this.obtained.has(b)) {
+      return "The thread you're pulling holds — you have enough to make the call.";
+    }
+    return "Something in what you have doesn't add up.";
   }
 
+  // §2.4 confirmation-by-doing: `correct` stays internal; the player learns the
+  // truth from the world's reaction (`consequence`), not a grade.
   commitVerdict(culpritId: string, disposition: Disposition): VerdictResult {
     const correct = culpritId === this.gameCase.solution.culpritId;
     this.closed = true;
