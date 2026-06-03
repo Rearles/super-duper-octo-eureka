@@ -5,7 +5,12 @@
 // lie implicates the culprit), and the faction layer (its requests assert the
 // same contested predicate). Strategy builders live alongside in CRUX_STRATEGIES.
 
-import type { CaseCore, CaseFact, CaseRecord, Claim, Entity, GameCase, RecordType } from "./types";
+import type { CaseCore, CaseFact, CaseRecord, Claim, Clue, Entity, Fidelity, GameCase, RecordType } from "./types";
+
+/** Build an atomic player-facing clue (hypothesis-board evidence) for a record + slot. */
+function mkClue(recordId: string, slot: CaseFact, value: string, fidelity: Fidelity, text: string): Clue {
+  return { id: `${recordId}__${slot}`, recordId, slot, value, fidelity, text };
+}
 
 /**
  * Per-crux metadata: the contested predicate, the record type that carries the
@@ -168,6 +173,9 @@ function whereLie(ctx: CruxContext): CruxLie {
       claim(witness.id, predicate, elsewhere.id, false, `${witness.name} states they were at ${elsewhere.name} at ${when}.`),
       claim(culprit.id, predicate, elsewhere.id, false, `${witness.name} states ${culprit.name} was with them at ${elsewhere.name} at ${when}.`),
     ],
+    clues: [
+      mkClue("rec_witness_stmt", "where", elsewhere.id, "false", `${witness.name} swears they and ${culprit.name} were across town at ${elsewhere.name} at ${when}.`),
+    ],
     leads: [phone.id, elsewhere.id, culprit.id],
     clearanceCost: 1,
   };
@@ -179,6 +187,9 @@ function whereLie(ctx: CruxContext): CruxLie {
     fidelity: "true",
     claims: [
       claim(witness.id, predicate, scene.id, true, `${witness.name}'s line placed a call from beside ${scene.name} at ${when}.`),
+    ],
+    clues: [
+      mkClue("rec_phone", "where", scene.id, "true", `A call from ${witness.name}'s line hit the tower beside ${scene.name} at ${when} — not across town.`),
     ],
     leads: [scene.id],
     clearanceCost: 1,
@@ -198,6 +209,9 @@ function whoLie(ctx: CruxContext): CruxLie {
     claims: [
       claim(victim.id, predicate, framed.id, false, `${witness.name} names ${framed.name} as the one responsible for ${victim.name}'s death.`),
     ],
+    clues: [
+      mkClue("rec_witness_stmt", "who", framed.id, "false", `${witness.name}'s statement puts ${framed.name} behind the wheel.`),
+    ],
     leads: [framed.id, scene.id],
     clearanceCost: 1,
   };
@@ -210,6 +224,9 @@ function whoLie(ctx: CruxContext): CruxLie {
     claims: [
       claim(victim.id, predicate, culprit.id, true, `Physical evidence ties ${culprit.name}, not ${framed.name}, to ${victim.name}'s death.`),
       claim(culprit.id, "at-scene", scene.id, true, `${culprit.name} was placed at ${scene.name}.`),
+    ],
+    clues: [
+      mkClue("rec_forensic", "who", culprit.id, "true", `Tread marks show the car was stopped at impact — no accident; a partial print on the gearshift matches ${culprit.name}.`),
     ],
     leads: [culprit.id, scene.id],
     clearanceCost: 1,
@@ -230,6 +247,9 @@ function whenLie(ctx: CruxContext): CruxLie {
     claims: [
       claim(culprit.id, predicate, falseTime, false, `${witness.name} places ${culprit.name} at ${scene.name} at ${falseTime}, not ${when}.`),
     ],
+    clues: [
+      mkClue("rec_witness_stmt", "when", falseTime, "false", `${witness.name} places ${culprit.name} at ${scene.name} at ${falseTime}.`),
+    ],
     leads: [phone.id, culprit.id],
     clearanceCost: 1,
   };
@@ -241,6 +261,9 @@ function whenLie(ctx: CruxContext): CruxLie {
     fidelity: "true",
     claims: [
       claim(culprit.id, predicate, when, true, `${culprit.name}'s line pinged the tower beside ${scene.name} at ${when}.`),
+    ],
+    clues: [
+      mkClue("rec_phone", "when", when, "true", `${culprit.name}'s line pinged the tower beside ${scene.name} at ${when}.`),
     ],
     leads: [scene.id],
     clearanceCost: 1,
@@ -260,6 +283,9 @@ function howLie(ctx: CruxContext): CruxLie {
     claims: [
       claim(victim.id, predicate, "natural", false, `${victim.name}'s death was ruled natural causes.`),
     ],
+    clues: [
+      mkClue("rec_ruling", "how", "natural", "false", `The coroner's ruling reads: natural causes.`),
+    ],
     leads: [scene.id],
     clearanceCost: 1,
   };
@@ -272,6 +298,9 @@ function howLie(ctx: CruxContext): CruxLie {
     claims: [
       claim(victim.id, predicate, "homicide", true, `Re-examination: ${victim.name} did not die naturally — ${core.how}.`),
       claim(culprit.id, "at-scene", scene.id, true, `Trace evidence places ${culprit.name} at ${scene.name}.`),
+    ],
+    clues: [
+      mkClue("rec_autopsy", "how", "homicide", "true", `Re-examination of the body: ${core.how}`),
     ],
     leads: [scene.id, culprit.id],
     clearanceCost: 1,
@@ -291,6 +320,9 @@ function whatLie(ctx: CruxContext): CruxLie {
     claims: [
       claim(victim.id, predicate, "no-crime", false, `${victim.name}'s death was ruled inconclusive — no crime recorded.`),
     ],
+    clues: [
+      mkClue("rec_ruling", "what", "no-crime", "false", `The file was closed: inconclusive — no crime recorded.`),
+    ],
     leads: [scene.id],
     clearanceCost: 1,
   };
@@ -303,6 +335,9 @@ function whatLie(ctx: CruxContext): CruxLie {
     claims: [
       claim(victim.id, predicate, "homicide", true, `Findings establish a homicide, not misadventure — ${core.how}.`),
       claim(culprit.id, "at-scene", scene.id, true, `${culprit.name} was placed at ${scene.name}.`),
+    ],
+    clues: [
+      mkClue("rec_autopsy", "what", "homicide", "true", `Autopsy findings establish a homicide, not misadventure — ${core.how}`),
     ],
     leads: [scene.id, culprit.id],
     clearanceCost: 1,

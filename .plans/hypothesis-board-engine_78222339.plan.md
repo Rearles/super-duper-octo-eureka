@@ -15,7 +15,7 @@ Playtest found the player has no deductive agency: records state conclusions and
 ## Todos
 
 - [x] Add `Clue` + `Theory` types to `src/engine/types.ts`; optional `clues?` on `CaseRecord`/`GameCase`
-- [ ] Emit per-slot clue sets from `src/engine/crux.ts` strategies (contested slot: ≥1 false + ≥1 true)
+- [x] Emit per-slot clue sets from `src/engine/crux.ts` strategies (contested slot: ≥1 false + ≥1 true)
 - [ ] Add true clues for non-contested who/where/when/how slots in `src/engine/generator.ts`; aggregate `GameCase.clues`
 - [ ] Render record `clues` as atomic evidence in `src/engine/templateRenderer.ts` (no conclusions)
 - [ ] Add `Theory` state + `setSlot`/`clearSlot`/`theory()` to `CaseSession` in `src/engine/index.ts`
