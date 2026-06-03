@@ -20,7 +20,7 @@ related: ["author-the-case-core_6a3b8c1f.plan.md", "faction-tension-systems_4b95
 - [ ] Add `resolveCast(world, core, rng)` to `src/engine/generator.ts` — authored people first, procgen fallback
 - [ ] Refactor `generateCase` to dispatch on `core.keyFact` via the strategy table
 - [ ] Weave culprit's faction into the cover-up record's source/provenance in `generateCase`
-- [ ] Generate red-herring decoy records pointing at other faction members (false theories)
+- [ ] Generate 1-2 (capped) red-herring decoy records pointing at other faction members
 - [ ] Generalize `verifySolvable` check #2 in `src/engine/solver.ts` (two-pronged culprit implication)
 - [ ] Update `generateRequests` in `src/engine/factions.ts` to use `cruxPredicate(core)`
 - [ ] Update `caseFacts` topics in `src/engine/factions.ts` for richer interest-matching
@@ -44,7 +44,7 @@ related: ["author-the-case-core_6a3b8c1f.plan.md", "faction-tension-systems_4b95
 
 **Cast resolution:** prefer authored non-principal people for framed-innocent (an authored person with no faction reads as a bystander, e.g. Okafor) and witnesses; faction members can fill decoy/associate roles. Fall back to procgen strangers (existing `uniqueName()`) only when no authored candidate exists. Keep it seeded/deterministic.
 
-**Faction record weave:** the culprit's faction, when protective/vindictive, is the *source* of the cover-up record (provenance grapevine). Red-herring decoys realize the user's "boss+enforcer / two-hands" false theories as biased/false records implicating OTHER faction members — additional **undisproved** false claims (leads, not catchable contradictions) so they add misdirection without breaking solvability (the solver's `keyContradiction` is set explicitly).
+**Faction record weave:** the culprit's faction, when protective/vindictive, is the *source* of the cover-up record (provenance grapevine). Red-herring decoys realize the user's "boss+enforcer / two-hands" false theories as biased/false records implicating OTHER faction members — additional **undisproved** false claims (leads, not catchable contradictions) so they add misdirection without breaking solvability (the solver's `keyContradiction` is set explicitly). **Decision (user, 2026-06-03): cap decoys at 1-2 per case, and only emit them when the world supplies eligible other-faction members** — no decoys on a thin world.
 
 **Commit grouping (assist-skill obs on implement-plan):** todos 1+5+8 (types `Solution.keyFact` → generator dispatch → solver branch) and the factions/test updates do **not** compile/pass individually — the TS project is red between a signature/shape change and its consumers. Group each interdependent set into ONE atomic working commit (flip all their checkboxes together, body lists each todo), restored to green before committing. Independent todos (e.g. new `crux.ts`, decoy records) commit on their own. Leaf-first order (lsn_81418856dfb0): types → crux.ts → generator → solver → factions → tests → snapshot.
 
