@@ -2,7 +2,7 @@
 title: "Faction state, stakes & reactions (§2.5 core): two-axis Standing+Heat, emergent stakes, the web, confirmation-by-doing"
 type: "feature"
 created: "2026-06-03"
-status: in-progress
+status: complete
 related: ["faction-requests-contacts-provenance_c691cba1.plan.md", "author-the-case-core_6a3b8c1f.plan.md", "analyze-install-and-build-the-mound-city-mvp_8e0af0d4.plan.md"]
 ---
 
@@ -31,7 +31,7 @@ doing** (§2.4). The **requests/contacts/provenance** interaction layer is the l
 - [x] Wire into `CaseSession` — verdict/disposition + official acts apply reactions; record shifts in a Ledger
 - [ ] Surface faction state in the UI — per-faction Standing/Heat indicators + outcome/Ledger shifts
 - [x] Add tests — stakes math, reaction layers, web ripples, Heat bidirectionality, confirmation-by-doing
-- [ ] Verify — `npm run typecheck`, `npm test` (green), `npm run build`, `npm run preview`
+- [x] Verify — `npm run typecheck`, `npm test` (green), `npm run build`, `npm run preview`
 
 ## Notes
 
