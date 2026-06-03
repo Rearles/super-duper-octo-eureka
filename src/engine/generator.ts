@@ -274,6 +274,7 @@ export function generateCase(world: AuthoredWorld, seed: number, caseId?: string
     keyContradiction: lie.keyContradiction,
     predicate,
     keyFact: core.keyFact,
+    trueAnswers: { who: culprit.id, where: scene.id, when, how: "homicide" },
   };
 
   const roles: Record<string, CaseRole> = {

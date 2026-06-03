@@ -20,7 +20,7 @@ Playtest found the player has no deductive agency: records state conclusions and
 - [x] Render record `clues` as atomic evidence in `src/engine/templateRenderer.ts` (no conclusions)
 - [x] Add `Theory` state + `setSlot`/`clearSlot`/`theory()` to `CaseSession` in `src/engine/index.ts`
 - [x] Add player-asserted `assertContradiction(clueA, clueB)` validation in `src/engine/factGraph.ts`
-- [ ] Add `trueAnswers` (per-slot ground truth) to `Solution` via optional field in `src/engine/generator.ts`
+- [x] Add `trueAnswers` (per-slot ground truth) to `Solution` via optional field in `src/engine/generator.ts`
 - [ ] Generalize `verifySolvable` in `src/engine/solver.ts` to per-slot supported + contested catchable
 - [ ] Add `commitTheory(theory, disposition)` to `CaseSession` — pure consequence, reuse §2.5 reactions, no grade
 - [ ] Update `buriedWitness` fixture + `engine/factions/requests` tests for the clue/theory API

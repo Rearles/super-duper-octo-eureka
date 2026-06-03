@@ -78,6 +78,8 @@ export interface Solution {
   predicate: string;
   /** which authored crux the lie attacks (drives solver branching); defaults to "where" when absent */
   keyFact?: CaseFact;
+  /** the true per-slot answers (who/where/when/how) — internal; never shown as a grade */
+  trueAnswers?: Theory;
 }
 
 export interface GameCase {
