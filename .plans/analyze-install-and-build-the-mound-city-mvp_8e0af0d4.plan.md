@@ -2,7 +2,7 @@
 title: "Analyze and understand the Mound City MVP, install dependencies, and build it"
 type: "feature"
 created: "2026-06-03"
-status: not-started
+status: complete
 related: ["build-mound-city-mvp-prototype_ad9accc1.plan.md"]
 ---
 
@@ -19,15 +19,15 @@ do a clean install to be certain. Toolchain: Node v24, npm 11.
 
 ## Todos
 
-- [ ] Read `docs/GameConceptDocument.md` end-to-end — all 15 §§ + Decision Log
-- [ ] Map `src/engine/*` + `src/ui/*` to the GCD MVP scope (Pillar 1, two-layer verdict)
-- [ ] Verify toolchain — `node -v`, `npm -v`
-- [ ] Install deps — `rm -rf node_modules && npm install`
-- [ ] Typecheck — `npm run typecheck` (tsc --noEmit, strict)
-- [ ] Test — `npm test` (vitest; expect 7 passing)
-- [ ] Build — `npm run build` (tsc && vite build) → confirm `dist/`
-- [ ] Run — `npm run preview`, confirm request→contradiction→verdict loop serves
-- [ ] Capture engine architecture facts to assist-project
+- [x] Read `docs/GameConceptDocument.md` end-to-end — all 15 §§ + Decision Log
+- [x] Map `src/engine/*` + `src/ui/*` to the GCD MVP scope (Pillar 1, two-layer verdict)
+- [x] Verify toolchain — `node -v`, `npm -v` — Node v24.16.0, npm 11.13.0
+- [x] Install deps — `rm -rf node_modules && npm install` — 77 pkgs, 11s (4 dev advisories, unaddressed)
+- [x] Typecheck — `npm run typecheck` (tsc --noEmit, strict) — clean
+- [x] Test — `npm test` (vitest) — 8 passing (plan said 7; actual 8)
+- [x] Build — `npm run build` (tsc && vite build) → `dist/` (index.html + 11.3KB JS)
+- [x] Run — `npm run preview` on :4173, served app + loop symbols confirmed in bundle
+- [x] Capture engine architecture facts to assist-project — `fct_57242bb32131`, `fct_29664b8c70cd`
 
 ## Notes
 
