@@ -2,7 +2,7 @@
 title: "Weave authored case data (keyFact, cast, factions) deeply into the procgen generator"
 type: "feature"
 created: "2026-06-03"
-status: not-started
+status: in-progress
 related: ["author-the-case-core_6a3b8c1f.plan.md", "faction-tension-systems_4b95a4c5.plan.md", "faction-requests-contacts-provenance_c691cba1.plan.md"]
 ---
 
@@ -14,7 +14,7 @@ related: ["author-the-case-core_6a3b8c1f.plan.md", "faction-tension-systems_4b95
 
 ## Todos
 
-- [ ] Add `keyFact` to `Solution` in `src/engine/types.ts`; extend `RecordType` with `"ruling"`
+- [x] Add `keyFact` to `Solution` in `src/engine/types.ts`; extend `RecordType` with `"ruling"`
 - [ ] Create `src/engine/crux.ts` — `cruxPredicate(core)` + per-keyFact descriptor table
 - [ ] Add five lie-strategy builders in `src/engine/crux.ts` (where/who/when/how/what)
 - [ ] Add `resolveCast(world, core, rng)` to `src/engine/generator.ts` — authored people first, procgen fallback

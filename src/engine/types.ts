@@ -15,7 +15,8 @@ export type RecordType =
   | "witness-statement"
   | "phone-records"
   | "autopsy"
-  | "property-record";
+  | "property-record"
+  | "ruling";
 
 /** How faithfully a record reflects ground truth. */
 export type Fidelity = "true" | "partial" | "biased" | "false";
@@ -49,6 +50,8 @@ export interface Solution {
   keyContradiction: [string, string];
   /** the predicate the contradiction turns on */
   predicate: string;
+  /** which authored crux the lie attacks (drives solver branching); defaults to "where" when absent */
+  keyFact?: CaseFact;
 }
 
 export interface GameCase {
