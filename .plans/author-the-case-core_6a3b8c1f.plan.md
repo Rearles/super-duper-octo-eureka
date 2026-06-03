@@ -2,7 +2,7 @@
 title: "Author the Case Core: builder + guided interview + procgen base layer"
 type: "feature"
 created: "2026-06-03"
-status: in-progress
+status: complete
 related: ["faction-tension-systems_4b95a4c5.plan.md", "analyze-install-and-build-the-mound-city-mvp_8e0af0d4.plan.md", "build-mound-city-mvp-prototype_ad9accc1.plan.md"]
 ---
 
@@ -34,7 +34,7 @@ renderer, and UI keep working. This plan is the base layer; the §2.4 faction **
 - [x] Update `CaseSession` to consume the `AuthoredWorld` (seed drives only the procgen dressing)
 - [x] Update `engine.test.ts` + add `authoring.test.ts` — builder validation, determinism, placed lie, solvable across seeds
 - [x] Add a golden snapshot test — one fully generated + rendered case at a fixed `(world, seed)`
-- [ ] Verify — `npm run typecheck`, `npm test` (green), `npm run build`, `npm run preview`
+- [x] Verify — `npm run typecheck`, `npm test` (green), `npm run build`, `npm run preview`
 
 ## Notes
 
