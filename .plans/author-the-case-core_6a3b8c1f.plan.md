@@ -25,7 +25,7 @@ renderer, and UI keep working. This plan is the base layer; the §2.4 faction **
 
 - [x] Map `generateCase` consumers + `GameCase`/`types.ts`; list what extends vs. breaks
 - [x] Add authored types to `types.ts`: `CaseCore` (5W+H + `keyFact`), `Faction` (`interests` + `temperament`), `FactionMember`, `Person` (case `role`, `factionId`), `AuthoredWorld`
-- [ ] Create `src/engine/authoring.ts` — `defineCase` / `defineFaction` / `definePerson` builders → validated data
+- [x] Create `src/engine/authoring.ts` — `defineCase` / `defineFaction` / `definePerson` builders → validated data
 - [ ] Write `docs/authoring-interview.md` — the structured-choice interview spec (5W+H · factions · key people); feeds the skill
 - [ ] Author `src/engine/world/` starter data — one case core + 1–2 factions + a few members, via the builders
 - [ ] Create the `case-author` skill via skill-creator — guided interview driving the builders; mirrors authored data to assist-project + consults assist-memory

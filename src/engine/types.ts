@@ -147,4 +147,6 @@ export interface AuthoredWorld {
   cases: CaseCore[];
   factions: Faction[];
   people: Person[];
+  /** authored place entities (scenes/locations) referenced by `CaseCore.whereId` and faction interests */
+  places: Entity[];
 }
