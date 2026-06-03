@@ -2,7 +2,7 @@
 title: "Hypothesis-board deduction redesign — Phase 1 (engine: clues, theory, per-slot solver, pure-consequence verdict)"
 type: "feature"
 created: "2026-06-03"
-status: not-started
+status: in-progress
 related: ["weave-authored-case-data-into-procgen_79b54597.plan.md"]
 ---
 
@@ -14,7 +14,7 @@ Playtest found the player has no deductive agency: records state conclusions and
 
 ## Todos
 
-- [ ] Add `Clue` + `Theory` types to `src/engine/types.ts`; optional `clues?` on `CaseRecord`/`GameCase`
+- [x] Add `Clue` + `Theory` types to `src/engine/types.ts`; optional `clues?` on `CaseRecord`/`GameCase`
 - [ ] Emit per-slot clue sets from `src/engine/crux.ts` strategies (contested slot: ≥1 false + ≥1 true)
 - [ ] Add true clues for non-contested who/where/when/how slots in `src/engine/generator.ts`; aggregate `GameCase.clues`
 - [ ] Render record `clues` as atomic evidence in `src/engine/templateRenderer.ts` (no conclusions)

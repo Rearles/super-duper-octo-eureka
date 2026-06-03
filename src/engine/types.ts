@@ -40,9 +40,35 @@ export interface CaseRecord {
   source: string; // the entity this record concerns / comes from
   fidelity: Fidelity;
   claims: Claim[];
+  /** atomic player-facing evidence (hypothesis-board layer); the player deduces from these */
+  clues?: Clue[];
   leads: string[]; // entity ids referenced (become requestable)
   clearanceCost: number;
 }
+
+/**
+ * One atomic piece of player-facing evidence that points a single case slot
+ * toward a value — the deduction currency of the hypothesis board. The player
+ * weighs clues to fill the WHO/WHERE/WHEN/HOW theory; `fidelity` is hidden, so a
+ * `false`/`biased` clue (the planted lie) must be outweighed by true ones. Unlike
+ * a `Claim`, a clue states EVIDENCE, never a conclusion.
+ */
+export interface Clue {
+  id: string;
+  /** the record this clue surfaced from */
+  recordId: string;
+  /** atomic evidence prose — never "X did it" */
+  text: string;
+  /** which 5W+H slot this clue speaks to */
+  slot: CaseFact;
+  /** the value it points the slot toward (entity id or literal token) */
+  value: string;
+  /** hidden truthfulness against ground truth */
+  fidelity: Fidelity;
+}
+
+/** The player's working hypothesis: a chosen value per slot (unset slots absent). */
+export type Theory = Partial<Record<CaseFact, string>>;
 
 export interface Solution {
   culpritId: string;
@@ -62,6 +88,8 @@ export interface GameCase {
   /** ground-truth facts as canonical (always-truthful) claims */
   groundTruth: Claim[];
   records: CaseRecord[];
+  /** flat aggregate of every record's clues (hypothesis-board layer) */
+  clues?: Clue[];
   /** the record handed to the player for free at the start */
   caseFileId: string;
   solution: Solution;
