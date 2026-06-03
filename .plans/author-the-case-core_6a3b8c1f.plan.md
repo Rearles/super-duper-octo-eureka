@@ -28,11 +28,12 @@ renderer, and UI keep working. This plan is the base layer; the §2.4 faction **
 - [ ] Create `src/engine/authoring.ts` — `defineCase` / `defineFaction` / `definePerson` builders → validated data
 - [ ] Write `docs/authoring-interview.md` — the structured-choice interview spec (5W+H · factions · key people); feeds the skill
 - [ ] Author `src/engine/world/` starter data — one case core + 1–2 factions + a few members, via the builders
-- [ ] Create the `case-author` skill via skill-creator — the guided structured-choice interview that drives the builders
+- [ ] Create the `case-author` skill via skill-creator — guided interview driving the builders; mirrors authored data to assist-project + consults assist-memory
 - [ ] Refactor `generateCase(world, seed)` — copy authored core/people → place lie → cast extras → build records/leads
 - [ ] Extend `verifySolvable` so authored-core + generated-layer cases still guarantee a solution path
 - [ ] Update `CaseSession` to consume the `AuthoredWorld` (seed drives only the procgen dressing)
 - [ ] Update `engine.test.ts` + add `authoring.test.ts` — builder validation, determinism, placed lie, solvable across seeds
+- [ ] Add a golden snapshot test — one fully generated + rendered case at a fixed `(world, seed)`
 - [ ] Verify — `npm run typecheck`, `npm test` (green), `npm run build`, `npm run preview`
 
 ## Notes
