@@ -25,7 +25,7 @@ describe("verifyClaim (against ground truth)", () => {
 
 describe("faction requests", () => {
   it("generates one request per stake-holding faction, with provenance and hidden fidelity", () => {
-    const s = new CaseSession(7);
+    const s = new CaseSession(7, { world });
     const reqs = s.requests();
     const heights = reqs.find((r) => r.factionId === "the-heights")!;
     const press = reqs.find((r) => r.factionId === "the-press")!;
@@ -37,7 +37,7 @@ describe("faction requests", () => {
   });
 
   it("verify reveals a grapevine lie as false and costs clearance", () => {
-    const s = new CaseSession(7);
+    const s = new CaseSession(7, { world });
     const before = s.clearance;
     const res = s.verifyRequest("req_the-heights");
     expect(res.ok).toBe(true);
@@ -48,12 +48,12 @@ describe("faction requests", () => {
   });
 
   it("verify is refused without enough clearance", () => {
-    const s = new CaseSession(7, { clearance: 0 });
+    const s = new CaseSession(7, { clearance: 0, world });
     expect(s.verifyRequest("req_the-heights").ok).toBe(false);
   });
 
   it("fulfill raises Standing, grants a Favor, and ripples to the rival", () => {
-    const s = new CaseSession(7);
+    const s = new CaseSession(7, { world });
     expect(s.fulfillRequest("req_the-heights").ok).toBe(true);
     const h = s.factions().find((f) => f.factionId === "the-heights")!;
     expect(h.standing).toBeGreaterThan(0);
@@ -64,14 +64,14 @@ describe("faction requests", () => {
   });
 
   it("refuse raises the faction's Heat and marks it refused", () => {
-    const s = new CaseSession(7);
+    const s = new CaseSession(7, { world });
     s.refuseRequest("req_the-heights");
     expect(s.factions().find((f) => f.factionId === "the-heights")!.heat).toBeGreaterThan(0);
     expect(s.requests().find((r) => r.id === "req_the-heights")!.status).toBe("refused");
   });
 
   it("a resolved request cannot be resolved again", () => {
-    const s = new CaseSession(7);
+    const s = new CaseSession(7, { world });
     s.fulfillRequest("req_the-heights");
     expect(s.refuseRequest("req_the-heights").ok).toBe(false);
   });
@@ -79,7 +79,7 @@ describe("faction requests", () => {
 
 describe("contacts & favors", () => {
   it("calling a contact spends a favor for a clearance boost (access, not answers)", () => {
-    const s = new CaseSession(7);
+    const s = new CaseSession(7, { world });
     expect(s.callContact("culprit").ok).toBe(false); // no favors yet
 
     s.fulfillRequest("req_the-heights"); // earn a Heights favor

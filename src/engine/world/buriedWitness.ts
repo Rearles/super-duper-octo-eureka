@@ -1,4 +1,6 @@
-// Starter authored world — a Buried Witness case core plus two factions.
+// Buried Witness — a Buried Witness case core plus two factions.
+// Retained as a TEST FIXTURE (engine/authoring/factions/requests/snapshot specs
+// import it directly). The live default world is now ./paper-trail (see index.ts).
 // This is the HAND-AUTHORED base layer (edit it freely); the generator builds
 // the record layer + extra cast on top. Produced via the builder API exactly as
 // the case-author interview (docs/authoring-interview.md) would emit it.
