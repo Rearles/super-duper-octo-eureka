@@ -99,6 +99,11 @@ export class CaseSession {
     return [...this.factionState.values()];
   }
 
+  /** Display name for a faction id. */
+  factionName(id: string): string {
+    return this.world.factions.find((f) => f.id === id)?.name ?? id;
+  }
+
   /** Apply faction reactions to the live state (heat floored at 0) and log to the Ledger. */
   private applyReactions(reactions: FactionReaction[], note: string): void {
     for (const r of reactions) {

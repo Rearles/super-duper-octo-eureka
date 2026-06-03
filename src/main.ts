@@ -1,13 +1,18 @@
 import { CaseSession } from "./engine/index";
 import { renderDesk } from "./ui/desk";
 import { renderBoard } from "./ui/board";
+import { renderFactions } from "./ui/factions";
 import { renderVerdict } from "./ui/verdict";
 
 const SEED = 7;
 const session = new CaseSession(SEED);
 const root = document.getElementById("app");
 
-function render(outcome?: string): void {
+function fmt(n: number): string {
+  return n > 0 ? `+${n}` : `${n}`;
+}
+
+function render(outcomeLines?: string[]): void {
   if (!root) return;
   root.replaceChildren();
 
@@ -27,17 +32,28 @@ function render(outcome?: string): void {
     }),
   );
   root.appendChild(renderBoard(session));
+  root.appendChild(renderFactions(session));
   root.appendChild(
     renderVerdict(session, (culprit, disposition) => {
       const res = session.commitVerdict(culprit, disposition);
-      render(`${res.correct ? "Factually sound." : "Factually wrong."} ${res.consequence}`);
+      // §2.4 confirmation-by-doing: no "correct/incorrect" grade — the player reads
+      // the truth from the world's reaction (the consequence + how the factions move).
+      const shifts = res.reactions.map(
+        (r) =>
+          `${session.factionName(r.factionId)}: Standing ${fmt(r.standingDelta)}, Heat ${fmt(r.heatDelta)} — ${r.reason}`,
+      );
+      render([res.consequence, ...shifts]);
     }),
   );
 
-  if (outcome) {
+  if (outcomeLines && outcomeLines.length > 0) {
     const box = document.createElement("aside");
     box.className = "outcome";
-    box.textContent = outcome;
+    for (const line of outcomeLines) {
+      const p = document.createElement("p");
+      p.textContent = line;
+      box.appendChild(p);
+    }
     root.appendChild(box);
   }
 }
