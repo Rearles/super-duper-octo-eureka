@@ -29,7 +29,7 @@ truth-model. assist-project: `fct_c5af1dbb681f`, `fct_77976f74828b`.
 - [x] Implement provenance + verify — test a request's claim against the Registry (spend clearance); fidelity from the truth-model
 - [x] Implement fulfill / refuse / verify resolution — Standing/Heat/Favor shifts + rival ripples per choice (via Plan 2)
 - [x] Surface requests in the UI — a requests inbox + the verify action; Ledger records what was acted on
-- [ ] Add tests — favor spend, each resolution path, verify exposes a false claim, fidelity handling
+- [x] Add tests — favor spend, each resolution path, verify exposes a false claim, fidelity handling
 - [ ] Verify — `npm run typecheck`, `npm test` (green), `npm run build`, `npm run preview`
 
 ## Notes
