@@ -1,4 +1,4 @@
-import { FactGraph, type Contradiction } from "./factGraph";
+import { FactGraph, type ClueConflict, type Contradiction } from "./factGraph";
 import { generateCase } from "./generator";
 import { verifySolvable } from "./solver";
 import { TemplateRenderer, type Renderer } from "./templateRenderer";
@@ -266,6 +266,17 @@ export class CaseSession {
   /** The player's current working hypothesis (a copy). */
   theory(): Theory {
     return { ...this._theory };
+  }
+
+  /**
+   * The player asserts two HELD clues contradict each other (§2.4). The engine
+   * confirms only whether they structurally conflict — never which is true.
+   * Returns `{ conflict: false }` if either clue isn't in a record the player holds.
+   */
+  assertContradiction(clueIdA: string, clueIdB: string): ClueConflict {
+    const held = new Set(this.clues().map((c) => c.id));
+    if (!held.has(clueIdA) || !held.has(clueIdB)) return { conflict: false };
+    return this.graph.assertContradiction(clueIdA, clueIdB);
   }
 
   /** Records pointed to by a lead in something already obtained, but not yet pulled. */
