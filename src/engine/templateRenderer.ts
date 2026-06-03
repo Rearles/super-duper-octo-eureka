@@ -13,7 +13,10 @@ export interface Renderer {
 export class TemplateRenderer implements Renderer {
   render(record: CaseRecord, _gameCase: GameCase): string {
     const header = `${record.title}\n[${record.type} · fidelity recorded internally]`;
-    const body = record.claims.map((c) => `  • ${c.text}`).join("\n");
+    // Player-facing layer: show atomic CLUES (evidence) when present; the player
+    // deduces. Fall back to claims for records without clues (e.g. the case file).
+    const lines = record.clues && record.clues.length > 0 ? record.clues : record.claims;
+    const body = lines.map((c) => `  • ${c.text}`).join("\n");
     return `${header}\n${body}`;
   }
 }
