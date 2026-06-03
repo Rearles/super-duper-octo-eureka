@@ -1,62 +1,53 @@
 ---
-title: "Faction tension systems (§2.4/§9/§10): Standing, Heat, Contacts, confirmation-by-doing"
+title: "Faction state, stakes & reactions (§2.5 core): two-axis Standing+Heat, emergent stakes, the web, confirmation-by-doing"
 type: "feature"
 created: "2026-06-03"
-status: on-hold
-related: ["author-the-case-core_6a3b8c1f.plan.md", "analyze-install-and-build-the-mound-city-mvp_8e0af0d4.plan.md"]
+status: not-started
+related: ["faction-requests-contacts-provenance_c691cba1.plan.md", "author-the-case-core_6a3b8c1f.plan.md", "analyze-install-and-build-the-mound-city-mvp_8e0af0d4.plan.md"]
 ---
 
-# Faction Tension Systems (§2.4 / §9 / §10)
-
-> ⏸️ **ON HOLD — to be RE-DERIVED from the GCD faction-design pass.** The user chose (2026-06-03) to
-> develop the expanded faction vision in the GCD first (§2.4/§6/§9/§10 via game-concept-builder),
-> then re-slice this plan from the locked design. The todos below are a **provisional sketch**, not
-> final. **Locked decisions to carry in:** (a) replace binary `correct/incorrect` with
-> **confirmation-by-doing** (theory whisper + world reactions); (b) **emergent stakes** = faction
-> interests × case facts × player public acts (`fct_819d93bfe926`); (c) **bidirectional Heat**
-> (rises on negative acts, falls on positive); (d) **faction-initiated requests** carrying
-> **provenance** (grapevine/press/direct) + testable reliability reusing the record-fidelity model;
-> (e) real-world-fidelity target (`fct_77976f74828b`). Likely splits into several plans after design.
+# Faction State, Stakes & Reactions (§2.5 core)
 
 ## Context
 
-Turn the **authored factions** from Plan 1 (`author-the-case-core_6a3b8c1f`) into the live tension
-engine the GCD describes: every faction is a sub-system with its own **Standing**, **Heat/Exposure**
-gauge, and **Contacts & favors** network (§2.4, §9.1, §9.2, §10); factual beliefs resolve only by
-**confirmation-by-doing** — committing a verdict/disposition or an **intermediate official act**
-(subpoena, naming a person of interest) makes the world react and confirm or contradict (§2.4). No
-score, no karma meter — competing faction pressures are the stakes. Depends on Plan 1's authored
-faction data model + the `CaseSession` verdict/consequence seams. **Large — split further if a
-single domain (e.g. Contacts, or confirmation-by-doing) grows past its todos.**
+Build the **runtime core** of the faction system now locked in GCD **§2.5** (v1.1) — the engine that
+turns Plan 1's authored factions into live tension. Per-faction **two axes** (Standing = slow durable
+trust; Heat = acute, **bidirectional**), **emergent stakes** (a faction's authored *interests* × the
+case's hard facts + the player's public acts), **three-layer reactions** (roles → direction,
+temperament → how, interests-overlap → magnitude), and the **inter-faction web** (authored ally/rival
+ties ripple shifts outward). Replaces the binary `correct/incorrect` verdict with **confirmation-by-
+doing** (§2.4). The **requests/contacts/provenance** interaction layer is the linked
+**Plan 3** (`faction-requests-contacts-provenance_c691cba1`). Depends on Plan 1's authored data model
+(`author-the-case-core_6a3b8c1f`). assist-project: `fct_c5af1dbb681f`, `fct_819d93bfe926`.
 
 ## Todos
 
-- [ ] Map Plan 1's `Faction`/`FactionMember` data + `CaseSession` verdict + consequence seams
-- [ ] Add runtime state types: per-faction `Standing`, `HeatExposure`, `FavorPool`, `Contact`
-- [ ] Implement `FactionState` — apply Standing + Heat shifts from dispositions and published info
-- [ ] Implement Heat thresholds → retaliation events (surveillance, clearance revocation, framing)
-- [ ] Implement Contacts & favors — calling a contact spends that faction's favors for access, never answers
-- [ ] Implement confirmation-by-doing — official acts (subpoena, name POI) + theory-whisper resolve beliefs
-- [ ] Wire into `CaseSession` — verdict/disposition + an official-acts path schedule immediate faction reactions
-- [ ] Surface factions in the UI — per-faction Standing/Heat indicators; outcome/Ledger shows the shifts
-- [ ] Add tests — Standing math, Heat→retaliation thresholds, favor spend, confirmation-by-doing resolution
+- [ ] Map Plan 1's authored `Faction`/`FactionMember`/`Person` + `CaseSession` verdict/consequence seams
+- [ ] Add runtime types — per-faction `Standing` + `Heat` (two independent axes), `FactionRuntimeState`
+- [ ] Implement emergent stakes — overlap of faction `interests` × (case hard-facts + player public acts)
+- [ ] Implement three-layer reactions — roles (direction) × temperament (how) × stake (magnitude) → Standing/Heat deltas
+- [ ] Implement the inter-faction web — ripple deltas to authored ally (+) / rival (−/heat) factions
+- [ ] Replace binary `correct/incorrect` with confirmation-by-doing — pre-commit theory whisper + reaction-based confirmation
+- [ ] Wire into `CaseSession` — verdict/disposition + official acts apply reactions; record shifts in a Ledger
+- [ ] Surface faction state in the UI — per-faction Standing/Heat indicators + outcome/Ledger shifts
+- [ ] Add tests — stakes math, reaction layers, web ripples, Heat bidirectionality, confirmation-by-doing
 - [ ] Verify — `npm run typecheck`, `npm test` (green), `npm run build`, `npm run preview`
 
 ## Notes
 
-**Why this is its own plan:** the user chose to build the **full §2.4 systems**, which is a distinct
-runtime/simulation domain layered on Plan 1's authored data. Plan 1 has no dependency on this plan;
-this plan consumes Plan 1's `Faction` model. Clean domain boundary (`lsn_08e808e71bef`).
+**§2.5 anchors:** two-axis state (Standing vs Heat are independent — high Standing can coexist with
+spiked Heat); Heat bidirectional (rises on acts against, falls on acts for); stakes emergent and
+**live** (player publishing a claim against a faction's member mid-case, even in an unrelated case,
+gives that faction a stake and shifts Heat); reactions combine roles+temperament+interests-overlap;
+web ripples through authored ally/rival ties.
 
-**GCD anchors:** §2.4 (no score; standing = multi-factional reputation; confirmation-by-doing),
-§9.1 (Heat/Exposure per faction; no game-over — maxed Heat forces hard consequences), §9.2 (Contacts
-& favors give access not answers), §10 (Clearance global; Heat/Favors/Standing per faction).
-Factions and a couple of members are **authored** (Plan 1); their **gauges and reactions** are built
-here. Keep Pillar 2 — the systems pressure and react, but never interpret or hand the player a
-conclusion.
+**Confirmation-by-doing (locked):** the engine's current immediate `correct: boolean` is replaced —
+factual truth confirms/contradicts only when the player **acts** (verdict, disposition, official act)
+and a faction **reacts**. Keep an internal correctness signal for tests, hidden from the player.
 
-**Likely sub-splits if it grows:** (a) Standing + Heat + retaliation; (b) Contacts & favors;
-(c) confirmation-by-doing + official acts + UI. Reassess after the first three todos.
+**Out of scope → Plan 3:** faction-initiated **requests**, **provenance** (grapevine/press/direct) +
+verify-against-Registry, **Contacts & Favors**. Also deferred: the calendar / variable-latency
+delayed consequences (this plan applies *immediate* reactions only), the secret backbone, interlinking.
 
-**Deferred even here:** the calendar / variable-latency delayed consequences (only *immediate*
-reactions in this plan), going-public/press cascade breadth, interlinking/the secret backbone.
+**Split rationale:** state+reactions (this plan) is the foundation the interaction layer (Plan 3)
+consumes; each stays a coherent ≤10-todo unit (`lsn_08e808e71bef`).
