@@ -61,6 +61,16 @@ the real error before swapping deps (`lsn_e9ffd7a42ab1`); a killed/partial `npm 
 the install step wipes first. To drive the running app headlessly if needed, system Chrome +
 puppeteer-core (`lsn_b560763b7994`).
 
+**Next direction (user, 2026-06-03 — informs the phase AFTER this plan).** The Buried Witness
+ground truth (the "hard truths": crime, who/how, key facts) is to be **hand-authored by the user**,
+not invented by the generator. Procgen should build **on top of** the authored core — elaborating
+entities / records / leads / distortions around fixed authored truths — rather than generating the
+whole case from a seed. Today `generateCase(seed)` builds everything from the seed with zero author
+input, which the user found annoying. Planned refactor: `generateCase` takes an authored
+ground-truth spec (canonical claims + culprit + key contradiction) and procgen fills the record
+layer around it, with `verifySolvable` still gating Pillar 1. Not in scope for this analyze/build
+plan — captured here so it isn't lost. (assist-project: `fct_57242bb32131`.)
+
 **Stack:** `package.json` scripts — dev (vite), build (tsc && vite build), preview, test (vitest run),
 typecheck (tsc --noEmit). tsconfig is strict, `noEmit`, ES2022/ESNext, bundler resolution,
 verbatimModuleSyntax. Vite is configed by convention (no vite.config — `index.html` at root entry).
