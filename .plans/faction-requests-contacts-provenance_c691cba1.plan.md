@@ -2,7 +2,7 @@
 title: "Faction requests, contacts & provenance (§2.5 interaction layer): grapevine/press/direct requests, verify-against-Registry, Contacts & Favors"
 type: "feature"
 created: "2026-06-03"
-status: in-progress
+status: complete
 related: ["faction-tension-systems_4b95a4c5.plan.md", "author-the-case-core_6a3b8c1f.plan.md"]
 ---
 
@@ -30,7 +30,7 @@ truth-model. assist-project: `fct_c5af1dbb681f`, `fct_77976f74828b`.
 - [x] Implement fulfill / refuse / verify resolution — Standing/Heat/Favor shifts + rival ripples per choice (via Plan 2)
 - [x] Surface requests in the UI — a requests inbox + the verify action; Ledger records what was acted on
 - [x] Add tests — favor spend, each resolution path, verify exposes a false claim, fidelity handling
-- [ ] Verify — `npm run typecheck`, `npm test` (green), `npm run build`, `npm run preview`
+- [x] Verify — `npm run typecheck`, `npm test` (green), `npm run build`, `npm run preview`
 
 ## Notes
 
