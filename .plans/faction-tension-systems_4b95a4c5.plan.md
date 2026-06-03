@@ -2,11 +2,21 @@
 title: "Faction tension systems (§2.4/§9/§10): Standing, Heat, Contacts, confirmation-by-doing"
 type: "feature"
 created: "2026-06-03"
-status: not-started
+status: on-hold
 related: ["author-the-case-core_6a3b8c1f.plan.md", "analyze-install-and-build-the-mound-city-mvp_8e0af0d4.plan.md"]
 ---
 
 # Faction Tension Systems (§2.4 / §9 / §10)
+
+> ⏸️ **ON HOLD — to be RE-DERIVED from the GCD faction-design pass.** The user chose (2026-06-03) to
+> develop the expanded faction vision in the GCD first (§2.4/§6/§9/§10 via game-concept-builder),
+> then re-slice this plan from the locked design. The todos below are a **provisional sketch**, not
+> final. **Locked decisions to carry in:** (a) replace binary `correct/incorrect` with
+> **confirmation-by-doing** (theory whisper + world reactions); (b) **emergent stakes** = faction
+> interests × case facts × player public acts (`fct_819d93bfe926`); (c) **bidirectional Heat**
+> (rises on negative acts, falls on positive); (d) **faction-initiated requests** carrying
+> **provenance** (grapevine/press/direct) + testable reliability reusing the record-fidelity model;
+> (e) real-world-fidelity target (`fct_77976f74828b`). Likely splits into several plans after design.
 
 ## Context
 

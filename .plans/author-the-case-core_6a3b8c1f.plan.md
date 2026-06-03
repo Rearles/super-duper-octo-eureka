@@ -24,10 +24,11 @@ renderer, and UI keep working. This plan is the base layer; the §2.4 faction **
 ## Todos
 
 - [ ] Map `generateCase` consumers + `GameCase`/`types.ts`; list what extends vs. breaks
-- [ ] Add authored types to `types.ts`: `CaseCore` (5W+H), `Faction`, `FactionMember`, `Person`, `AuthoredWorld`
+- [ ] Add authored types to `types.ts`: `CaseCore` (5W+H + `keyFact`), `Faction` (`interests` + `temperament`), `FactionMember`, `Person` (case `role`, `factionId`), `AuthoredWorld`
 - [ ] Create `src/engine/authoring.ts` — `defineCase` / `defineFaction` / `definePerson` builders → validated data
-- [ ] Write `docs/authoring-interview.md` — the structured-choice interview script (5W+H · factions · key people)
+- [ ] Write `docs/authoring-interview.md` — the structured-choice interview spec (5W+H · factions · key people); feeds the skill
 - [ ] Author `src/engine/world/` starter data — one case core + 1–2 factions + a few members, via the builders
+- [ ] Create the `case-author` skill via skill-creator — the guided structured-choice interview that drives the builders
 - [ ] Refactor `generateCase(world, seed)` — copy authored core/people → place lie → cast extras → build records/leads
 - [ ] Extend `verifySolvable` so authored-core + generated-layer cases still guarantee a solution path
 - [ ] Update `CaseSession` to consume the `AuthoredWorld` (seed drives only the procgen dressing)
@@ -37,17 +38,28 @@ renderer, and UI keep working. This plan is the base layer; the §2.4 faction **
 ## Notes
 
 **Decisions (user, 2026-06-03):**
-- *Hard-truth schema* = **Core 5W+H only**: what (crime/event), who (culprit + victim), where (scene),
-  when (time), how (method). Motive/"why", explicit stakes, and the lie are **not** authored on the
-  case core — the **lie/contradiction is procgen-placed** (preserves the earlier skeleton+placed-lie
-  call). Tension comes from the factions, not a case stakes field.
+- *Hard-truth schema* = **Core 5W+H** + a **`keyFact`**: what, who (culprit+victim), where, when, how
+  — and the author **designates one `keyFact` as the crux** the cover-up attacks. The lie is
+  **procgen-placed against the keyFact**, and procgen **may add secondary contradictions** around it
+  (author owns the central deduction; procgen enriches). Motive/"why" and explicit per-case stakes
+  are **not** authored.
 - *Authored vs cast* = **author key people + procgen casts the rest**: author the principals (culprit,
   victim) and a few faction members who matter; procgen invents remaining witnesses/bystanders and
   all their records, leads, distortions.
+- *Factions (authored fields only here)* = identity + members + a one-word **`temperament`**
+  (protective/opportunistic/vindictive/principled…) + **`interests`** (topics/places/people/objects/
+  money/drugs a faction cares about). Member **case roles** link factions to a case. The *reaction
+  and stake math* is runtime (Plan 2): stakes are **emergent** — overlap of a faction's interests
+  with the case's hard facts AND the player's public acts — so this plan only needs the authored
+  fields. (assist-project `fct_819d93bfe926`.)
 - *Builder UX* = **guided interview that emits builder data, asked in structured multiple-choice
-  form** (like these planning questions — options + previews + a recommended default). Conducted by
-  Claude Code per `docs/authoring-interview.md`; could later be formalized as a toolbelt
-  `case-author` skill (via skill-creator) — out of scope here, in-repo playbook is enough.
+  form** (like these planning questions — options + previews + a recommended default), delivered as
+  the **`case-author` skill** (via skill-creator) with `docs/authoring-interview.md` as its spec.
+
+**Pending the GCD faction-design pass (user chose GCD-first, 2026-06-03):** the faction *runtime* —
+emergent-stake computation, bidirectional Heat, faction-initiated **requests** with **provenance**
+(grapevine/press/direct) + testable reliability, confirmation-by-doing — is designed in the GCD
+(§2.4/§6/§9/§10) and built in Plan 2. Plan 1 must only author the data those systems will read.
 
 **Proposed shapes (refine during build):**
 - `CaseCore` = `{ id, what, culpritId, victimId, whereId, when, how }` (the 5W+H; `when`/`how` as the
