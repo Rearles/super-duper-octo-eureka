@@ -12,6 +12,7 @@ import {
   reactToOfficialAct,
   reactToVerdict,
   resolveCore,
+  verifyClaim,
 } from "./factions";
 import type {
   AuthoredWorld,
@@ -22,11 +23,14 @@ import type {
   FactionReaction,
   FactionRequest,
   FactionRuntimeState,
+  Fidelity,
   GameCase,
 } from "./types";
 
 /** Clearance a faction contact grants when called (§9.2 — access, not answers). */
 const CONTACT_CLEARANCE_BONUS = 2;
+/** Clearance cost to verify a faction request's claim against the Registry. */
+const VERIFY_COST = 1;
 
 export * from "./types";
 export { generateCase, verifySolvable, FactGraph, TemplateRenderer };
@@ -113,9 +117,35 @@ export class CaseSession {
     return this.world.factions.find((f) => f.id === id)?.name ?? id;
   }
 
-  /** Open and resolved faction requests pushed to the player (§2.5). */
+  /**
+   * Open and resolved faction requests pushed to the player (§2.5). A request's
+   * `fidelity` is the hidden truth — display it only once `revealed` (verified).
+   */
   requests(): FactionRequest[] {
     return [...this.requestList];
+  }
+
+  /**
+   * Verify a request's provenance-tagged claim against the Registry's ground
+   * truth (§2.5): spend clearance to reveal its true `fidelity` before deciding.
+   * Turns the faction's own information into deduction material (Pillar 1).
+   */
+  verifyRequest(requestId: string): { ok: boolean; message: string; fidelity?: Fidelity } {
+    if (this.closed) return { ok: false, message: "The case is closed." };
+    const req = this.requestList.find((r) => r.id === requestId);
+    if (!req) return { ok: false, message: "No such request." };
+    if (req.revealed) return { ok: false, message: "Already verified.", fidelity: req.fidelity };
+    if (this.clearance < VERIFY_COST) {
+      return { ok: false, message: "Not enough clearance to verify." };
+    }
+    this.clearance -= VERIFY_COST;
+    req.fidelity = verifyClaim(req.claim, this.gameCase.groundTruth);
+    req.revealed = true;
+    this.ledger.push({
+      note: `Verified ${this.factionName(req.factionId)}'s claim → ${req.fidelity}`,
+      reactions: [],
+    });
+    return { ok: true, message: `Their claim checks out as: ${req.fidelity}.`, fidelity: req.fidelity };
   }
 
   /** The faction members the player can call for access (§9.2). */
