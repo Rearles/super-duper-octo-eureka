@@ -6,11 +6,29 @@ import type {
   AuthoredWorld,
   CaseCore,
   CaseRole,
+  Contact,
   Disposition,
   Faction,
   FactionReaction,
   GameCase,
 } from "./types";
+
+/** A faction's members are its callable contacts (§9.2). */
+export function listContacts(world: AuthoredWorld): Contact[] {
+  const out: Contact[] = [];
+  for (const f of world.factions) {
+    for (const m of f.members) {
+      const person = world.people.find((p) => p.id === m.personId);
+      out.push({
+        factionId: f.id,
+        personId: m.personId,
+        name: person?.name ?? m.personId,
+        ...(m.title ? { title: m.title } : {}),
+      });
+    }
+  }
+  return out;
+}
 
 /** The procgen-cast ids the generator always uses (see generator.ts). */
 const WITNESS_ID = "witness";

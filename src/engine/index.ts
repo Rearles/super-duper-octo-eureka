@@ -7,6 +7,7 @@ import {
   applyInterFactionWeb,
   caseFacts,
   factionStake,
+  listContacts,
   reactToOfficialAct,
   reactToVerdict,
   resolveCore,
@@ -15,11 +16,15 @@ import type {
   AuthoredWorld,
   CaseCore,
   CaseRecord,
+  Contact,
   Disposition,
   FactionReaction,
   FactionRuntimeState,
   GameCase,
 } from "./types";
+
+/** Clearance a faction contact grants when called (§9.2 — access, not answers). */
+const CONTACT_CLEARANCE_BONUS = 2;
 
 export * from "./types";
 export { generateCase, verifySolvable, FactGraph, TemplateRenderer };
@@ -102,6 +107,32 @@ export class CaseSession {
   /** Display name for a faction id. */
   factionName(id: string): string {
     return this.world.factions.find((f) => f.id === id)?.name ?? id;
+  }
+
+  /** The faction members the player can call for access (§9.2). */
+  contacts(): Contact[] {
+    return listContacts(this.world);
+  }
+
+  /**
+   * Call a faction contact: spend 1 of that faction's favors for ACCESS — a
+   * clearance boost (they pull a string). Never an answer (Pillar 2).
+   */
+  callContact(personId: string): { ok: boolean; message: string } {
+    if (this.closed) return { ok: false, message: "The case is closed." };
+    const contact = this.contacts().find((c) => c.personId === personId);
+    if (!contact) return { ok: false, message: "No such contact." };
+    const state = this.factionState.get(contact.factionId);
+    if (!state || state.favors < 1) {
+      return { ok: false, message: `No favors to spend with ${this.factionName(contact.factionId)}.` };
+    }
+    state.favors -= 1;
+    this.clearance += CONTACT_CLEARANCE_BONUS;
+    this.ledger.push({
+      note: `Called ${contact.name} (${this.factionName(contact.factionId)}) — clearance +${CONTACT_CLEARANCE_BONUS}`,
+      reactions: [],
+    });
+    return { ok: true, message: `${contact.name} pulls a string — clearance +${CONTACT_CLEARANCE_BONUS}.` };
   }
 
   /** Apply faction reactions to the live state (heat floored at 0) and log to the Ledger. */
