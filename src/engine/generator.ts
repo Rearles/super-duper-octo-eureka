@@ -186,6 +186,7 @@ export function generateCase(world: AuthoredWorld, seed: number, caseId?: string
 
   return {
     seed,
+    coreId: core.id,
     entities,
     groundTruth,
     records: [caseFile, witnessStatement, phoneRecords, autopsy, property],

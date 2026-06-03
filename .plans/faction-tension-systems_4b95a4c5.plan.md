@@ -23,7 +23,7 @@ doing** (§2.4). The **requests/contacts/provenance** interaction layer is the l
 ## Todos
 
 - [x] Map Plan 1's authored `Faction`/`FactionMember`/`Person` + `CaseSession` verdict/consequence seams
-- [ ] Add runtime types — per-faction `Standing` + `Heat` (two independent axes), `FactionRuntimeState`
+- [x] Add runtime types — per-faction `Standing` + `Heat` (two independent axes), `FactionRuntimeState`
 - [ ] Implement emergent stakes — overlap of faction `interests` × (case hard-facts + player public acts)
 - [ ] Implement three-layer reactions — roles (direction) × temperament (how) × stake (magnitude) → Standing/Heat deltas
 - [ ] Implement the inter-faction web — ripple deltas to authored ally (+) / rival (−/heat) factions

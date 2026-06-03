@@ -53,6 +53,8 @@ export interface Solution {
 
 export interface GameCase {
   seed: number;
+  /** the authored CaseCore id this was generated from (resolve via `world.cases`) */
+  coreId?: string;
   entities: Record<string, Entity>;
   /** ground-truth facts as canonical (always-truthful) claims */
   groundTruth: Claim[];
@@ -149,4 +151,29 @@ export interface AuthoredWorld {
   people: Person[];
   /** authored place entities (scenes/locations) referenced by `CaseCore.whereId` and faction interests */
   places: Entity[];
+}
+
+// ---------------------------------------------------------------------------
+// Faction runtime (Plan 2 — the §2.5 tension engine, computed not authored).
+// ---------------------------------------------------------------------------
+
+/**
+ * Live per-faction relationship state — two INDEPENDENT axes (§2.5):
+ * you can hold high `standing` and a spiked `heat` at once.
+ */
+export interface FactionRuntimeState {
+  factionId: string;
+  /** slow, durable trust/reputation; gates access. Signed (− hostile … + allied). */
+  standing: number;
+  /** acute hostile attention; bidirectional (rises on acts against, falls on acts for). `>= 0`. */
+  heat: number;
+}
+
+/** One faction's reaction to a player act: the applied deltas + why. */
+export interface FactionReaction {
+  factionId: string;
+  name: string;
+  standingDelta: number;
+  heatDelta: number;
+  reason: string;
 }
