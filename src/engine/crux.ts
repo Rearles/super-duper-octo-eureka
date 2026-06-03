@@ -7,8 +7,16 @@
 
 import type { CaseCore, CaseFact, CaseRecord, Claim, Clue, Entity, Fidelity, GameCase, RecordType } from "./types";
 
+/** The four player-facing theory slots (a `what` crux folds into `how`). */
+export const THEORY_SLOTS: CaseFact[] = ["who", "where", "when", "how"];
+
+/** The theory slot a crux contests — `what` is presented through the `how` slot. */
+export function contestedSlot(core: CaseCore): CaseFact {
+  return core.keyFact === "what" ? "how" : core.keyFact;
+}
+
 /** Build an atomic player-facing clue (hypothesis-board evidence) for a record + slot. */
-function mkClue(recordId: string, slot: CaseFact, value: string, fidelity: Fidelity, text: string): Clue {
+export function mkClue(recordId: string, slot: CaseFact, value: string, fidelity: Fidelity, text: string): Clue {
   return { id: `${recordId}__${slot}`, recordId, slot, value, fidelity, text };
 }
 
@@ -321,7 +329,7 @@ function whatLie(ctx: CruxContext): CruxLie {
       claim(victim.id, predicate, "no-crime", false, `${victim.name}'s death was ruled inconclusive — no crime recorded.`),
     ],
     clues: [
-      mkClue("rec_ruling", "what", "no-crime", "false", `The file was closed: inconclusive — no crime recorded.`),
+      mkClue("rec_ruling", "how", "no-crime", "false", `The file was closed: inconclusive — no crime recorded.`),
     ],
     leads: [scene.id],
     clearanceCost: 1,
@@ -337,7 +345,7 @@ function whatLie(ctx: CruxContext): CruxLie {
       claim(culprit.id, "at-scene", scene.id, true, `${culprit.name} was placed at ${scene.name}.`),
     ],
     clues: [
-      mkClue("rec_autopsy", "what", "homicide", "true", `Autopsy findings establish a homicide, not misadventure — ${core.how}`),
+      mkClue("rec_autopsy", "how", "homicide", "true", `Autopsy findings establish a homicide, not misadventure — ${core.how}`),
     ],
     leads: [scene.id, culprit.id],
     clearanceCost: 1,

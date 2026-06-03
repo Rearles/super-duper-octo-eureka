@@ -9,7 +9,15 @@ import type {
   Person,
   Solution,
 } from "./types";
-import { CRUX_STRATEGIES, cruxPredicate, cruxTruth, type CruxContext } from "./crux";
+import {
+  CRUX_STRATEGIES,
+  THEORY_SLOTS,
+  contestedSlot,
+  cruxPredicate,
+  cruxTruth,
+  mkClue,
+  type CruxContext,
+} from "./crux";
 
 /** Deterministic seeded PRNG (mulberry32). Same seed → identical procgen. */
 function mulberry32(seed: number): () => number {
@@ -242,6 +250,25 @@ export function generateCase(world: AuthoredWorld, seed: number, caseId?: string
 
   const records: CaseRecord[] = [caseFile, ...lie.records, property, ...genericAutopsy, ...decoys];
 
+  // True clues for the NON-contested theory slots, so the player can fill all four
+  // (the contested slot already carries its false+true pair from the strategy).
+  // Carrier records: who → property, where/when/how → the autopsy.
+  const contested = contestedSlot(core);
+  const autopsyRec = records.find((r) => r.type === "autopsy") ?? property;
+  const slotTrue: Record<string, { value: string; carrier: CaseRecord; text: string }> = {
+    who: { value: culprit.id, carrier: property, text: `${culprit.name}'s effects place him near ${scene.name}.` },
+    where: { value: scene.id, carrier: autopsyRec, text: `${victim.name}'s body was found at ${scene.name}.` },
+    when: { value: when, carrier: autopsyRec, text: `Time of death is fixed at ${when}.` },
+    how: { value: "homicide", carrier: autopsyRec, text: `The injuries are consistent with foul play — ${core.how}.` },
+  };
+  for (const slot of THEORY_SLOTS) {
+    if (slot === contested) continue;
+    const t = slotTrue[slot];
+    t.carrier.clues = [...(t.carrier.clues ?? []), mkClue(t.carrier.id, slot, t.value, "true", t.text)];
+  }
+
+  const clues = records.flatMap((rec) => rec.clues ?? []);
+
   const solution: Solution = {
     culpritId: culprit.id,
     keyContradiction: lie.keyContradiction,
@@ -265,6 +292,7 @@ export function generateCase(world: AuthoredWorld, seed: number, caseId?: string
     entities,
     groundTruth,
     records,
+    clues,
     caseFileId: caseFile.id,
     solution,
     suspects,
