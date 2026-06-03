@@ -157,6 +157,9 @@ export interface AuthoredWorld {
 // Faction runtime (Plan 2 — the §2.5 tension engine, computed not authored).
 // ---------------------------------------------------------------------------
 
+/** What the player does with a closed case (the morally-grey second layer). */
+export type Disposition = "charge" | "bury" | "expose";
+
 /**
  * Live per-faction relationship state — two INDEPENDENT axes (§2.5):
  * you can hold high `standing` and a spiked `heat` at once.

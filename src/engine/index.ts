@@ -3,15 +3,13 @@ import { generateCase } from "./generator";
 import { verifySolvable } from "./solver";
 import { TemplateRenderer, type Renderer } from "./templateRenderer";
 import { defaultWorld } from "./world";
-import type { AuthoredWorld, CaseRecord, GameCase } from "./types";
+import type { AuthoredWorld, CaseRecord, Disposition, GameCase } from "./types";
 
 export * from "./types";
 export { generateCase, verifySolvable, FactGraph, TemplateRenderer };
 export { defaultWorld } from "./world";
 export * from "./authoring";
 export type { Renderer, Contradiction };
-
-export type Disposition = "charge" | "bury" | "expose";
 
 export interface VerdictResult {
   correct: boolean;
