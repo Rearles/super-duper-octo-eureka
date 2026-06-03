@@ -10,6 +10,11 @@ export interface SolvabilityResult {
  * Pillar 1 guarantee: confirm a chain of *obtainable* records exposes the lie
  * and implicates the culprit. The generator and this checker are co-built; any
  * malformed case is rejected (CaseSession throws on failure).
+ *
+ * Generic over the authored case: it keys on `gameCase.solution.predicate`
+ * (now derived from the authored core's `keyFact`/`when`, e.g. `location@2300`),
+ * not a hardcoded predicate — so authored-core + generated-layer cases are
+ * checked the same way.
  */
 export function verifySolvable(gameCase: GameCase): SolvabilityResult {
   const graph = new FactGraph(gameCase);

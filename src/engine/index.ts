@@ -2,10 +2,13 @@ import { FactGraph, type Contradiction } from "./factGraph";
 import { generateCase } from "./generator";
 import { verifySolvable } from "./solver";
 import { TemplateRenderer, type Renderer } from "./templateRenderer";
-import type { CaseRecord, GameCase } from "./types";
+import { defaultWorld } from "./world";
+import type { AuthoredWorld, CaseRecord, GameCase } from "./types";
 
 export * from "./types";
 export { generateCase, verifySolvable, FactGraph, TemplateRenderer };
+export { defaultWorld } from "./world";
+export * from "./authoring";
 export type { Renderer, Contradiction };
 
 export type Disposition = "charge" | "bury" | "expose";
@@ -28,8 +31,18 @@ export class CaseSession {
   clearance: number;
   closed = false;
 
-  constructor(seed: number, opts: { clearance?: number; renderer?: Renderer } = {}) {
-    this.gameCase = generateCase(seed);
+  constructor(
+    seed: number,
+    opts: {
+      clearance?: number;
+      renderer?: Renderer;
+      /** override the authored world (defaults to the bundled `defaultWorld`) */
+      world?: AuthoredWorld;
+      /** which authored case to generate (defaults to the world's first) */
+      caseId?: string;
+    } = {},
+  ) {
+    this.gameCase = generateCase(opts.world ?? defaultWorld, seed, opts.caseId);
     const check = verifySolvable(this.gameCase);
     if (!check.solvable) {
       throw new Error(`Unsolvable case generated (seed ${seed}): ${check.reason}`);

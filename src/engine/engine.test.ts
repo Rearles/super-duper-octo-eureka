@@ -2,28 +2,43 @@ import { describe, it, expect } from "vitest";
 import { generateCase } from "./generator";
 import { verifySolvable } from "./solver";
 import { CaseSession } from "./index";
+import { buriedWitnessWorld as world } from "./world/buriedWitness";
 
 describe("engine", () => {
-  it("generates deterministically from a seed", () => {
-    const a = generateCase(42);
-    const b = generateCase(42);
+  it("generates deterministically from an authored world + seed", () => {
+    const a = generateCase(world, 42);
+    const b = generateCase(world, 42);
     expect(JSON.stringify(a)).toEqual(JSON.stringify(b));
   });
 
-  it("varies between seeds", () => {
-    expect(generateCase(43).entities.victim.name).not.toEqual(
-      generateCase(42).entities.victim.name,
+  it("varies the procgen-cast names between seeds; authored facts stay fixed", () => {
+    const witnessNames = new Set(
+      Array.from({ length: 10 }, (_, i) => generateCase(world, i + 1).entities.witness.name),
     );
+    expect(witnessNames.size).toBeGreaterThan(1);
+    // authored principals never change with the seed
+    expect(generateCase(world, 1).entities.culprit.name).toEqual(
+      generateCase(world, 2).entities.culprit.name,
+    );
+  });
+
+  it("builds the case from the authored core (culprit/victim/scene/when)", () => {
+    const c = generateCase(world, 7);
+    expect(c.solution.culpritId).toBe("culprit");
+    expect(c.entities.culprit.name).toBe("Cole Voss");
+    expect(c.entities.victim.name).toBe("Mara Hale");
+    // the contested predicate is derived from the authored `when`
+    expect(c.solution.predicate).toBe("location@2300");
   });
 
   it("every generated case is solvable (Pillar 1)", () => {
     for (let seed = 1; seed <= 100; seed++) {
-      expect(verifySolvable(generateCase(seed)).solvable).toBe(true);
+      expect(verifySolvable(generateCase(world, seed)).solvable).toBe(true);
     }
   });
 
   it("plants a lie that a true record disproves", () => {
-    const c = generateCase(7);
+    const c = generateCase(world, 7);
     const stmt = c.records.find((r) => r.type === "witness-statement");
     expect(stmt?.claims.some((cl) => !cl.truthful)).toBe(true);
   });

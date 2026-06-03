@@ -1,6 +1,15 @@
-import type { Claim, CaseRecord, Entity, GameCase, Solution } from "./types";
+import type {
+  AuthoredWorld,
+  CaseCore,
+  CaseRecord,
+  Claim,
+  Entity,
+  GameCase,
+  Person,
+  Solution,
+} from "./types";
 
-/** Deterministic seeded PRNG (mulberry32). Same seed → identical case. */
+/** Deterministic seeded PRNG (mulberry32). Same seed → identical procgen. */
 function mulberry32(seed: number): () => number {
   let a = seed >>> 0;
   return () => {
@@ -25,14 +34,44 @@ function claim(
   return { subject, predicate, object, truthful, text };
 }
 
+function resolveCore(world: AuthoredWorld, caseId?: string): CaseCore {
+  const core = caseId ? world.cases.find((c) => c.id === caseId) : world.cases[0];
+  if (!core) {
+    throw new Error(`No authored case core${caseId ? ` '${caseId}'` : ""} in the world.`);
+  }
+  return core;
+}
+
+function requirePerson(world: AuthoredWorld, id: string, role: string): Person {
+  const p = world.people.find((person) => person.id === id);
+  if (!p) throw new Error(`Case core ${role} '${id}' is not a person in the authored world.`);
+  return p;
+}
+
+function requirePlace(world: AuthoredWorld, id: string): Entity {
+  const place = world.places.find((p) => p.id === id);
+  if (!place) throw new Error(`Case core where '${id}' is not a place in the authored world.`);
+  return place;
+}
+
 /**
- * Generate one "Buried Witness" case from a seed (§5.4 archetype):
- * ground truth is built first, then records are projected — one of them a lie
- * (a false alibi) that a true record (phone logs) disproves. Always solvable.
+ * Generate one playable case from a HAND-AUTHORED world + a seed (§2.5 / §5.4).
+ *
+ * The author owns the hard truths (the `CaseCore` 5W+H + the `keyFact` crux);
+ * this generator builds the record layer ON TOP — it casts the witness and a
+ * bystander procedurally (deterministically from the seed), and **places the
+ * lie against the `keyFact`**: a false alibi a true record (phone logs)
+ * disproves. The authored culprit/victim/scene/time/method are never invented.
+ *
+ * `keyFact` currently realizes the where/when "alibi" crux (the Buried Witness
+ * pattern); other crux dimensions fall back to it until more archetypes exist.
  */
-export function generateCase(seed: number): GameCase {
+export function generateCase(world: AuthoredWorld, seed: number, caseId?: string): GameCase {
+  const core = resolveCore(world, caseId);
   const rng = mulberry32(seed);
-  const used = new Set<string>();
+
+  // Don't let procgen-cast names collide with any authored person.
+  const used = new Set(world.people.map((p) => p.name));
   const uniqueName = (): string => {
     let n = "";
     let guard = 0;
@@ -43,39 +82,47 @@ export function generateCase(seed: number): GameCase {
     return n;
   };
 
-  const victim: Entity = { id: "victim", type: "person", name: uniqueName() };
-  const culprit: Entity = { id: "suspect_a", type: "person", name: uniqueName() };
-  const bystander: Entity = { id: "suspect_b", type: "person", name: uniqueName() };
-  const witness: Entity = { id: "witness", type: "person", name: uniqueName() };
-  const home: Entity = { id: "victim_home", type: "place", name: "the victim's flat" };
+  // Authored principals + scene (the hard truths — never invented here).
+  const culprit = requirePerson(world, core.culpritId, "culprit");
+  const victim = requirePerson(world, core.victimId, "victim");
+  const scene = requirePlace(world, core.whereId);
+
+  // Procgen-cast people + places (deterministic from the seed).
+  const witness: Person = { id: "witness", type: "person", name: uniqueName() };
+  const bystander: Person = { id: "suspect_b", type: "person", name: uniqueName() };
   const bar: Entity = { id: "across_town", type: "place", name: "the Westside bar" };
   const phone: Entity = { id: "witness_phone", type: "phone", name: "the witness's telephone line" };
 
+  const when = core.when;
+  const at = `location@${when}`; // the contested predicate the keyFact crux turns on
+
   const entities: Record<string, Entity> = Object.fromEntries(
-    [victim, culprit, bystander, witness, home, bar, phone].map((e) => [e.id, e]),
+    [culprit, victim, scene, witness, bystander, bar, phone].map((e) => [e.id, e]),
   );
 
-  // Ground truth: culprit killed victim at 23:00 at the flat; the witness was there too.
+  // Ground truth, projected from the authored core: culprit killed victim at the
+  // scene at `when`; the witness was there too.
   const groundTruth: Claim[] = [
     claim(culprit.id, "killed", victim.id, true, `${culprit.name} killed ${victim.name}.`),
-    claim(culprit.id, "location@2300", home.id, true, `${culprit.name} was at ${home.name} at 23:00.`),
-    claim(witness.id, "location@2300", home.id, true, `${witness.name} was near ${home.name} at 23:00.`),
+    claim(culprit.id, at, scene.id, true, `${culprit.name} was at ${scene.name} at ${when}.`),
+    claim(witness.id, at, scene.id, true, `${witness.name} was near ${scene.name} at ${when}.`),
   ];
 
   const caseFile: CaseRecord = {
     id: "rec_casefile",
     type: "case-file",
-    title: "Cold Case File",
+    title: `Cold Case File — ${core.what}`,
     source: victim.id,
     fidelity: "true",
     claims: [
-      claim(victim.id, "found-dead", home.id, true, `${victim.name} was found dead at ${home.name}; ruled inconclusive.`),
+      claim(victim.id, "found-dead", scene.id, true, `${victim.name} was found dead at ${scene.name}; ruled inconclusive.`),
     ],
-    leads: [witness.id, culprit.id, bystander.id, home.id],
+    leads: [witness.id, culprit.id, bystander.id, scene.id],
     clearanceCost: 0,
   };
 
-  // THE LIE: the witness falsely alibis the culprit (and themselves) across town.
+  // THE LIE (placed against the keyFact): the witness falsely alibis the culprit
+  // (and themselves) across town at `when`.
   const witnessStatement: CaseRecord = {
     id: "rec_witness_stmt",
     type: "witness-statement",
@@ -83,14 +130,14 @@ export function generateCase(seed: number): GameCase {
     source: witness.id,
     fidelity: "false",
     claims: [
-      claim(witness.id, "location@2300", bar.id, false, `${witness.name} states they were at ${bar.name} at 23:00.`),
-      claim(culprit.id, "location@2300", bar.id, false, `${witness.name} states ${culprit.name} was with them at ${bar.name} at 23:00.`),
+      claim(witness.id, at, bar.id, false, `${witness.name} states they were at ${bar.name} at ${when}.`),
+      claim(culprit.id, at, bar.id, false, `${witness.name} states ${culprit.name} was with them at ${bar.name} at ${when}.`),
     ],
     leads: [phone.id, bar.id, culprit.id],
     clearanceCost: 1,
   };
 
-  // THE PROOF: phone logs place the witness at the flat at 23:00 — contradicting the statement.
+  // THE PROOF: phone logs place the witness at the scene at `when` — disproving the statement.
   const phoneRecords: CaseRecord = {
     id: "rec_phone",
     type: "phone-records",
@@ -98,9 +145,9 @@ export function generateCase(seed: number): GameCase {
     source: witness.id,
     fidelity: "true",
     claims: [
-      claim(witness.id, "location@2300", home.id, true, `${witness.name}'s line placed a call from beside ${home.name} at 23:00.`),
+      claim(witness.id, at, scene.id, true, `${witness.name}'s line placed a call from beside ${scene.name} at ${when}.`),
     ],
-    leads: [home.id],
+    leads: [scene.id],
     clearanceCost: 1,
   };
 
@@ -111,10 +158,10 @@ export function generateCase(seed: number): GameCase {
     source: victim.id,
     fidelity: "true",
     claims: [
-      claim(victim.id, "death-time", "2300", true, `Time of death fixed at 23:00.`),
-      claim(victim.id, "location@2300", home.id, true, `${victim.name} died at ${home.name}.`),
+      claim(victim.id, "death-time", when, true, `Time of death fixed at ${when}; ${core.how}.`),
+      claim(victim.id, at, scene.id, true, `${victim.name} died at ${scene.name}.`),
     ],
-    leads: [home.id],
+    leads: [scene.id],
     clearanceCost: 1,
   };
 
@@ -134,7 +181,7 @@ export function generateCase(seed: number): GameCase {
   const solution: Solution = {
     culpritId: culprit.id,
     keyContradiction: [witnessStatement.id, phoneRecords.id],
-    predicate: "location@2300",
+    predicate: at,
   };
 
   return {
