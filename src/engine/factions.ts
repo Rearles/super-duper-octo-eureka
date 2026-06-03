@@ -154,3 +154,56 @@ export function reactToVerdict(faction: Faction, facts: CaseFacts, stake: number
 
   return { factionId: faction.id, name: faction.name, standingDelta, heatDelta, reason: why };
 }
+
+function appendReason(base: string, note: string): string {
+  return base ? `${base}; ${note}` : note;
+}
+
+/**
+ * Ripple direct reactions through the authored ally/rival web (§2.5): a faction's
+ * standing shift nudges its **allies** the same way and its **rivals** the
+ * opposite way — and helping a faction heats up its rivals. Takes the direct
+ * reactions for all factions and returns the NET reaction per faction (direct +
+ * ripples folded in), dropping factions left with no net effect.
+ */
+export function applyInterFactionWeb(world: AuthoredWorld, direct: FactionReaction[]): FactionReaction[] {
+  const byId = new Map(world.factions.map((f) => [f.id, f]));
+  const net = new Map<string, FactionReaction>(
+    world.factions.map((f) => [
+      f.id,
+      { factionId: f.id, name: f.name, standingDelta: 0, heatDelta: 0, reason: "" },
+    ]),
+  );
+
+  // Seed from the direct reactions.
+  for (const r of direct) {
+    const n = net.get(r.factionId);
+    if (!n) continue;
+    n.standingDelta += r.standingDelta;
+    n.heatDelta += r.heatDelta;
+    if (r.standingDelta !== 0 || r.heatDelta !== 0) n.reason = r.reason;
+  }
+
+  // Ripple each nonzero direct standing shift to allies (+) and rivals (−, +heat if helped).
+  for (const r of direct) {
+    if (r.standingDelta === 0) continue;
+    const f = byId.get(r.factionId);
+    if (!f) continue;
+    const s = Math.sign(r.standingDelta);
+    for (const allyId of f.allies ?? []) {
+      const a = net.get(allyId);
+      if (!a) continue;
+      a.standingDelta += s;
+      a.reason = appendReason(a.reason, `allied with ${f.name}`);
+    }
+    for (const rivalId of f.rivals ?? []) {
+      const rv = net.get(rivalId);
+      if (!rv) continue;
+      rv.standingDelta -= s;
+      if (s > 0) rv.heatDelta += 1;
+      rv.reason = appendReason(rv.reason, `rival of ${f.name}`);
+    }
+  }
+
+  return [...net.values()].filter((n) => n.standingDelta !== 0 || n.heatDelta !== 0);
+}
