@@ -2,6 +2,7 @@ import { CaseSession } from "./engine/index";
 import { renderDesk } from "./ui/desk";
 import { renderBoard } from "./ui/board";
 import { renderFactions } from "./ui/factions";
+import { renderRequests } from "./ui/requests";
 import { renderVerdict } from "./ui/verdict";
 
 const SEED = 7;
@@ -33,6 +34,7 @@ function render(outcomeLines?: string[]): void {
   );
   root.appendChild(renderBoard(session));
   root.appendChild(renderFactions(session));
+  root.appendChild(renderRequests(session, () => render()));
   root.appendChild(
     renderVerdict(session, (culprit, disposition) => {
       const res = session.commitVerdict(culprit, disposition);

@@ -22,7 +22,7 @@ export function renderFactions(session: CaseSession): HTMLElement {
     if (f.heat >= 5) row.className = "contradiction";
     const heatTag = f.heat >= 5 ? " 🔥" : "";
     row.textContent =
-      `${session.factionName(f.factionId)} — Standing ${fmt(f.standing)} · Heat ${f.heat}${heatTag}`;
+      `${session.factionName(f.factionId)} — Standing ${fmt(f.standing)} · Heat ${f.heat}${heatTag} · Favors ${f.favors}`;
     el.appendChild(row);
   }
   return el;
