@@ -2,7 +2,7 @@
 
 **Author:** [ … ]  
 **Studio:** [ … ]  
-**Version:** 1.0 · Design complete (pre-production) · 2026-06-02
+**Version:** 1.1 · Design complete (pre-production); faction systems deepened · 2026-06-03
 
 -----
 
@@ -209,7 +209,33 @@ City-exploration verbs (walking the streets, visiting locations) belong to the o
 
 > This binds the central tension: because confirmation comes only through consequential action, every verdict and official act is a real decision made on incomplete information — exactly the feeling the game is built to produce.
 
-**Open questions & decisions:** How a *contradicted* belief can be revised after a consequence exposes it (does the case re-open? — §5/§11). The number of factions and their concrete pressures/levers (→ §3 / world). How the theory-level whisper is presented diegetically (a gut cue, a superior's nod?). Tuning the density of intermediate official acts so feedback is steady but not constant.
+**Open questions & decisions:** How a *contradicted* belief can be revised after a consequence exposes it (does the case re-open? — §5/§11). How the theory-level whisper is presented diegetically (a gut cue, a superior's nod?). Tuning the density of intermediate official acts so feedback is steady but not constant. *(The factions' concrete pressures/levers are now specified in §2.5; the concrete faction roster is deliberately left to the case-author layer — the player authors the factions.)*
+
+-----
+
+### 2.5 The Faction System — the relationship web
+
+*(Added 2026-06-03. The §2.4 "standing" axis, the §9 Heat/Contacts gauges, the §6.1 obstructing powers, and the §10 per-faction economy are one cross-cutting system; this is its canonical spec. **Goal:** factions and their people behave as close to **real-life** factions and people as possible — politicians, the press, gangs, the mob, organized crime, the people around a crime, and the Unit itself — a living web of good / bad / neutral ties among factions, their members, the player, and the Registry.)*
+
+**Per-faction state — two axes plus resources.** Each faction is a sub-system carrying:
+- **Standing** — slow, durable trust / reputation. Moves gradually; gates access, contact quality, and whether the faction's pressure turns into help or harm.
+- **Heat / Exposure** — acute hostile attention, **bidirectional**: rises fast when the player acts *against* the faction or its members, falls when the player acts *for* them (not merely by lying low). The two axes are **independent** — you can hold high Standing *and* spike Heat with a single act (a trusted ally, currently furious). High Heat triggers that faction's retaliation (§6.1).
+- **Favors** — a spendable pool earned by serving the faction; spent only on *that* faction's Contacts (§9.2).
+- **Contacts** — the faction's people the player can call for access, never answers (Pillar 2).
+
+**Authored vs. computed.** *Authored by hand* (the case-author layer, `.plans/author-the-case-core`): each faction's **Interests** (the topics, places, people, objects, money, drugs… it cares about), a one-word **Temperament** (protective / opportunistic / vindictive / principled…), its **Members**, and its **ally / rival ties** to other factions. *Computed at runtime:* stake magnitude, Standing / Heat shifts, reactions, and requests.
+
+**Emergent stakes — how much a faction cares.** A faction's stake in a case is **not authored per case**; it *emerges* as the overlap between its **Interests** and (a) the case's **hard facts** *and* (b) anything the **player makes public** or any official act they take. A case whose hard facts include a mob hit → the mob is deeply invested; a case touching nothing they care about → near-zero. **Stakes are live:** publish a claim against a mob figure mid-investigation — even in an unrelated case, even on bad information — and the mob now holds a stake in *that*, and reacts. The tension is an engine that falls out of authored data, not bespoke scripting.
+
+**How a faction reacts — three layers.** (1) **Roles** — a member's role in the case (culprit / victim / witness / person-of-interest) links the faction to it and sets the *direction* of reaction (expose a culprit-member → the faction is harmed; clear them → helped). (2) **Temperament** — shapes *how* they react (a *protective* faction shields its own and heats up fast; an *opportunistic* one may trade a member away). (3) **Interests-overlap** — sets *how much* (stake magnitude → the size of the Standing / Heat swing).
+
+**The inter-faction web.** Factions carry authored **ally / rival** ties, so an act ripples outward: helping the press lifts Standing with its allies and **heats its rivals** (the elite it exposes). Resolving one obstruction can inflame another (§6.1) — the player triggers the cascade but never fully controls it.
+
+**Factions act — requests, and the provenance of their information.** Factions don't only react; they **initiate**, making **requests / demands** of the player. Every request carries a **claim** with a **provenance** and a **fidelity** drawn from the same truth-model as records (Pillar 1):
+- **Provenance:** **grapevine** (Nth-hand, ultimately traceable to the Registry — unreliable, full of holes), **press** (slanted, biased, or partial, like real news), or **direct** (the faction's first-hand want).
+- Because a request's claim **may be false**, the player's decision is real: **fulfill** it (raise that faction's Standing / cool its Heat, earn a Favor — often at a rival's or the truth's expense), **refuse / ignore** it (Heat rises; a door may close), or **verify** it first (spend clearance to test the provenance-tagged claim against the Registry before acting). Acting on a faction's bad information is how the player gets *played* — and catching it is deduction, not just diplomacy.
+
+**Ties to the pillars & feedback.** The system gives "**no clean answer**" mechanical teeth — every disposition courts one faction and antagonizes another — without grading morality (§2.4, no score). It carries **confirmation-by-doing**: because beliefs resolve only when acted on, a faction's reaction to a verdict or official act is *also* how factual truth is confirmed or contradicted. And it honors **Pillar 2** — factions pressure, court, and mislead, but never interpret the case for the player.
 
 -----
 
@@ -360,7 +386,7 @@ For this game a "level" is a **case**, and §5.1 is the procedural **ground-trut
 
 ### 6.1 Boss Conventions
 
-*(Reinterpreted — "bosses" are **major obstructing powers**, not combat. They are authored figures/institutions woven into the secret backbone; you overcome them with evidence, leverage, or the press — never violence.)*
+*(Reinterpreted — "bosses" are **major obstructing powers**, not combat. They are authored figures/institutions woven into the secret backbone; you overcome them with evidence, leverage, or the press — never violence.)* **The per-faction state (Standing + Heat), emergent stakes, the inter-faction web, and faction-initiated requests that drive these obstructions are specified canonically in §2.5.**
 
 **Shared rules (how an obstruction works and resolves):**
 - **What they are:** powerful, authored figures or institutions tied to the secret backbone, who obstruct the player's approach to the truth.
@@ -506,9 +532,9 @@ For this game a "level" is a **case**, and §5.1 is the procedural **ground-trut
 
 *(Reinterpreted — no combat, no HP. The player's "health" is **Heat / Exposure**: how much hostile attention they've drawn.)*
 
-**Heat / Exposure (per-faction vulnerability gauges):** Heat is tracked **separately for each faction** (§2.4) — you can be hot with the political elite while cold with the press. A faction's Heat rises with acts that antagonize *it specifically* — pulling records it guards, official acts against its interests, **going public** in ways it dislikes, pressing its protected figures. The nearer the secret, the faster the guarding factions heat up (§3.2).
+**Heat / Exposure (per-faction vulnerability gauges):** Heat is tracked **separately for each faction** (§2.4/§2.5) — you can be hot with the political elite while cold with the press. A faction's Heat rises with acts that antagonize *it specifically* — pulling records it guards, official acts against its interests, **going public** in ways it dislikes, pressing its protected figures. The nearer the secret, the faster the guarding factions heat up (§3.2). Heat is **distinct from Standing** (the slow, durable reputation axis — §2.5/§10): you can hold high Standing with a faction yet spike its Heat with a single act.
 
-**Cooling, retaliation & "death":** high Heat **with a faction** triggers *that faction's* **retaliation** (§6.1) — surveillance, clearance revocation, threats, endangered sources, framing — scaled to how hot you are with it. The player cools a faction's Heat by **lying low** toward it (quieter threads, time passing). There is **no death / game-over** (consequential, not terminal — §3.2): maxing a faction's Heat forces hard consequences from *that* faction — a suspension, a burned source, a lost avenue — carried forward, not a fail screen.
+**Cooling, retaliation & "death":** Heat is **bidirectional** (§2.5) — it rises with acts that antagonize a faction and **falls when the player acts in that faction's favor** (fulfilling its request, clearing one of its people, publishing what it wants), as well as by **lying low** (quieter threads, time passing). High Heat **with a faction** triggers *that faction's* **retaliation** (§6.1) — surveillance, clearance revocation, threats, endangered sources, framing — scaled to how hot you are with it. There is **no death / game-over** (consequential, not terminal — §3.2): maxing a faction's Heat forces hard consequences from *that* faction — a suspension, a burned source, a lost avenue — carried forward, not a fail screen.
 
 -----
 
@@ -516,7 +542,7 @@ For this game a "level" is a **case**, and §5.1 is the procedural **ground-trut
 
 *(Reinterpreted — a **contacts & favors network** rather than "power-ups".)*
 
-**Per-faction networks:** the player cultivates a **separate** contacts network *within each faction* (§2.4) — a Unit clerk and coroner, a press reporter, an elite insider, community witnesses. Calling a contact spends **that faction's favors** (§10) and draws on that faction alone: a press source can run a leak but cannot open an elite's sealed file. Calls buy temporary help — a fast-tracked record, a quiet leak, emergency clearance, a warning before retaliation lands — at a cost (a favor owed, standing, or a cooldown). Contacts give **access, never answers** (Pillar 2), and leaning hard on one faction can cost standing or raise Heat with a rival.
+**Per-faction networks:** the player cultivates a **separate** contacts network *within each faction* (§2.4) — a Unit clerk and coroner, a press reporter, an elite insider, community witnesses. Calling a contact spends **that faction's favors** (§10) and draws on that faction alone: a press source can run a leak but cannot open an elite's sealed file. Calls buy temporary help — a fast-tracked record, a quiet leak, emergency clearance, a warning before retaliation lands — at a cost (a favor owed, standing, or a cooldown). Contacts give **access, never answers** (Pillar 2), and leaning hard on one faction can cost standing or raise Heat with a rival. The traffic runs **both ways**: factions also **call the player**, making requests whose information carries a grapevine / press / direct **provenance** the player may have to verify — see §2.5.
 
 -----
 
@@ -576,6 +602,7 @@ The economy has distinct axes: **Clearance** (a global spend-to-act budget), and
 - **Favors (per faction)** → calling that faction's contacts (fast-tracked records, leaks, emergency clearance, warnings — §9.2). Each call draws down *that faction's* favor pool.
 - **Heat (per faction)** is the *hidden price* of risky/visible acts: pulling sensitive records, official acts, and going public raise Heat **with the specific factions affected** — and high faction-Heat buys that faction's retaliation (§6.1). The same act can cool one faction and inflame another.
 - *Price scaling:* costs rise with record sensitivity, proximity to the secret, and how much an act antagonizes a given faction.
+- **Standing (per faction)** is the slow, durable axis alongside Heat (§2.5); **Favors** are earned by serving a faction and spent on its Contacts, and **fulfilling a faction's request** can pay out Favors or Standing (at a rival's or the truth's cost).
 
 -----
 
@@ -833,6 +860,7 @@ The economy has distinct axes: **Clearance** (a global spend-to-act budget), and
 
 |Date |Decision & reasoning                                                      |
 |-----|--------------------------------------------------------------------------|
+|2026-06-03|**Faction systems deepened → new §2.5 "The Faction System" (GCD v1.1).** Absorbed the expanded faction vision into a single canonical cross-cutting spec, resolving three foundational structure decisions (each chosen over alternatives weighed): **(1) per-faction state = TWO axes** — **Standing** (slow, durable trust; gates access) **+ Heat** (acute, **bidirectional** — rises on acts against a faction/its members, falls on acts for them) — independent, so a trusted ally can be acutely furious; chosen over a single relational axis (loses that texture) and heat-only (flattens trust). Ref: reputation vs. GTA "wanted level"; Disco Elysium relationships. **(2) Inter-faction WEB** — authored **ally/rival** ties so acting on one faction ripples (+) to allies and (−/heat) to rivals; chosen over emergent-only collisions and no-web (which contradicts §6.1). Ref: Crusader Kings webs; Shadow of Mordor rivalries. **(3) Faction REQUESTS = offers with strings + a verifiable claim** — each request carries a **provenance** (grapevine = Nth-hand/unreliable · press = slanted/partial · direct = first-hand) and a **fidelity** from the record truth-model; the player may **fulfill / refuse / verify** (spend clearance to test it against the Registry); chosen over pure standing levers and info-only tips (both lose the imperfect-info deduction). **Emergent stakes** = overlap of a faction's authored **Interests** with case hard-facts AND the player's public acts — dynamic, mid-case, player-triggerable. **Reactions** combine **roles** (linkage/direction) + **temperament** (how) + **interests-overlap** (how much). Authored fields (interests, temperament, members, ally/rival ties) live in `.plans/author-the-case-core_6a3b8c1f`; the runtime re-slices into `.plans/faction-tension-systems_4b95a4c5` (on-hold). Cross-refs added in §2.4, §6.1, §9.1, §9.2, §10.2. (assist-project: fct_77976f74828b, fct_819d93bfe926.)|
 |2026-06-02|**§15 Scope & Roadmap locked — GCD v1.0 complete.** **MVP** = the §14 smallest prototype: deterministic core engine for ONE solvable case + template renderer (no LLM) + barebones top-down desk UI + the request→contradiction→two-layer-verdict loop + one immediate consequence. Deferred from MVP: LLM rendering, per-faction systems, calendar/delayed consequences, interlinking/the secret, going-public/press, hunches, progression, multiple archetypes, A/V polish, the wider city. Milestones: Prototype (=MVP) → Vertical slice (one polished case + LLM + Heat + one faction + a delayed consequence + art pass) → Content build (interlinking, archetypes, full faction web, calendar, press, progression) → Polish & ship (tuning, accessibility, the endgame, Tauri desktop). Next: bridge to `create-plan` for the Prototype.|
 |2026-06-02|**§14 Technical Foundation DECIDED** (the deferred, design-informed call). Stack = **TypeScript end-to-end, web app** (HTML/DOM docs + Canvas/PixiJS Board + React/Svelte shell; desktop via Tauri later); no game engine. Architecture = **pure deterministic core engine** (fact graph · generator · solvability checker · per-faction sim · calendar/scheduler), UI- and LLM-independent and seed-replayable; **LLM as a cached, swappable renderer adapter with a no-LLM template fallback** (LLM is presentation only — the game is correct without it). Top risks: grounded rendering without hallucination (validate vs. facts + fallback) and provably-solvable generation (generator+solver co-built, checker gates every case). Smallest prototype = one tiny solvable case → ~3 rendered docs → the request→contradiction→verdict loop (= the §15 MVP seed). Chosen over Godot/Unity (worse for a document UI, no benefit to the procgen/LLM core).|
 |2026-06-02|**§13 Audio & Visual Identity locked.** Art = **stylized illustration / noir** (hand-illustrated, high-contrast, muted palette + desk-lamp light, period document graphic design; quiet institutional dread, no supernatural; readability first). Refs: Papers Please, Obra Dinn, Disco Elysium, period noir/municipal paperwork. VFX: contradiction flags, consequence-landing stamps, per-faction Heat tells, publish ripple, ambiguous whisper cue; record/tamper/redaction/retaliation reveals. SFX: the analog desk as instrument (paper, typewriter/teletype, microfiche whir, rotary phone, rubber stamp, file drawer, pencil, room tone). Music: sparse contemplative noir-jazz on the Desk → drones/dread at high Heat → stabs for publish/consequence → near-silence in the Office → heavy unresolved endgame theme.|
