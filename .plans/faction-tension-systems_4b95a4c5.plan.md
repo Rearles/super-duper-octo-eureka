@@ -27,8 +27,8 @@ doing** (§2.4). The **requests/contacts/provenance** interaction layer is the l
 - [x] Implement emergent stakes — overlap of faction `interests` × (case hard-facts + player public acts)
 - [x] Implement three-layer reactions — roles (direction) × temperament (how) × stake (magnitude) → Standing/Heat deltas
 - [x] Implement the inter-faction web — ripple deltas to authored ally (+) / rival (−/heat) factions
-- [~] Replace binary `correct/incorrect` with confirmation-by-doing — pre-commit theory whisper + reaction-based confirmation
-- [ ] Wire into `CaseSession` — verdict/disposition + official acts apply reactions; record shifts in a Ledger
+- [x] Replace binary `correct/incorrect` with confirmation-by-doing — pre-commit theory whisper + reaction-based confirmation
+- [x] Wire into `CaseSession` — verdict/disposition + official acts apply reactions; record shifts in a Ledger
 - [ ] Surface faction state in the UI — per-faction Standing/Heat indicators + outcome/Ledger shifts
 - [ ] Add tests — stakes math, reaction layers, web ripples, Heat bidirectionality, confirmation-by-doing
 - [ ] Verify — `npm run typecheck`, `npm test` (green), `npm run build`, `npm run preview`

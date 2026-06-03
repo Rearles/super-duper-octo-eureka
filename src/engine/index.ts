@@ -3,24 +3,49 @@ import { generateCase } from "./generator";
 import { verifySolvable } from "./solver";
 import { TemplateRenderer, type Renderer } from "./templateRenderer";
 import { defaultWorld } from "./world";
-import type { AuthoredWorld, CaseRecord, Disposition, GameCase } from "./types";
+import {
+  applyInterFactionWeb,
+  caseFacts,
+  factionStake,
+  reactToOfficialAct,
+  reactToVerdict,
+  resolveCore,
+} from "./factions";
+import type {
+  AuthoredWorld,
+  CaseCore,
+  CaseRecord,
+  Disposition,
+  FactionReaction,
+  FactionRuntimeState,
+  GameCase,
+} from "./types";
 
 export * from "./types";
 export { generateCase, verifySolvable, FactGraph, TemplateRenderer };
 export { defaultWorld } from "./world";
 export * from "./authoring";
+export * from "./factions";
 export type { Renderer, Contradiction };
 
 export interface VerdictResult {
   /**
    * Internal factual correctness of the accusation — **not a player-facing grade**.
    * §2.4 confirmation-by-doing: the player learns the truth only through the
-   * world's reaction (`consequence`, and the faction reactions in Plan 2), never
-   * a "correct/incorrect" stamp. Kept for the engine + tests.
+   * world's reaction (`consequence` + the faction `reactions`), never a
+   * "correct/incorrect" stamp. Kept for the engine + tests.
    */
   correct: boolean;
   /** The world's reaction — how the truth actually surfaces (confirmation-by-doing). */
   consequence: string;
+  /** Per-faction Standing/Heat shifts this verdict produced (§2.5). */
+  reactions: FactionReaction[];
+}
+
+/** A Decision-Ledger entry: a player act and the faction reactions it caused (§2.2/§3.3). */
+export interface LedgerEntry {
+  note: string;
+  reactions: FactionReaction[];
 }
 
 /**
@@ -33,6 +58,11 @@ export class CaseSession {
   readonly graph: FactGraph;
   private readonly renderer: Renderer;
   private readonly obtained = new Set<string>();
+  private readonly world: AuthoredWorld;
+  private readonly core: CaseCore;
+  private readonly factionState = new Map<string, FactionRuntimeState>();
+  /** The Decision Ledger: every act and the faction reactions it caused (§2.2). */
+  readonly ledger: LedgerEntry[] = [];
   clearance: number;
   closed = false;
 
@@ -47,15 +77,37 @@ export class CaseSession {
       caseId?: string;
     } = {},
   ) {
-    this.gameCase = generateCase(opts.world ?? defaultWorld, seed, opts.caseId);
+    const world = opts.world ?? defaultWorld;
+    this.world = world;
+    this.gameCase = generateCase(world, seed, opts.caseId);
     const check = verifySolvable(this.gameCase);
     if (!check.solvable) {
       throw new Error(`Unsolvable case generated (seed ${seed}): ${check.reason}`);
     }
     this.graph = new FactGraph(this.gameCase);
+    this.core = resolveCore(world, this.gameCase);
+    for (const f of world.factions) {
+      this.factionState.set(f.id, { factionId: f.id, standing: 0, heat: 0 });
+    }
     this.renderer = opts.renderer ?? new TemplateRenderer();
     this.clearance = opts.clearance ?? 5;
     this.obtained.add(this.gameCase.caseFileId); // the case file is free
+  }
+
+  /** Live per-faction Standing/Heat (§2.5). */
+  factions(): FactionRuntimeState[] {
+    return [...this.factionState.values()];
+  }
+
+  /** Apply faction reactions to the live state (heat floored at 0) and log to the Ledger. */
+  private applyReactions(reactions: FactionReaction[], note: string): void {
+    for (const r of reactions) {
+      const state = this.factionState.get(r.factionId);
+      if (!state) continue;
+      state.standing += r.standingDelta;
+      state.heat = Math.max(0, state.heat + r.heatDelta);
+    }
+    this.ledger.push({ note, reactions });
   }
 
   obtainedRecords(): CaseRecord[] {
@@ -144,6 +196,37 @@ export class CaseSession {
           : `You bury the case. No one is the wiser — least of all you.`;
         break;
     }
-    return { correct, consequence };
+
+    // The factions react to who you named and what you did (§2.5): direct reactions
+    // (the accused's name is now public) rippled through the ally/rival web.
+    const facts = caseFacts(this.gameCase, this.core);
+    const direct = this.world.factions.map((f) =>
+      reactToVerdict(f, facts, factionStake(f, facts, [accused]), {
+        accusedId: culpritId,
+        disposition,
+        correct,
+      }),
+    );
+    const reactions = applyInterFactionWeb(this.world, direct);
+    this.applyReactions(reactions, `Verdict: ${disposition} — ${accused}`);
+
+    return { correct, consequence, reactions };
+  }
+
+  /**
+   * An intermediate **official act** (§2.4 confirmation-by-doing): publicly name a
+   * person of interest. The factions react — naming one of their own raises that
+   * faction's heat — and beliefs resolve as the world responds. Returns the
+   * reactions and logs them to the Ledger.
+   */
+  nameOfInterest(personId: string): FactionReaction[] {
+    const facts = caseFacts(this.gameCase, this.core);
+    const targetName = this.graph.entityName(personId);
+    const direct = this.world.factions.map((f) =>
+      reactToOfficialAct(f, factionStake(f, facts, [targetName]), personId),
+    );
+    const reactions = applyInterFactionWeb(this.world, direct);
+    this.applyReactions(reactions, `Named a person of interest: ${targetName}`);
+    return reactions;
   }
 }

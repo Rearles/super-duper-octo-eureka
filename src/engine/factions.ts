@@ -207,3 +207,35 @@ export function applyInterFactionWeb(world: AuthoredWorld, direct: FactionReacti
 
   return [...net.values()].filter((n) => n.standingDelta !== 0 || n.heatDelta !== 0);
 }
+
+/**
+ * One faction's reaction to an intermediate **official act** (§2.4 confirmation-by-
+ * doing) — e.g. naming a person of interest. A public, hostile-leaning act toward
+ * the target: naming a faction's own member raises that faction's heat; onlookers
+ * with a stake grow warier. Temperament shapes the intensity.
+ */
+export function reactToOfficialAct(faction: Faction, stake: number, targetId: string): FactionReaction {
+  const targetIsMember = faction.members.some((m) => m.personId === targetId);
+  const direction = targetIsMember ? -1 : 0;
+  let standingDelta = direction * stake;
+  let heatDelta = -direction * stake;
+  let why = targetIsMember
+    ? "you officially named one of their own"
+    : stake > 0
+      ? "an official act in a case they care about"
+      : "no stake in this act";
+  if (direction === 0 && stake > 0) heatDelta += 1;
+
+  if (direction < 0 && faction.temperament === "protective") {
+    heatDelta *= 2;
+    why += " — and they protect their own fiercely";
+  } else if (direction < 0 && faction.temperament === "vindictive") {
+    heatDelta += stake;
+    standingDelta -= 1;
+    why += " — and they hold grudges";
+  } else if (faction.temperament === "opportunistic") {
+    heatDelta = Math.round(heatDelta / 2);
+  }
+
+  return { factionId: faction.id, name: faction.name, standingDelta, heatDelta, reason: why };
+}
