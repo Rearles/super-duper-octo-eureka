@@ -67,6 +67,8 @@ export interface GameCase {
   solution: Solution;
   /** entity ids the player may accuse */
   suspects: string[];
+  /** personId → role in this case (culprit/victim/witness/framed…); drives faction stake */
+  roles?: Record<string, CaseRole>;
 }
 
 // ---------------------------------------------------------------------------

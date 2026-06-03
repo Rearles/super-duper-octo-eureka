@@ -5,7 +5,7 @@
 // lie implicates the culprit), and the faction layer (its requests assert the
 // same contested predicate). Strategy builders live alongside in CRUX_STRATEGIES.
 
-import type { CaseCore, CaseFact, CaseRecord, Claim, Entity, RecordType } from "./types";
+import type { CaseCore, CaseFact, CaseRecord, Claim, Entity, GameCase, RecordType } from "./types";
 
 /**
  * Per-crux metadata: the contested predicate, the record type that carries the
@@ -30,6 +30,78 @@ export const CRUX: Record<CaseFact, CruxDescriptor> = {
 /** The contested predicate for a case's crux. Shared by generator, solver, requests. */
 export function cruxPredicate(core: CaseCore): string {
   return (CRUX[core.keyFact] ?? CRUX.where).predicate(core);
+}
+
+/**
+ * The canonical TRUTHFUL claim(s) on the crux predicate — the ground truth the
+ * lie contradicts. Used to seed `GameCase.groundTruth` so faction requests that
+ * assert the contested fact verify correctly against reality.
+ */
+export function cruxTruth(ctx: CruxContext): Claim[] {
+  const { culprit, victim, scene, witness, when, predicate, claim, core } = ctx;
+  switch (core.keyFact) {
+    case "who":
+      return [claim(victim.id, predicate, culprit.id, true, `${culprit.name} is responsible for ${victim.name}'s death.`)];
+    case "how":
+    case "what":
+      return [claim(victim.id, predicate, "homicide", true, `${victim.name}'s death was a homicide, not natural or accidental.`)];
+    case "when":
+      return [claim(culprit.id, predicate, when, true, `${culprit.name} was at ${scene.name} at ${when}.`)];
+    case "where":
+    default:
+      return [
+        claim(culprit.id, predicate, scene.id, true, `${culprit.name} was at ${scene.name} at ${when}.`),
+        claim(witness.id, predicate, scene.id, true, `${witness.name} was near ${scene.name} at ${when}.`),
+      ];
+  }
+}
+
+/**
+ * The crux-appropriate claim a FACTION asserts in its request (§2.5) — the same
+ * contested fact the lie turns on, phrased as the faction's `exculpatory` cover
+ * story (shielding the culprit) or the true accusation. Verifies against
+ * `GameCase.groundTruth` (seeded by `cruxTruth`) so its fidelity resolves
+ * correctly for every crux, not just the where/alibi one.
+ */
+export function factionClaim(gameCase: GameCase, core: CaseCore, exculpatory: boolean): Claim {
+  const predicate = (CRUX[core.keyFact] ?? CRUX.where).predicate(core);
+  const name = (id: string): string => gameCase.entities[id]?.name ?? id;
+  const culpritId = gameCase.solution.culpritId;
+  const victimId = core.victimId;
+  const sceneId = core.whereId;
+  const mk = (s: string, o: string, truthful: boolean, text: string): Claim => ({
+    subject: s,
+    predicate,
+    object: o,
+    truthful,
+    text,
+  });
+
+  switch (core.keyFact) {
+    case "who": {
+      const framedId =
+        Object.entries(gameCase.roles ?? {}).find(([, r]) => r === "person-of-interest")?.[0] ?? culpritId;
+      return exculpatory
+        ? mk(victimId, framedId, false, `word is ${name(framedId)} did it, not ${name(culpritId)}`)
+        : mk(victimId, culpritId, true, `${name(culpritId)} is the one responsible for ${name(victimId)}'s death`);
+    }
+    case "how":
+    case "what":
+      return exculpatory
+        ? mk(victimId, "natural", false, `it was natural causes — there's no case here`)
+        : mk(victimId, "homicide", true, `the ruling is wrong — ${name(victimId)}'s death was a homicide`);
+    case "when":
+      return exculpatory
+        ? mk(culpritId, shiftTime(core.when), false, `${name(culpritId)} was at ${name(sceneId)} at ${shiftTime(core.when)}, not the key hour`)
+        : mk(culpritId, core.when, true, `${name(culpritId)} was at ${name(sceneId)} at ${core.when}`);
+    case "where":
+    default: {
+      const elsewhereId = gameCase.entities["across_town"] ? "across_town" : sceneId;
+      return exculpatory
+        ? mk(culpritId, elsewhereId, false, `${name(culpritId)} was at ${name(elsewhereId)}, not the scene`)
+        : mk(culpritId, sceneId, true, `${name(culpritId)} was at ${name(sceneId)} that night`);
+    }
+  }
 }
 
 /**

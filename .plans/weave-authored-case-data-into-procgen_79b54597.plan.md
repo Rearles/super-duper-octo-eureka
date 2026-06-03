@@ -2,7 +2,7 @@
 title: "Weave authored case data (keyFact, cast, factions) deeply into the procgen generator"
 type: "feature"
 created: "2026-06-03"
-status: in-progress
+status: complete
 related: ["author-the-case-core_6a3b8c1f.plan.md", "faction-tension-systems_4b95a4c5.plan.md", "faction-requests-contacts-provenance_c691cba1.plan.md"]
 ---
 
@@ -17,17 +17,17 @@ related: ["author-the-case-core_6a3b8c1f.plan.md", "faction-tension-systems_4b95
 - [x] Add `keyFact` to `Solution` in `src/engine/types.ts`; extend `RecordType` with `"ruling"`
 - [x] Create `src/engine/crux.ts` — `cruxPredicate(core)` + per-keyFact descriptor table
 - [x] Add five lie-strategy builders in `src/engine/crux.ts` (where/who/when/how/what)
-- [ ] Add `resolveCast(world, core, rng)` to `src/engine/generator.ts` — authored people first, procgen fallback
-- [ ] Refactor `generateCase` to dispatch on `core.keyFact` via the strategy table
-- [ ] Weave culprit's faction into the cover-up record's source/provenance in `generateCase`
-- [ ] Generate 1-2 (capped) red-herring decoy records pointing at other faction members
-- [ ] Generalize `verifySolvable` check #2 in `src/engine/solver.ts` (two-pronged culprit implication)
-- [ ] Update `generateRequests` in `src/engine/factions.ts` to use `cruxPredicate(core)`
-- [ ] Update `caseFacts` topics in `src/engine/factions.ts` for richer interest-matching
-- [ ] Fix `factions.test.ts` / `requests.test.ts` expectations for the where-crux fixture
-- [ ] Add tests: how-crux + who-crux cases generate solvable with expected lie shape
-- [ ] Regenerate the golden snapshot (`vitest -u`) and review the diff intentionally
-- [ ] Verify: `npm run typecheck` + `npm test` + regenerate both paper-trail cases
+- [x] Add `resolveCast(world, core, rng)` to `src/engine/generator.ts` — authored people first, procgen fallback
+- [x] Refactor `generateCase` to dispatch on `core.keyFact` via the strategy table
+- [x] Weave culprit's faction into the cover-up record's source/provenance in `generateCase`
+- [x] Generate 1-2 (capped) red-herring decoy records pointing at other faction members
+- [x] Generalize `verifySolvable` check #2 in `src/engine/solver.ts` (two-pronged culprit implication)
+- [x] Update `generateRequests` in `src/engine/factions.ts` to use `cruxPredicate(core)`
+- [x] Update `caseFacts` topics in `src/engine/factions.ts` for richer interest-matching
+- [x] Fix `factions.test.ts` / `requests.test.ts` expectations for the where-crux fixture
+- [x] Add tests: how-crux + who-crux cases generate solvable with expected lie shape
+- [x] Regenerate the golden snapshot (`vitest -u`) and review the diff intentionally
+- [x] Verify: `npm run typecheck` + `npm test` + regenerate both paper-trail cases
 
 ## Notes
 

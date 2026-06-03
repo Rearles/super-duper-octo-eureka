@@ -16,6 +16,7 @@ import type {
   GameCase,
   Provenance,
 } from "./types";
+import { factionClaim } from "./crux";
 
 /** Compare a claim to canonical ground truth → its true fidelity (hidden until verified). */
 export function verifyClaim(claim: Claim, groundTruth: Claim[]): Fidelity {
@@ -35,12 +36,8 @@ export function verifyClaim(claim: Claim, groundTruth: Claim[]): Fidelity {
  */
 export function generateRequests(world: AuthoredWorld, gameCase: GameCase, core: CaseCore): FactionRequest[] {
   const facts = caseFacts(gameCase, core);
-  const predicate = `location@${core.when}`;
   const culpritId = gameCase.solution.culpritId;
   const culpritName = gameCase.entities[culpritId]?.name ?? culpritId;
-  const sceneName = gameCase.entities[core.whereId]?.name ?? core.whereId;
-  const elsewhereId = gameCase.entities["across_town"] ? "across_town" : core.whereId;
-  const elsewhereName = gameCase.entities[elsewhereId]?.name ?? "across town";
 
   const requests: FactionRequest[] = [];
   for (const f of world.factions) {
@@ -55,36 +52,18 @@ export function generateRequests(world: AuthoredWorld, gameCase: GameCase, core:
     if (memberIsCulprit && (f.temperament === "protective" || f.temperament === "vindictive")) {
       ask = "bury";
       provenance = "grapevine";
-      claim = {
-        subject: culpritId,
-        predicate,
-        object: elsewhereId,
-        truthful: false,
-        text: `${culpritName} was at ${elsewhereName}, not the scene.`,
-      };
-      plea = `bury this — word is ${culpritName} was nowhere near it`;
+      claim = factionClaim(gameCase, core, true); // the cover story shielding their own
+      plea = `bury this — ${claim.text}`;
     } else if (f.temperament === "principled") {
       ask = "charge";
       provenance = "direct";
-      claim = {
-        subject: culpritId,
-        predicate,
-        object: core.whereId,
-        truthful: true,
-        text: `${culpritName} was at ${sceneName}.`,
-      };
+      claim = factionClaim(gameCase, core, false); // the true accusation
       plea = `charge ${culpritName} — the truth has to stand`;
     } else {
       ask = "expose";
       provenance = "press";
-      claim = {
-        subject: culpritId,
-        predicate,
-        object: core.whereId,
-        truthful: true,
-        text: `${culpritName} was at ${sceneName} that night.`,
-      };
-      plea = `expose it — our sources put ${culpritName} at the scene`;
+      claim = factionClaim(gameCase, core, false); // the true accusation, via the press
+      plea = `expose it — ${claim.text}`;
     }
 
     requests.push({
@@ -152,19 +131,19 @@ export function resolveCore(world: AuthoredWorld, gameCase: GameCase): CaseCore 
 /** Derive the matchable facts + role map for a generated case. */
 export function caseFacts(gameCase: GameCase, core: CaseCore): CaseFacts {
   const name = (id: string): string => gameCase.entities[id]?.name ?? id;
-  const topics = [
-    core.what,
-    core.how,
-    name(core.culpritId),
-    name(core.victimId),
-    name(core.whereId),
-  ].map((s) => s.toLowerCase());
-  const roles: Record<string, CaseRole> = {
+  // Prefer the generator's actual role map (authored cast may fill witness/framed);
+  // fall back to the procgen-cast convention for cases generated without roles.
+  const roles: Record<string, CaseRole> = gameCase.roles ?? {
     [core.culpritId]: "culprit",
     [core.victimId]: "victim",
     [WITNESS_ID]: "witness",
     [BYSTANDER_ID]: "bystander",
   };
+  // Topics every role-holder's name surfaces, so an interest in a named person
+  // (or the scene/method) raises that faction's stake.
+  const topics = [core.what, core.how, name(core.whereId), ...Object.keys(roles).map(name)].map((s) =>
+    s.toLowerCase(),
+  );
   return { topics, roles };
 }
 

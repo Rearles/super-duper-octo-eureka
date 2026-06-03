@@ -24,7 +24,7 @@ const buryCulprit: VerdictAct = { accusedId: gc.solution.culpritId, disposition:
 
 describe("emergent stakes", () => {
   it("a faction whose member is the culprit cares more than an onlooker", () => {
-    expect(factionStake(heights, facts)).toBe(3); // "Cole Voss" interest (+1) + member is culprit (+2)
+    expect(factionStake(heights, facts)).toBe(4); // "Cole Voss" interest (+1) + culprit member (+2) + Vera Mott cast as the witness (+1)
     expect(factionStake(press, facts)).toBe(1); // cares about "Cole Voss", no member involved
     expect(factionStake(heights, facts)).toBeGreaterThan(factionStake(press, facts));
   });
