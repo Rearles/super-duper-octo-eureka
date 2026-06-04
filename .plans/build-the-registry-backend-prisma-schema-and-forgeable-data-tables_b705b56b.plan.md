@@ -3,14 +3,14 @@ title: "Build the Registry backend, Prisma schema, and forgeable data tables for
 type: "feature"
 created: "2026-06-04"
 status: not-started
-related: ["add-the-registry-access-tiers-tamper-evident-audit-and-publication-layer_298f7bb1.plan.md", "migrate-the-registry-database-from-sqlite-to-postgres_38b4da91.plan.md", "weave-authored-case-data-into-procgen_79b54597.plan.md", "faction-requests-contacts-provenance_c691cba1.plan.md"]
+related: ["add-the-registry-access-tiers-tamper-evident-audit-and-publication-layer_298f7bb1.plan.md", "migrate-the-registry-database-from-sqlite-to-postgres_38b4da91.plan.md", "weave-authored-case-data-into-procgen_79b54597.plan.md", "faction-requests-contacts-provenance_c691cba1.plan.md", "add-death-investigation-and-judicial-record-clusters_a7f3c2e9.plan.md", "build-the-procgen-v2-framework-lazy-realization-tiered-solvability_b3e8d4a1.plan.md"]
 ---
 
 # Build the Registry backend, Prisma schema, and forgeable data tables for Mound City
 
 ## Context
 
-Stand up "The Registry" as a real persisted database behind a Node backend (the game is browser-only today; `src/main.ts` runs `CaseSession` client-side). Adds a `server/` Node API + Prisma (SQLite now, Postgres later) modeling world-level Person Registration, Mortician/Police/report records, and the forgeable-record layer (`enteredBy` + motive + hidden `fidelity`). Must preserve deterministic procgen (same seed → identical rows) and Pillar 1 (ground truth never lies; only records carry hidden fidelity). This is Plan 1 of 3 (the data layer); Plan 2 adds the governance layer, Plan 3 migrates SQLite→Postgres.
+Stand up "The Registry" as a real persisted database behind a Node backend (the game is browser-only today; `src/main.ts` runs `CaseSession` client-side). Adds a `server/` Node API + Prisma (SQLite now, Postgres later) modeling world-level Person Registration, Mortician/Police/report records, and the forgeable-record layer (`enteredBy` + motive + hidden `fidelity`). Must preserve deterministic procgen (same seed → identical rows) and Pillar 1 (ground truth never lies; only records carry hidden fidelity). This is the **data layer** of the foundation slice (GCD **v2.0** — a *fictional* ~1950 St. Louis analogue per §4.2, records ultimately authored by the faction society-sim per §2.5); Plan 2 adds the governance layer, Plan 3 migrates SQLite→Postgres.
 
 ## Todos
 
@@ -28,6 +28,7 @@ Stand up "The Registry" as a real persisted database behind a Node backend (the 
 - [ ] Add `src/engine/seedRegistry.ts` — generator writes deterministic rows
 - [ ] Rewire `CaseSession` (`src/engine/index.ts`) to read records via the API
 - [ ] Update UI (`src/main.ts`, `src/ui/*`) to fetch the API
+- [ ] Model `Location`/zones + `Organization` (world-level place & org entities the records reference)
 - [ ] Test determinism + forged-record round-trip (`src/engine/registry.test.ts`)
 
 ## Notes
@@ -49,3 +50,5 @@ Stand up "The Registry" as a real persisted database behind a Node backend (the 
 **Stack:** Node backend + Prisma chosen by the user (runtime = "add a backend server"; schema = Prisma). Fastify is a lightweight default for `server/` — swappable for Express. Backend gets its own `tsconfig`/build; keep strict TS, no `any`.
 
 **Affected existing files:** `src/engine/index.ts` (CaseSession), `src/engine/generator.ts`, `src/engine/types.ts`, `src/main.ts`, `src/ui/*`. New: `server/`, `prisma/schema.prisma`, `src/engine/ids.ts`, `src/engine/seedRegistry.ts`.
+
+**v2.0 alignment (GCD 2026-06-04 pivot).** Names/geography are *fictional* analogues (§4.2). The forgeable record layer (`enteredBy`/`motive`/`fidelity`) is the seam the **faction society-sim** (§2.5) writes distortions through — build it sim-agnostic here (a human `enteredBy` today), but keep `enteredBy` a `PersonRegistration` GUID so a faction member can be the author later. `Location`/`Organization` are world-level (like `PersonRegistration`), shared across cases. The death-investigation/judicial clusters, NIBRS-grade fields, and new record types live in the sibling `add-death-investigation-and-judicial-record-clusters` plan; lazy realization + tiered solvability in `build-the-procgen-v2-framework`.
