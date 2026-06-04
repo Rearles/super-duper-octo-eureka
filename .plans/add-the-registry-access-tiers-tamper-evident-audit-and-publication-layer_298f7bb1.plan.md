@@ -3,14 +3,14 @@ title: "Add the Registry access tiers, tamper-evident audit, and publication lay
 type: "feature"
 created: "2026-06-04"
 status: not-started
-related: ["build-the-registry-backend-prisma-schema-and-forgeable-data-tables_b705b56b.plan.md", "faction-requests-contacts-provenance_c691cba1.plan.md"]
+related: ["build-the-registry-backend-prisma-schema-and-forgeable-data-tables_b705b56b.plan.md", "migrate-the-registry-database-from-sqlite-to-postgres_38b4da91.plan.md", "faction-requests-contacts-provenance_c691cba1.plan.md"]
 ---
 
 # Add the Registry access tiers, tamper-evident audit, and publication layer
 
 ## Context
 
-The governance layer over the Registry's records: who may read/edit/publish, a tamper-evident audit of every access, and the public vs. non-public projection. Implements the md's "stored in triplicate… audited every day… no one can manipulate without the powers that be knowing" and the privileged roles (cold-case detectives, prosecutors, judges, auditors). Depends on Plan 1's tables + `server/` API. This is Plan 2 of 2.
+The governance layer over the Registry's records: who may read/edit/publish, a tamper-evident audit of every access, and the public vs. non-public projection. Implements the md's "stored in triplicate… audited every day… no one can manipulate without the powers that be knowing" and the privileged roles (cold-case detectives, prosecutors, judges, auditors). Depends on Plan 1's tables + `server/` API. This is Plan 2 of 3; Plan 3 then migrates the whole schema (these audit/access tables included) SQLite→Postgres.
 
 ## Todos
 
@@ -33,6 +33,6 @@ The governance layer over the Registry's records: who may read/edit/publish, a t
 
 **Public vs. non-public (the "Go Public" act already exists — GCD §2.4 / index.ts).** Publication copies/flags a record into `PublicRecordView`; only privileged roles may publish. Verdicts are "written back into the Registry," and publishing triggers faction reactions — wire the publish route to the existing faction runtime so going public moves Standing/Heat.
 
-**Why this is a separate plan:** decomposing both subsystems together exceeded create-plan's 15-step cap. Split point = the records themselves (Plan 1) vs. governance of access/audit/publication over them (Plan 2). Plan 2 assumes Plan 1's `server/`, Prisma schema, and record models exist.
+**Why this is a separate plan:** decomposing both subsystems together exceeded create-plan's 15-step cap. Split point = the records themselves (Plan 1) vs. governance of access/audit/publication over them (Plan 2). Plan 2 assumes Plan 1's `server/`, Prisma schema, and record models exist. The Postgres migration is deferred to Plan 3 so it can convert the **complete** schema (data + governance) at once — including switching the `Role`/`fidelity`/`reportType` string-unions to native enums and `aliases` to `String[]`.
 
 **Affected files:** new `server/audit/*`, extends `prisma/schema.prisma` and `server/api` (from Plan 1), `src/ui/*` for the publish/published surfacing.
