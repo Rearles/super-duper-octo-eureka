@@ -46,4 +46,6 @@ Move the Registry off SQLite onto Postgres once the full **foundation** schema e
 
 **v2.0 — Postgres-native power tier.** This migration also lights up what the society-sim needs: **Apache AGE** (project `EntityLink` + faction allegiance/pact edges as a property graph for openCypher multi-hop — "who was at war with the victim's crew that winter"), **Row-Level Security** (enforce access tiers in the DB, not just the API), and **PostGIS** (zone geometry for sim territory). These are why the migration is sequenced *before* the sim, not last.
 
+**assist-project:** fct_c9ebf6bea613 (server tier / Postgres+AGE+RLS), fct_368b273e0ae0 (v2.0 pivot).
+
 **Provider portability.** Prisma makes the provider swap mostly declarative, but watch: `@db.*` native attributes, case-sensitivity, and autoincrement semantics differ. The Audit step must list every native-type attribute before the switch.

@@ -36,3 +36,5 @@ Generalize the built generator (`src/engine/generator.ts`, `crux.ts`, `solver.ts
 **Tiered solvability (refined Pillar 1).** `provable` = surviving chains pin a unique ground truth; `crackable` = hard but converges; `underdetermined` = evidence-rich, >=2 live suspects, no conclusive link (the White Whale — closeable **by theory**, never by proof). **Blank is forbidden** — the classifier repairs or re-seeds any case that decays below the engagement floor. Difficulty tunes by how many independent corroboration paths survive.
 
 **The sim is the future caller.** Build the framework sim-agnostic and deterministic now; the autonomous society-sim (the next slice) supplies the `actor`/`motive` from faction allegiance + agendas and drives `realize()` as the detective and the world touch entities. Keep the contract pure so the sim is the only thing that changes later.
+
+**assist-project:** fct_a5b0a0cfbc34 (Pillar 1 tiered solvability), fct_368b273e0ae0 (v2.0 pivot).

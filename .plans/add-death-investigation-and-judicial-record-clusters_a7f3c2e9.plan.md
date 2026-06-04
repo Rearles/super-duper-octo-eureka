@@ -40,4 +40,6 @@ Enrich the Registry's record layer (GCD v2.0) beyond the base `MorticianRecord` 
 
 **Truth-model (Pillar 1).** Every new table is forgeable: `enteredBy` (a `PersonRegistration` GUID — later a faction member), a faction-linked `motive`, hidden `fidelity`. Build sim-agnostic; the faction society-sim becomes the author later.
 
+**assist-project:** fct_368b273e0ae0 (v2.0 pivot), fct_a5b0a0cfbc34 (Pillar 1 tiered solvability — these records feed the determination classifier), fct_b03838e7cfab (foundation re-plan).
+
 **SQLite shims.** Per the data-layer plan: `mannerOfDeath`/disposition/new `reportType`s are string-unions now → native Prisma enums in the Postgres migration; arrays as `Json` now → `String[]` later.

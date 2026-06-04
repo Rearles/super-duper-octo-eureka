@@ -52,3 +52,5 @@ Stand up "The Registry" as a real persisted database behind a Node backend (the 
 **Affected existing files:** `src/engine/index.ts` (CaseSession), `src/engine/generator.ts`, `src/engine/types.ts`, `src/main.ts`, `src/ui/*`. New: `server/`, `prisma/schema.prisma`, `src/engine/ids.ts`, `src/engine/seedRegistry.ts`.
 
 **v2.0 alignment (GCD 2026-06-04 pivot).** Names/geography are *fictional* analogues (§4.2). The forgeable record layer (`enteredBy`/`motive`/`fidelity`) is the seam the **faction society-sim** (§2.5) writes distortions through — build it sim-agnostic here (a human `enteredBy` today), but keep `enteredBy` a `PersonRegistration` GUID so a faction member can be the author later. `Location`/`Organization` are world-level (like `PersonRegistration`), shared across cases. The death-investigation/judicial clusters, NIBRS-grade fields, and new record types live in the sibling `add-death-investigation-and-judicial-record-clusters` plan; lazy realization + tiered solvability in `build-the-procgen-v2-framework`.
+
+**assist-project:** fct_368b273e0ae0 (v2.0 simulation-first pivot), fct_b03838e7cfab (foundation re-plan), fct_c9ebf6bea613 (server tier).

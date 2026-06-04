@@ -41,4 +41,6 @@ The governance layer over the Registry's records: who may read/edit/publish, a t
 
 **Sealed-access (v2.0).** A `SealedRecord` wraps any record behind a seal **tier**; access requires an `UnsealRuling` granted on an `UnsealPetition` (an evidence bundle the cold-case detective files) — and a *machine-owned* judge can deny a valid petition or grant a crony's (the corrupt-judge hook, §2.5). The audit log doubles as the factions' **sensor net**: every view/edit is a logged event a watching faction can read, so investigating a sealed case raises Heat and can trigger active cover-up (the observer effect).
 
+**assist-project:** fct_368b273e0ae0 (v2.0 pivot), fct_2fbede949a8d (the factions read the audit log as their sensor net).
+
 **Affected files:** new `server/audit/*`, extends `prisma/schema.prisma` and `server/api` (from Plan 1), `src/ui/*` for the publish/published surfacing.
