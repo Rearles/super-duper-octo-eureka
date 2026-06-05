@@ -14,10 +14,12 @@
     "db:migrate": "prisma migrate dev",
     "db:reset": "prisma migrate reset --force",
     "server": "tsx watch server/index.ts",
-    "seed": "tsx server/seed.ts"
+    "seed": "tsx server/seed.ts",
+    "transfer": "tsx server/transfer.ts"
   },
   "devDependencies": {
     "@types/node": "^25.9.1",
+    "@types/pg": "^8.20.0",
     "dotenv": "^17.4.2",
     "prisma": "^7.8.0",
     "tsx": "^4.22.4",
@@ -27,8 +29,10 @@
   },
   "dependencies": {
     "@prisma/adapter-better-sqlite3": "^7.8.0",
+    "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "better-sqlite3": "^12.10.0",
-    "fastify": "^5.8.5"
+    "fastify": "^5.8.5",
+    "pg": "^8.21.0"
   }
 }

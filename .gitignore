@@ -3,7 +3,7 @@ dist/
 *.log
 .DS_Store
 
-/server/generated/prisma
+/server/generated
 .env
 *.db
 *.db-journal

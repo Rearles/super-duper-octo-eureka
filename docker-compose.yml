@@ -1,0 +1,25 @@
+# Local Postgres for the Registry (migration plan). The apache/age image is
+# Postgres 16 + Apache AGE preinstalled, so the graph layer (graph-analysis plan)
+# has its native engine. RLS is built into Postgres; PostGIS is enabled if the
+# image provides it (zone geometry is only needed by the sim, not the foundation).
+#   docker compose up -d
+services:
+  registry-db:
+    image: apache/age:latest
+    container_name: mound-city-registry-db
+    environment:
+      POSTGRES_USER: mound
+      POSTGRES_PASSWORD: mound
+      POSTGRES_DB: registry
+    ports:
+      - "5433:5432"
+    volumes:
+      - registry-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mound -d registry"]
+      interval: 3s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  registry-pgdata:
