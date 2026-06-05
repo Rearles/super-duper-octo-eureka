@@ -1,7 +1,8 @@
 // Pure, deterministic Registry row-builder: maps an AuthoredWorld into Registry
-// rows (people, identity bindings, places, orgs, and a starter record layer).
-// NO Prisma/DB here — kept pure so determinism is unit-testable (Pillar 1): the
-// same seed always yields identical rows. The DB persist lives in registry.ts.
+// rows (people, identity bindings, places, orgs, and a starter record layer that
+// now includes the death-investigation + judicial clusters). NO Prisma/DB here —
+// kept pure so determinism is unit-testable (Pillar 1): the same seed always
+// yields identical rows. The DB persist lives in registry.ts.
 import { createIdFactory } from "../src/engine/ids";
 import type { AuthoredWorld } from "../src/engine/types";
 
@@ -58,6 +59,52 @@ export interface PoliceRow {
   fidelity: string;
   incident?: IncidentSub;
 }
+export interface DeathCertRow {
+  id: string;
+  subjectId: string;
+  mannerOfDeath: string;
+  causeOfDeath: string | null;
+  pronouncedAt: string | null;
+  certifierId: string | null;
+  enteredById: string;
+  motive: string | null;
+  fidelity: string;
+}
+export interface AutopsyRow {
+  id: string;
+  subjectId: string;
+  deathCertId: string | null;
+  causeFindings: string | null;
+  woundPattern: string | null;
+  timeOfDeath: string | null;
+  examinerId: string | null;
+  enteredById: string;
+  motive: string | null;
+  fidelity: string;
+}
+export interface ToxRow {
+  id: string;
+  subjectId: string;
+  autopsyId: string | null;
+  substances: string[];
+  findings: string | null;
+  analystId: string | null;
+  enteredById: string;
+  fidelity: string;
+}
+export interface CourtRow {
+  id: string;
+  caseRef: string | null;
+  court: string | null;
+  judgeId: string | null;
+  rulingType: string | null;
+  ruling: string | null;
+  ruledAt: string | null;
+  parties: string[];
+  enteredById: string;
+  motive: string | null;
+  fidelity: string;
+}
 export interface RegistryRows {
   seed: number;
   persons: PersonRow[];
@@ -66,6 +113,10 @@ export interface RegistryRows {
   organizations: OrganizationRow[];
   morticianRecords: MorticianRow[];
   policeRecords: PoliceRow[];
+  deathCertificates: DeathCertRow[];
+  autopsies: AutopsyRow[];
+  toxicologies: ToxRow[];
+  courtRecords: CourtRow[];
   /** authored entity id -> registry GUID (so records can reference registry ids) */
   idMap: Record<string, string>;
 }
@@ -101,6 +152,11 @@ export function buildRegistryRows(world: AuthoredWorld, seed: number): RegistryR
 
   const morticianRecords: MorticianRow[] = [];
   const policeRecords: PoliceRow[] = [];
+  const deathCertificates: DeathCertRow[] = [];
+  const autopsies: AutopsyRow[] = [];
+  const toxicologies: ToxRow[] = [];
+  const courtRecords: CourtRow[] = [];
+
   for (const c of world.cases) {
     const victimRegId = idMap[c.victimId];
     const culpritRegId = idMap[c.culpritId];
@@ -114,6 +170,8 @@ export function buildRegistryRows(world: AuthoredWorld, seed: number): RegistryR
     // The cover-up seam: a how-crux case has its manner-of-death forged "natural"
     // (a faction-motivated, hidden-fidelity lie a true autopsy later disproves).
     const forged = c.keyFact === "how";
+    const motive = forged ? `shield ${faction?.name ?? "the accused"}` : null;
+
     morticianRecords.push({
       id: idf.next("mort"),
       subjectId: victimRegId,
@@ -121,7 +179,7 @@ export function buildRegistryRows(world: AuthoredWorld, seed: number): RegistryR
       mannerHint: forged ? "natural" : "homicide",
       notes: null,
       enteredById,
-      motive: forged ? `shield ${faction?.name ?? "the accused"}` : null,
+      motive,
       fidelity: forged ? "false" : "true",
       enteredAt: c.when,
     });
@@ -144,7 +202,77 @@ export function buildRegistryRows(world: AuthoredWorld, seed: number): RegistryR
         preliminaryActions: "Scene secured; body removed to the morgue.",
       },
     });
+
+    // Death-investigation cluster — the multi-view fan-out. The death certificate
+    // may forge the manner; the autopsy stays HONEST, so the two records contradict
+    // (the deduction seam: corroborate through the record the cover-up didn't own).
+    const certId = idf.next("death");
+    deathCertificates.push({
+      id: certId,
+      subjectId: victimRegId,
+      mannerOfDeath: forged ? "natural" : "homicide",
+      causeOfDeath: forged ? "natural causes" : c.how,
+      pronouncedAt: c.when,
+      certifierId: enteredById,
+      enteredById,
+      motive,
+      fidelity: forged ? "false" : "true",
+    });
+
+    const autopsyId = idf.next("autopsy");
+    autopsies.push({
+      id: autopsyId,
+      subjectId: victimRegId,
+      deathCertId: certId,
+      causeFindings: c.how, // the TRUE cause — contradicts a forged certificate
+      woundPattern: forged
+        ? "injuries inconsistent with a natural death"
+        : "consistent with the reported method",
+      timeOfDeath: c.when,
+      examinerId: null,
+      enteredById,
+      motive: null,
+      fidelity: "true", // the honest autopsy is the contradiction
+    });
+
+    toxicologies.push({
+      id: idf.next("tox"),
+      subjectId: victimRegId,
+      autopsyId,
+      substances: [],
+      findings: "no occlusive toxicology",
+      analystId: null,
+      enteredById,
+      fidelity: "true",
+    });
+
+    courtRecords.push({
+      id: idf.next("court"),
+      caseRef: null,
+      court: "Circuit Court",
+      judgeId: null,
+      rulingType: "open",
+      ruling: `No disposition entered for ${c.what}.`,
+      ruledAt: null,
+      parties: [victimRegId, culpritRegId],
+      enteredById,
+      motive: null,
+      fidelity: "true",
+    });
   }
 
-  return { seed, persons, bindings, locations, organizations, morticianRecords, policeRecords, idMap };
+  return {
+    seed,
+    persons,
+    bindings,
+    locations,
+    organizations,
+    morticianRecords,
+    policeRecords,
+    deathCertificates,
+    autopsies,
+    toxicologies,
+    courtRecords,
+    idMap,
+  };
 }
