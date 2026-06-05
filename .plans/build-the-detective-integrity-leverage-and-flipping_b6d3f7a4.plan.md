@@ -2,7 +2,7 @@
 title: "Build the detective's integrity, leverage, and the flip mechanic"
 type: "feature"
 created: "2026-06-04"
-status: not-started
+status: complete
 related: ["build-the-faction-and-allegiance-model_c1f7a2b8.plan.md", "build-the-event-to-record-pipeline-ground-truth-and-case-lifecycle_f4b1d5e2.plan.md", "faction-tension-systems_4b95a4c5.plan.md"]
 ---
 

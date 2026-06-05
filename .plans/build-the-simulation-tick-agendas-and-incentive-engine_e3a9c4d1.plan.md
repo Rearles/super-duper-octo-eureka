@@ -2,7 +2,7 @@
 title: "Build the simulation tick, faction agendas, and the incentive engine"
 type: "feature"
 created: "2026-06-04"
-status: not-started
+status: complete
 related: ["build-the-faction-and-allegiance-model_c1f7a2b8.plan.md", "build-the-relationships-and-pacts-diplomacy-engine_d2e8b3c9.plan.md", "build-the-event-to-record-pipeline-ground-truth-and-case-lifecycle_f4b1d5e2.plan.md"]
 ---
 

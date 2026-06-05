@@ -2,7 +2,7 @@
 title: "Build the faction & actor model + Allegiance portfolios (the society-sim data layer)"
 type: "feature"
 created: "2026-06-04"
-status: not-started
+status: complete
 related: ["faction-tension-systems_4b95a4c5.plan.md", "faction-requests-contacts-provenance_c691cba1.plan.md", "build-the-registry-backend-prisma-schema-and-forgeable-data-tables_b705b56b.plan.md", "build-the-relationships-and-pacts-diplomacy-engine_d2e8b3c9.plan.md"]
 ---
 

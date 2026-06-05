@@ -2,7 +2,7 @@
 title: "Build the relationships & pacts diplomacy engine (the living faction web)"
 type: "feature"
 created: "2026-06-04"
-status: not-started
+status: complete
 related: ["build-the-faction-and-allegiance-model_c1f7a2b8.plan.md", "faction-tension-systems_4b95a4c5.plan.md", "build-the-simulation-tick-agendas-and-incentive-engine_e3a9c4d1.plan.md"]
 ---
 

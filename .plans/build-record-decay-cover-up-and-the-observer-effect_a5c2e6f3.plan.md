@@ -2,7 +2,7 @@
 title: "Build record decay, active cover-up, and the observer effect"
 type: "feature"
 created: "2026-06-04"
-status: not-started
+status: complete
 related: ["build-the-event-to-record-pipeline-ground-truth-and-case-lifecycle_f4b1d5e2.plan.md", "add-the-registry-access-tiers-tamper-evident-audit-and-publication-layer_298f7bb1.plan.md", "build-the-procgen-v2-framework-lazy-realization-tiered-solvability_b3e8d4a1.plan.md"]
 ---
 

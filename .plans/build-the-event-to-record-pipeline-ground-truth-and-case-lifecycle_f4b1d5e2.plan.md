@@ -2,7 +2,7 @@
 title: "Build the event-to-record pipeline, the hidden ground-truth, and the Case lifecycle"
 type: "feature"
 created: "2026-06-04"
-status: not-started
+status: complete
 related: ["build-the-simulation-tick-agendas-and-incentive-engine_e3a9c4d1.plan.md", "build-the-registry-backend-prisma-schema-and-forgeable-data-tables_b705b56b.plan.md", "add-death-investigation-and-judicial-record-clusters_a7f3c2e9.plan.md", "build-the-procgen-v2-framework-lazy-realization-tiered-solvability_b3e8d4a1.plan.md", "hypothesis-board-engine_78222339.plan.md"]
 ---
 
