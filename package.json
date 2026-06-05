@@ -15,7 +15,8 @@
     "db:reset": "prisma migrate reset --force",
     "server": "tsx watch server/index.ts",
     "seed": "tsx server/seed.ts",
-    "transfer": "tsx server/transfer.ts"
+    "transfer": "tsx server/transfer.ts",
+    "seed:sim": "tsx server/seedSim.ts"
   },
   "devDependencies": {
     "@types/node": "^25.9.1",

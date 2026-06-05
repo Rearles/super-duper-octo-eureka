@@ -473,3 +473,40 @@ model CriminalCaseReport {
   linkedReports        String       @default("[]") // JSON PoliceRecord GUIDs
   prosecutorId         String? // PersonRegistration GUID
 }
+
+// ---------------------------------------------------------------------------
+// Sim persistence (integration): the society-sim's output, written into the
+// Registry. The GroundTruthLog is the HIDDEN answer key (never exposed via the
+// public API); ColdCase + SimRecord are the player-facing distorted exhaust.
+// ---------------------------------------------------------------------------
+
+/// The hidden ground-truth log — the sim's answer key. NEVER exposed publicly.
+model GroundTruthLog {
+  id         String  @id
+  eventId    String  @unique
+  kind       String
+  culpritId  String
+  victimId   String?
+  locationId String?
+  at         String
+  truth      String // JSON claims (hidden)
+}
+
+/// A cold case the sim produced (player-facing; the answer lives in GroundTruthLog).
+model ColdCase {
+  id            String  @id
+  eventId       String
+  state         String  @default("cold") // cold|open|solved|cleared-by-theory|closed-false
+  determination String?
+}
+
+/// A sim-authored record (the distorted exhaust), persisted into the Registry.
+model SimRecord {
+  id          String @id
+  caseId      String
+  type        String
+  title       String
+  fidelity    String
+  claims      String // JSON
+  enteredById String
+}

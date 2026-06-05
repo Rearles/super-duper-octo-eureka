@@ -3,6 +3,7 @@
 import { paperTrailWorld } from "./paper-trail";
 
 export { paperTrailWorld };
+export { simDemoWorld } from "./sim-demo";
 
 /** The world `CaseSession` loads by default. */
 export const defaultWorld = paperTrailWorld;
