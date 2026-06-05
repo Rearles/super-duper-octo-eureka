@@ -2,7 +2,7 @@
 title: "Research & roll out world-class security + PR scanning"
 type: "research"
 created: "2026-06-05"
-status: not-started
+status: in-progress
 related: ["wire-the-vertical-slice-http-routes-and-desk-ui_3f1a9c20.plan.md"]
 ---
 
@@ -104,10 +104,13 @@ free pick is chosen, the paid alternative is noted, then it lands additively.
 
 ## Todos (phased — gate criticals; each scanner lands on a branch → PR)
 
-- [ ] **Phase 0 — remediate & toggle (free, immediate).** Land the Vite 8 /
-      Vitest 4 upgrade to clear the existing **critical** + Vite/esbuild
-      moderates (verify 111 tests stay green). Flip Settings toggles: secret
-      scanning + push protection, Dependabot security updates.
+- [x] **Phase 0a — Vite 8 / Vitest 4 upgrade.** Clears GHSA-5xrq-8626-4rwp
+      (critical) + Vite/esbuild moderates. 111 tests + both typechecks green.
+      `@hono/node-server` moderate (via Prisma CLI) tracked for future Prisma 7
+      patch; unfixable without a Prisma major downgrade. Committed `18a0ba0`.
+- [ ] **Phase 0b — Settings toggles (manual, GitHub UI).** Enable in
+      Settings → Code security: **Secret scanning**, **Push protection**,
+      **Dependabot security updates** (auto-fix PRs for known advisories).
 - [ ] **Phase 1 — governance & visible wins.** OpenSSF Scorecard workflow + README
       badge; `SECURITY.md`, `CODEOWNERS`, PR/issue templates, license; branch
       protection on `develop`; gitleaks in CI; document commit signing.
