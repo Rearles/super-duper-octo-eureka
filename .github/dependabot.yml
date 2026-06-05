@@ -1,28 +1,36 @@
-# Basic `dependabot.yml` file with
-# minimum configuration for three package managers
+# Dependabot version updates. Security updates are enabled separately in
+# Settings → Code security. Minor/patch bumps are grouped to keep PR volume
+# low; majors (e.g. vite 5 -> 8, vitest 1 -> 4) still open as individual PRs so
+# they get a deliberate review.
 
 version: 2
 updates:
-  # Enable version updates for npm
+  # npm — the browser engine + the Node server
   - package-ecosystem: "npm"
-    # Look for `package.json` and `lock` files in the `root` directory
     directory: "/"
-    # Check the npm registry for updates every day (weekdays)
-    schedule:
-      interval: "daily"
-
-  # Enable version updates for Docker
-  - package-ecosystem: "docker"
-    # Look for a `Dockerfile` in the `root` directory
-    directory: "/"
-    # Check for updates once a week
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      dev-minor-patch:
+        dependency-type: "development"
+        update-types: ["minor", "patch"]
+      prod-minor-patch:
+        dependency-type: "production"
+        update-types: ["minor", "patch"]
 
-  # Enable version updates for GitHub Actions
+  # GitHub Actions used by the workflows in .github/workflows
   - package-ecosystem: "github-actions"
-    # Workflow files stored in the default location of `.github/workflows`
-    # You don't need to specify `/.github/workflows` for `directory`. You can use `directory: "/"`.
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      actions:
+        patterns: ["*"]
+
+  # Docker — scans a root Dockerfile if one is added later (the apache/age
+  # compose service isn't covered by the docker ecosystem on its own).
+  - package-ecosystem: "docker"
     directory: "/"
     schedule:
       interval: "weekly"
