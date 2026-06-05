@@ -111,8 +111,7 @@ exports[`golden snapshot > generates a stable case + rendered documents at (buri
       ],
       "rendered": "Statement of Vera Mott
 [witness-statement · fidelity recorded internally]
-  • Vera Mott states they were at the Westside bar at 2300.
-  • Vera Mott states Cole Voss was with them at the Westside bar at 2300.",
+  • Vera Mott swears they and Cole Voss were across town at the Westside bar at 2300.",
       "type": "witness-statement",
     },
     {
@@ -124,7 +123,7 @@ exports[`golden snapshot > generates a stable case + rendered documents at (buri
       ],
       "rendered": "Telephone records — Vera Mott
 [phone-records · fidelity recorded internally]
-  • Vera Mott's line placed a call from beside the victim's flat on Delmar at 2300.",
+  • A call from Vera Mott's line hit the tower beside the victim's flat on Delmar at 2300 — not across town.",
       "type": "phone-records",
     },
     {
@@ -136,7 +135,7 @@ exports[`golden snapshot > generates a stable case + rendered documents at (buri
       ],
       "rendered": "Property & associations
 [property-record · fidelity recorded internally]
-  • Cole Voss and Vera Mott are long-time associates.",
+  • Cole Voss's effects place him near the victim's flat on Delmar.",
       "type": "property-record",
     },
     {
@@ -148,8 +147,8 @@ exports[`golden snapshot > generates a stable case + rendered documents at (buri
       ],
       "rendered": "Autopsy — Mara Hale
 [autopsy · fidelity recorded internally]
-  • Time of death fixed at 2300; struck during a late-night argument.
-  • Mara Hale died at the victim's flat on Delmar.",
+  • Time of death is fixed at 2300.
+  • The injuries are consistent with foul play — struck during a late-night argument.",
       "type": "autopsy",
     },
     {
@@ -186,6 +185,12 @@ exports[`golden snapshot > generates a stable case + rendered documents at (buri
     ],
     "keyFact": "where",
     "predicate": "location@2300",
+    "trueAnswers": {
+      "how": "homicide",
+      "when": "2300",
+      "where": "flat",
+      "who": "culprit",
+    },
   },
   "suspects": [
     "culprit",
