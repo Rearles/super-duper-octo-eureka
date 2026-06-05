@@ -2,7 +2,7 @@
 title: "Add the Registry access tiers, tamper-evident audit, and publication layer"
 type: "feature"
 created: "2026-06-04"
-status: not-started
+status: complete
 related: ["build-the-registry-backend-prisma-schema-and-forgeable-data-tables_b705b56b.plan.md", "migrate-the-registry-database-from-sqlite-to-postgres_38b4da91.plan.md", "faction-requests-contacts-provenance_c691cba1.plan.md", "add-death-investigation-and-judicial-record-clusters_a7f3c2e9.plan.md"]
 ---
 

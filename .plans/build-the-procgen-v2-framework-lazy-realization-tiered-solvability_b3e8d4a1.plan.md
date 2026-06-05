@@ -2,7 +2,7 @@
 title: "Build the procgen v2.0 framework: lazy realization, the truth-to-distortion record contract, and tiered solvability"
 type: "feature"
 created: "2026-06-04"
-status: not-started
+status: complete
 related: ["build-the-registry-backend-prisma-schema-and-forgeable-data-tables_b705b56b.plan.md", "add-death-investigation-and-judicial-record-clusters_a7f3c2e9.plan.md", "weave-authored-case-data-into-procgen_79b54597.plan.md", "hypothesis-board-engine_78222339.plan.md"]
 ---
 

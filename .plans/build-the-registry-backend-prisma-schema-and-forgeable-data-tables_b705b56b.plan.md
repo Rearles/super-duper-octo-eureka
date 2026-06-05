@@ -2,7 +2,7 @@
 title: "Build the Registry backend, Prisma schema, and forgeable data tables for Mound City"
 type: "feature"
 created: "2026-06-04"
-status: not-started
+status: complete
 related: ["add-the-registry-access-tiers-tamper-evident-audit-and-publication-layer_298f7bb1.plan.md", "migrate-the-registry-database-from-sqlite-to-postgres_38b4da91.plan.md", "weave-authored-case-data-into-procgen_79b54597.plan.md", "faction-requests-contacts-provenance_c691cba1.plan.md", "add-death-investigation-and-judicial-record-clusters_a7f3c2e9.plan.md", "build-the-procgen-v2-framework-lazy-realization-tiered-solvability_b3e8d4a1.plan.md"]
 ---
 
