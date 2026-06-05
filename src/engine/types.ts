@@ -70,6 +70,9 @@ export interface Clue {
 /** The player's working hypothesis: a chosen value per slot (unset slots absent). */
 export type Theory = Partial<Record<CaseFact, string>>;
 
+/** Tiered solvability (refined Pillar 1 §1.2/§5.4): provable | crackable | underdetermined | blank. */
+export type Determination = "provable" | "crackable" | "underdetermined" | "blank";
+
 export interface Solution {
   culpritId: string;
   /** the two record ids whose claims expose the key lie */
@@ -80,6 +83,8 @@ export interface Solution {
   keyFact?: CaseFact;
   /** the true per-slot answers (who/where/when/how) — internal; never shown as a grade */
   trueAnswers?: Theory;
+  /** tiered-solvability classification (refined Pillar 1); computed on demand, optional */
+  determination?: Determination;
 }
 
 export interface GameCase {
