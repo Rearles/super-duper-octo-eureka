@@ -108,7 +108,7 @@ free pick is chosen, the paid alternative is noted, then it lands additively.
       (critical) + Vite/esbuild moderates. 111 tests + both typechecks green.
       `@hono/node-server` moderate (via Prisma CLI) tracked for future Prisma 7
       patch; unfixable without a Prisma major downgrade. Committed `18a0ba0`.
-- [ ] **Phase 0b — Settings toggles (manual, GitHub UI).** Enable in
+- [x] **Phase 0b — Settings toggles (manual, GitHub UI).** Enabled in
       Settings → Code security: **Secret scanning**, **Push protection**,
       **Dependabot security updates** (auto-fix PRs for known advisories).
 - [ ] **Phase 1 — governance & visible wins.** OpenSSF Scorecard workflow + README
