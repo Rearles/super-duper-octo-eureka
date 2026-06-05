@@ -18,6 +18,8 @@ deliberately-distorted record, and the detective reconstructs the truth from it.
    tsvector, typed-cluster persistence, and Apache AGE).
 4. **assist-project facts** (if the MCP is available): `project_list_facts` — the
    `build-status` + `architecture` facts summarize what's built and the stack quirks.
+   Not connected? **`docs/assist-tooling-setup.md`** wires up the assist-* MCP
+   servers + skills from the sibling `refactored-tribble` repo.
 
 ## What's built (branch `claude/zen-clarke-DkXdA`)
 
