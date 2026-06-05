@@ -2,7 +2,7 @@
 title: "Build the public read-model (CQRS) and the Go Public mechanic"
 type: "feature"
 created: "2026-06-04"
-status: not-started
+status: complete
 related: ["migrate-the-registry-database-from-sqlite-to-postgres_38b4da91.plan.md", "add-the-registry-access-tiers-tamper-evident-audit-and-publication-layer_298f7bb1.plan.md", "faction-tension-systems_4b95a4c5.plan.md"]
 ---
 

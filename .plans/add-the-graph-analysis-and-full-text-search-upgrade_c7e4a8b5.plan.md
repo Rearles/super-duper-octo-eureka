@@ -2,7 +2,7 @@
 title: "Add the graph analysis (Apache AGE) and full-text search upgrade"
 type: "feature"
 created: "2026-06-04"
-status: not-started
+status: complete
 related: ["migrate-the-registry-database-from-sqlite-to-postgres_38b4da91.plan.md", "build-the-relationships-and-pacts-diplomacy-engine_d2e8b3c9.plan.md", "build-the-event-to-record-pipeline-ground-truth-and-case-lifecycle_f4b1d5e2.plan.md"]
 ---
 
