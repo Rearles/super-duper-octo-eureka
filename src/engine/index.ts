@@ -1,4 +1,4 @@
-import { FactGraph, type Contradiction } from "./factGraph";
+import { FactGraph, type ClueConflict, type Contradiction } from "./factGraph";
 import { generateCase } from "./generator";
 import { verifySolvable } from "./solver";
 import { TemplateRenderer, type Renderer } from "./templateRenderer";
@@ -17,7 +17,9 @@ import {
 import type {
   AuthoredWorld,
   CaseCore,
+  CaseFact,
   CaseRecord,
+  Clue,
   Contact,
   Disposition,
   FactionReaction,
@@ -25,6 +27,7 @@ import type {
   FactionRuntimeState,
   Fidelity,
   GameCase,
+  Theory,
 } from "./types";
 
 /** Clearance a faction contact grants when called (§9.2 — access, not answers). */
@@ -75,6 +78,8 @@ export class CaseSession {
   private readonly requestList: FactionRequest[];
   /** The Decision Ledger: every act and the faction reactions it caused (§2.2). */
   readonly ledger: LedgerEntry[] = [];
+  /** The player's working hypothesis — per-slot values they've committed to (§2.4). */
+  private readonly _theory: Theory = {};
   clearance: number;
   closed = false;
 
@@ -239,6 +244,39 @@ export class CaseSession {
 
   obtainedRecords(): CaseRecord[] {
     return this.gameCase.records.filter((r) => this.obtained.has(r.id));
+  }
+
+  /** Atomic clues from the records the player currently holds — the deduction inputs (§2.4). */
+  clues(): Clue[] {
+    return this.obtainedRecords().flatMap((r) => r.clues ?? []);
+  }
+
+  // --- The hypothesis board (§2.4): the player fills a per-slot theory themselves ---
+
+  /** Assign a value to a theory slot (who/where/when/how). The player's call, not the engine's. */
+  setSlot(slot: CaseFact, value: string): void {
+    this._theory[slot] = value;
+  }
+
+  /** Unset a theory slot. */
+  clearSlot(slot: CaseFact): void {
+    delete this._theory[slot];
+  }
+
+  /** The player's current working hypothesis (a copy). */
+  theory(): Theory {
+    return { ...this._theory };
+  }
+
+  /**
+   * The player asserts two HELD clues contradict each other (§2.4). The engine
+   * confirms only whether they structurally conflict — never which is true.
+   * Returns `{ conflict: false }` if either clue isn't in a record the player holds.
+   */
+  assertContradiction(clueIdA: string, clueIdB: string): ClueConflict {
+    const held = new Set(this.clues().map((c) => c.id));
+    if (!held.has(clueIdA) || !held.has(clueIdB)) return { conflict: false };
+    return this.graph.assertContradiction(clueIdA, clueIdB);
   }
 
   /** Records pointed to by a lead in something already obtained, but not yet pulled. */

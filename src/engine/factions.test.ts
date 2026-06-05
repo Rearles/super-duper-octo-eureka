@@ -24,7 +24,7 @@ const buryCulprit: VerdictAct = { accusedId: gc.solution.culpritId, disposition:
 
 describe("emergent stakes", () => {
   it("a faction whose member is the culprit cares more than an onlooker", () => {
-    expect(factionStake(heights, facts)).toBe(3); // "Cole Voss" interest (+1) + member is culprit (+2)
+    expect(factionStake(heights, facts)).toBe(4); // "Cole Voss" interest (+1) + culprit member (+2) + Vera Mott cast as the witness (+1)
     expect(factionStake(press, facts)).toBe(1); // cares about "Cole Voss", no member involved
     expect(factionStake(heights, facts)).toBeGreaterThan(factionStake(press, facts));
   });
@@ -96,7 +96,7 @@ describe("inter-faction web", () => {
 
 describe("CaseSession integration", () => {
   it("a verdict applies reactions, logs the Ledger, and floors Heat at 0", () => {
-    const s = new CaseSession(7);
+    const s = new CaseSession(7, { world });
     expect(s.factions().every((f) => f.standing === 0 && f.heat === 0)).toBe(true);
 
     const res = s.commitVerdict(s.gameCase.solution.culpritId, "charge");
@@ -112,7 +112,7 @@ describe("CaseSession integration", () => {
   });
 
   it("an official act (naming a POI) raises the named faction's Heat", () => {
-    const s = new CaseSession(7);
+    const s = new CaseSession(7, { world });
     const reactions = s.nameOfInterest(s.gameCase.solution.culpritId); // a Heights member
     expect(reactions.length).toBeGreaterThan(0);
     const h = s.factions().find((f) => f.factionId === "the-heights")!;
@@ -128,7 +128,7 @@ describe("CaseSession integration", () => {
 
 describe("confirmation-by-doing", () => {
   it("the theory whisper is ripeness-only and never names the culprit", () => {
-    const s = new CaseSession(7);
+    const s = new CaseSession(7, { world });
     expect(s.whisper()).toContain("Nothing yet");
 
     const stmt = s.availableRequests().find((r) => r.type === "witness-statement")!;
@@ -142,9 +142,9 @@ describe("confirmation-by-doing", () => {
   });
 
   it("keeps an internal correctness signal for the engine/tests", () => {
-    const s = new CaseSession(7);
+    const s = new CaseSession(7, { world });
     expect(s.commitVerdict(s.gameCase.solution.culpritId, "charge").correct).toBe(true);
-    const s2 = new CaseSession(7);
+    const s2 = new CaseSession(7, { world });
     const wrong = s2.gameCase.suspects.find((id) => id !== s2.gameCase.solution.culpritId)!;
     expect(s2.commitVerdict(wrong, "charge").correct).toBe(false);
   });

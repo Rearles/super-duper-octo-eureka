@@ -12,10 +12,11 @@ describe("engine", () => {
   });
 
   it("varies the procgen-cast names between seeds; authored facts stay fixed", () => {
-    const witnessNames = new Set(
-      Array.from({ length: 10 }, (_, i) => generateCase(world, i + 1).entities.witness.name),
+    // The bystander is procgen-cast (no authored factionless innocent in this world).
+    const bystanderNames = new Set(
+      Array.from({ length: 10 }, (_, i) => generateCase(world, i + 1).entities.suspect_b.name),
     );
-    expect(witnessNames.size).toBeGreaterThan(1);
+    expect(bystanderNames.size).toBeGreaterThan(1);
     // authored principals never change with the seed
     expect(generateCase(world, 1).entities.culprit.name).toEqual(
       generateCase(world, 2).entities.culprit.name,
@@ -44,7 +45,7 @@ describe("engine", () => {
   });
 
   it("surfaces the contradiction only after the right records are obtained", () => {
-    const s = new CaseSession(7);
+    const s = new CaseSession(7, { world });
     expect(s.contradictions().length).toBe(0); // only the case file so far
 
     const stmt = s.availableRequests().find((r) => r.type === "witness-statement");
@@ -59,7 +60,7 @@ describe("engine", () => {
   });
 
   it("spends clearance and refuses unaffordable or un-led requests", () => {
-    const s = new CaseSession(7, { clearance: 1 });
+    const s = new CaseSession(7, { world, clearance: 1 });
     expect(s.request("rec_phone").ok).toBe(true); // led by the case file, costs 1
     expect(s.clearance).toBe(0);
     const more = s.availableRequests()[0];
@@ -67,7 +68,7 @@ describe("engine", () => {
   });
 
   it("confirms the culprit on a correct verdict and reports a consequence", () => {
-    const s = new CaseSession(7);
+    const s = new CaseSession(7, { world });
     const res = s.commitVerdict(s.gameCase.solution.culpritId, "charge");
     expect(res.correct).toBe(true);
     expect(res.consequence.length).toBeGreaterThan(0);
@@ -75,7 +76,7 @@ describe("engine", () => {
   });
 
   it("marks a wrong accusation incorrect", () => {
-    const s = new CaseSession(7);
+    const s = new CaseSession(7, { world });
     const wrong = s.gameCase.suspects.find((id) => id !== s.gameCase.solution.culpritId)!;
     expect(s.commitVerdict(wrong, "charge").correct).toBe(false);
   });

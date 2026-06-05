@@ -9,6 +9,7 @@ import type {
   CaseCore,
   CaseFact,
   Entity,
+  BlocId,
   Faction,
   FactionMember,
   Person,
@@ -67,6 +68,7 @@ export class FactionBuilder {
   private readonly _members: FactionMember[] = [];
   private readonly _allies: string[] = [];
   private readonly _rivals: string[] = [];
+  private _bloc?: BlocId;
   constructor(
     private readonly _id: string,
     private readonly _name: string,
@@ -103,6 +105,12 @@ export class FactionBuilder {
     return this;
   }
 
+  /** Which broad bloc this faction belongs to (v2.0 sim; fluid at runtime). */
+  bloc(blocId: BlocId): this {
+    this._bloc = blocId;
+    return this;
+  }
+
   build(): Faction {
     if (!this._id) throw new AuthoringError("faction: id is required");
     if (!this._name) throw new AuthoringError(`faction '${this._id}': name is required`);
@@ -120,6 +128,7 @@ export class FactionBuilder {
     };
     if (this._allies.length) faction.allies = [...this._allies];
     if (this._rivals.length) faction.rivals = [...this._rivals];
+    if (this._bloc) faction.bloc = this._bloc;
     return faction;
   }
 }

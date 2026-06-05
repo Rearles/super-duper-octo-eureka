@@ -1,8 +1,9 @@
 // The default authored world the engine loads. Swap or extend with more
 // authored worlds as the case-author interview produces them.
-import { buriedWitnessWorld } from "./buriedWitness";
+import { paperTrailWorld } from "./paper-trail";
 
-export { buriedWitnessWorld };
+export { paperTrailWorld };
+export { simDemoWorld } from "./sim-demo";
 
 /** The world `CaseSession` loads by default. */
-export const defaultWorld = buriedWitnessWorld;
+export const defaultWorld = paperTrailWorld;

@@ -1,0 +1,512 @@
+// Mound City — The Registry schema (GCD v2.0). See docs/GameConceptDocument.md.
+// SQLite in dev; the migration plan swaps the provider to postgresql.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../server/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ===========================================================================
+// THE REGISTRY — data layer (GCD v2.0). Determinism: all ids are seed-derived
+// (src/engine/ids.ts), never DB-generated. JSON-encoded String columns +
+// String-union "enums" are the SQLite shims; they become Postgres enums /
+// String[] / Jsonb in the migration. Pillar 1: the IdentityBinding spine is
+// ground truth (always accurate); every other record carries enteredBy + motive
+// + hidden fidelity (the distortion seam the faction society-sim writes through).
+// ===========================================================================
+
+/// World-level index of a person (spans cases). The registry's view; the
+/// unforgeable identity is in IdentityBinding (1:1).
+model PersonRegistration {
+  id       String           @id
+  name     String
+  aliases  String           @default("[]") // JSON string[] (SQLite shim)
+  features String           @default("{}") // JSON featuresOfPerson (SQLite shim)
+  binding  IdentityBinding?
+}
+
+/// The unforgeable real-person<->GUID spine the Registry never loses track of
+/// (Pillar 1 ground truth). Forgery lives only in the record layer, never here.
+model IdentityBinding {
+  id           String             @id
+  personId     String             @unique
+  person       PersonRegistration @relation(fields: [personId], references: [id])
+  trueName     String
+  trueFeatures String             @default("{}") // JSON ground-truth features
+}
+
+/// A world-level place / zone (sim territory). Referenced by GUID from records.
+model Location {
+  id     String  @id
+  name   String
+  kind   String  @default("address") // "zone" | "address" | "building" | ...
+  zoneId String? // parent zone GUID, if any
+}
+
+/// A world-level organization (company, paper, gang, party...). Referenced by GUID.
+model Organization {
+  id   String @id
+  name String
+  kind String @default("org") // "press" | "gang" | "party" | "business" | ...
+}
+
+// ---------------------------------------------------------------------------
+// Governance (access-tiers plan): users/roles, the tamper-evident audit log,
+// sealed-access (seal any record + unseal petitions), and publication.
+// ---------------------------------------------------------------------------
+
+/// A Registry user with a role + clearance (gates reads/writes/official acts).
+model RegistryUser {
+  id        String @id
+  name      String
+  role      String @default("clerk") // clerk|detective|prosecutor|judge|auditor|admin
+  clearance Int    @default(1)
+}
+
+/// Append-only, hash-chained audit entry (tamper-evident). Each row stores
+/// hash(prevHash + payload); recomputing the chain detects any edit/deletion.
+/// Doubles as the factions' sensor net (every view/edit is a logged event).
+model AuditLogEntry {
+  id         String @id
+  seq        Int    @unique
+  actorId    String
+  action     String // view|create|edit|publish|seal|unseal|petition|rule
+  targetType String
+  targetId   String
+  payload    String @default("{}") // JSON
+  prevHash   String
+  hash       String
+  at         String // clock token
+}
+
+/// A seal over ANY record (court ruling, IA file, personnel, warrant, grand-jury).
+model SealedRecord {
+  id         String  @id
+  targetType String
+  targetId   String
+  tier       Int     @default(1) // seal sensitivity tier
+  reason     String?
+  sealedById String
+  sealedAt   String?
+}
+
+/// A petition to unseal a SealedRecord — an evidence bundle a detective files.
+model UnsealPetition {
+  id             String  @id
+  sealedRecordId String
+  petitionerId   String
+  evidenceBundle String  @default("[]") // JSON record GUIDs
+  status         String  @default("open") // open|granted|denied
+  filedAt        String?
+}
+
+/// A judge's ruling on an unseal petition (a machine-owned judge can distort it).
+model UnsealRuling {
+  id         String  @id
+  petitionId String  @unique
+  judgeId    String
+  granted    Boolean
+  reason     String?
+  ruledAt    String?
+}
+
+/// A publication entry — a record made public ("Go Public"); the CQRS public
+/// read-model projects only these, and factions react to what's public.
+model Publication {
+  id            String  @id
+  targetType    String
+  targetId      String
+  publishedById String
+  publishedAt   String?
+}
+
+/// A forgeable mortician/death record (MVP base; the rich death cluster is a
+/// sibling plan). Forgeable fields nullable; enteredBy/motive/fidelity = the seam.
+model MorticianRecord {
+  id             String  @id
+  subjectId      String // PersonRegistration GUID (the deceased)
+  causeOfDeath   String? // forgeable
+  mannerHint     String? // forgeable
+  notes          String?
+  enteredById    String // PersonRegistration GUID (who filed it)
+  motive         String? // faction-linked distortion reason
+  fidelity       String  @default("true") // "true"|"partial"|"biased"|"false" (hidden)
+  lastEditedById String?
+  enteredAt      String? // in-world clock token (deterministic)
+}
+
+// ---------------------------------------------------------------------------
+// Death-investigation cluster (clusters plan). The paper fan a homicide
+// generates; mannerOfDeath is the field a corrupt coroner flips. All forgeable.
+// ---------------------------------------------------------------------------
+
+/// Death certificate — the legally-loaded mannerOfDeath is the cover-up's lever.
+model DeathCertificate {
+  id             String  @id
+  subjectId      String // deceased PersonRegistration GUID
+  mannerOfDeath  String  @default("undetermined") // natural|accident|suicide|homicide|undetermined
+  causeOfDeath   String?
+  pronouncedAt   String?
+  certifierId    String? // coroner/ME PersonRegistration GUID
+  enteredById    String
+  motive         String?
+  fidelity       String  @default("true")
+  lastEditedById String?
+}
+
+/// Autopsy — its wound/time findings can contradict a forged death certificate.
+model AutopsyReport {
+  id            String  @id
+  subjectId     String
+  deathCertId   String? // the DeathCertificate it corroborates or contradicts
+  causeFindings String?
+  woundPattern  String?
+  timeOfDeath   String?
+  examinerId    String?
+  enteredById   String
+  motive        String?
+  fidelity      String  @default("true")
+}
+
+/// Toxicology — substances + levels behind a cause of death.
+model ToxicologyReport {
+  id          String  @id
+  subjectId   String
+  autopsyId   String?
+  substances  String  @default("[]") // JSON
+  levels      String  @default("{}") // JSON
+  findings    String?
+  analystId   String?
+  enteredById String
+  fidelity    String  @default("true")
+}
+
+/// Medical-examiner scene investigation.
+model MEInvestigationReport {
+  id             String  @id
+  subjectId      String
+  locationId     String?
+  sceneSummary   String?
+  bodyPosition   String?
+  investigatorId String?
+  enteredById    String
+  fidelity       String  @default("true")
+}
+
+/// Body chart — intake diagram + marks.
+model BodyChart {
+  id          String  @id
+  subjectId   String
+  diagram     String  @default("[]") // JSON marks
+  notes       String?
+  enteredById String
+  fidelity    String  @default("true")
+}
+
+/// Chain of custody — append-only custody events; GAPS are themselves clues.
+model ChainOfCustody {
+  id          String @id
+  itemRef     String // body / evidence GUID
+  events      String @default("[]") // JSON append-only events
+  enteredById String
+  fidelity    String @default("true")
+}
+
+/// Body release form — to whom and when the body was released.
+model BodyReleaseForm {
+  id          String  @id
+  subjectId   String
+  releasedTo  String?
+  releasedAt  String?
+  enteredById String
+  fidelity    String  @default("true")
+}
+
+// ---------------------------------------------------------------------------
+// Judicial cluster (clusters plan). A machine-owned judge can distort; the
+// sealed-access subsystem (governance plan) can seal these.
+// ---------------------------------------------------------------------------
+
+/// A court record / ruling.
+model CourtRecord {
+  id             String  @id
+  caseRef        String? // a PoliceRecord / criminal-case GUID
+  court          String?
+  judgeId        String? // PersonRegistration GUID
+  rulingType     String? // dismissed|convicted|acquitted|sealed-order|...
+  ruling         String?
+  ruledAt        String?
+  parties        String  @default("[]") // JSON person GUIDs
+  enteredById    String
+  motive         String?
+  fidelity       String  @default("true")
+  lastEditedById String?
+}
+
+// ---------------------------------------------------------------------------
+// New police record types (clusters plan) — per-type tables 1:1 to PoliceRecord.
+// ---------------------------------------------------------------------------
+
+/// CAD / dispatch log — often the EARLIEST record; CAD-vs-report gaps are leads.
+model CADDispatchLog {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  callType       String?
+  dispatchedAt   String?
+  units          String       @default("[]") // JSON
+  callerInfo     String?
+  timeline       String       @default("[]") // JSON events
+}
+
+/// Field-interview card — a street contact recorded as an investigative lead.
+model FieldInterviewCard {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  intervieweeId  String?
+  contactInfo    String?
+  circumstances  String?
+  officerId      String?
+}
+
+/// Booking report.
+model BookingReport {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  arresteeId     String?
+  charges        String       @default("[]") // JSON
+  property       String       @default("[]") // JSON
+  bookedAt       String?
+}
+
+/// Supplemental report — an APPEND to a parent report (not an edit); versioning.
+model SupplementalReport {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  parentRecordId String // the PoliceRecord this supplements
+  addendum       String?
+  supplementedAt String?
+}
+
+/// BOLO — be-on-the-lookout alert.
+model BOLO {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  targetType     String? // person|vehicle|property
+  description    String?
+  issuedAt       String?
+  active         Boolean      @default(true)
+}
+
+/// Warrant — court-issued; links the judicial and police clusters; often sealed.
+model Warrant {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  warrantType    String? // arrest|search
+  subjectId      String?
+  issuingJudgeId String?
+  charges        String       @default("[]") // JSON
+  bail           String?
+  issuedAt       String?
+}
+
+/// Evidence / property log — chain-of-custody anchored.
+model EvidenceLog {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  items          String       @default("[]") // JSON
+  custodyId      String? // a ChainOfCustody GUID
+  collectedAt    String?
+}
+
+/// Shared parent of all police reports (class-table inheritance). reportType is
+/// the discriminator; the 8 per-type tables hold type-specific columns 1:1.
+model PoliceRecord {
+  id             String  @id
+  reportType     String // incident|arrest|accident|investigation|analytical|use-of-force|internal-affairs|criminal-case
+  subjectId      String? // PersonRegistration GUID the report concerns
+  locationId     String? // Location GUID
+  occurredAt     String? // in-world clock token
+  narrative      String?
+  enteredById    String // PersonRegistration GUID
+  motive         String?
+  fidelity       String  @default("true")
+  lastEditedById String?
+
+  incident        IncidentReport?
+  arrest          ArrestReport?
+  accident        AccidentReport?
+  investigation   InvestigationReport?
+  analytical      AnalyticalReport?
+  useOfForce      UseOfForceReport?
+  internalAffairs InternalAffairsReport?
+  criminalCase    CriminalCaseReport?
+
+  // New record types (clusters plan):
+  cadDispatch    CADDispatchLog?
+  fieldInterview FieldInterviewCard?
+  booking        BookingReport?
+  supplemental   SupplementalReport?
+  bolo           BOLO?
+  warrant        Warrant?
+  evidenceLog    EvidenceLog?
+}
+
+/// Incident report — first response to a reported offense.
+model IncidentReport {
+  id                         String       @id
+  policeRecordId             String       @unique
+  policeRecord               PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  involved                   String       @default("[]") // JSON person GUIDs
+  witnesses                  String       @default("[]") // JSON person GUIDs
+  conditions                 String?
+  preliminaryActions         String?
+  // NIBRS-grade fields
+  offenseCode                String?
+  victimOffenderRelationship String?
+  weapon                     String?
+  disposition                String?
+}
+
+/// Arrest report.
+model ArrestReport {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  arresteeId     String // PersonRegistration GUID
+  charges        String       @default("[]") // JSON
+  probableCause  String?
+  evidence       String       @default("[]") // JSON
+  booking        String?
+  mirandaGiven   Boolean      @default(false)
+  // NIBRS-grade fields
+  offenseCode    String?
+  armedWith      String?
+  disposition    String?
+}
+
+/// Traffic/industrial accident report.
+model AccidentReport {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  weather        String?
+  vehicles       String       @default("[]") // JSON
+  driverId       String? // PersonRegistration GUID
+  passengers     String       @default("[]") // JSON person GUIDs
+  injuries       String?
+  citations      String       @default("[]") // JSON
+}
+
+/// Investigation report — the working case file.
+model InvestigationReport {
+  id                 String       @id
+  policeRecordId     String       @unique
+  policeRecord       PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  leadInvestigatorId String? // PersonRegistration GUID
+  evidenceLog        String       @default("[]") // JSON
+  interviews         String       @default("[]") // JSON
+  personsOfInterest  String       @default("[]") // JSON person GUIDs
+  status             String?
+  findings           String?
+}
+
+/// Analytical report — crime analysis / pattern work.
+model AnalyticalReport {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  dataSources    String       @default("[]") // JSON
+  method         String?
+  patterns       String?
+  scope          String?
+  conclusions    String?
+  analystId      String? // PersonRegistration GUID
+}
+
+/// Use-of-force report.
+model UseOfForceReport {
+  id               String       @id
+  policeRecordId   String       @unique
+  policeRecord     PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  officers         String       @default("[]") // JSON person GUIDs
+  subjectId        String? // PersonRegistration GUID
+  forceLevel       String?
+  justification    String?
+  injuries         String?
+  supervisorReview String?
+}
+
+/// Internal-affairs report — sealable (see the governance plan's sealed-access).
+model InternalAffairsReport {
+  id               String       @id
+  policeRecordId   String       @unique
+  policeRecord     PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  subjectOfficerId String? // PersonRegistration GUID
+  complainantId    String? // PersonRegistration GUID
+  allegation       String?
+  findings         String?
+  disposition      String? // sustained|not-sustained|exonerated|unfounded (clusters plan)
+  confidentiality  String?
+}
+
+/// Criminal-case report — the consolidated prosecution file.
+model CriminalCaseReport {
+  id                   String       @id
+  policeRecordId       String       @unique
+  policeRecord         PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  caseNumber           String?
+  defendants           String       @default("[]") // JSON person GUIDs
+  charges              String       @default("[]") // JSON
+  consolidatedEvidence String       @default("[]") // JSON
+  witnessList          String       @default("[]") // JSON person GUIDs
+  linkedReports        String       @default("[]") // JSON PoliceRecord GUIDs
+  prosecutorId         String? // PersonRegistration GUID
+}
+
+// ---------------------------------------------------------------------------
+// Sim persistence (integration): the society-sim's output, written into the
+// Registry. The GroundTruthLog is the HIDDEN answer key (never exposed via the
+// public API); ColdCase + SimRecord are the player-facing distorted exhaust.
+// ---------------------------------------------------------------------------
+
+/// The hidden ground-truth log — the sim's answer key. NEVER exposed publicly.
+model GroundTruthLog {
+  id         String  @id
+  eventId    String  @unique
+  kind       String
+  culpritId  String
+  victimId   String?
+  locationId String?
+  at         String
+  truth      String // JSON claims (hidden)
+}
+
+/// A cold case the sim produced (player-facing; the answer lives in GroundTruthLog).
+model ColdCase {
+  id            String  @id
+  eventId       String
+  state         String  @default("cold") // cold|open|solved|cleared-by-theory|closed-false
+  determination String?
+}
+
+/// A sim-authored record (the distorted exhaust), persisted into the Registry.
+model SimRecord {
+  id          String @id
+  caseId      String
+  type        String
+  title       String
+  fidelity    String
+  claims      String // JSON
+  enteredById String
+}

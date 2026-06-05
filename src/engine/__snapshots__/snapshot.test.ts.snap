@@ -15,24 +15,37 @@ exports[`golden snapshot > generates a stable case + rendered documents at (buri
       "name": "Cole Voss",
       "type": "person",
     },
+    "editor": {
+      "factionId": "the-press",
+      "id": "editor",
+      "name": "Dale Frey",
+      "type": "person",
+    },
     "flat": {
       "id": "flat",
       "name": "the victim's flat on Delmar",
       "type": "place",
     },
+    "patron": {
+      "factionId": "the-heights",
+      "id": "patron",
+      "name": "Vera Mott",
+      "type": "person",
+    },
+    "reporter": {
+      "factionId": "the-press",
+      "id": "reporter",
+      "name": "Iris Pike",
+      "type": "person",
+    },
     "suspect_b": {
       "id": "suspect_b",
-      "name": "Otis Mott",
+      "name": "Sol Crane",
       "type": "person",
     },
     "victim": {
       "id": "victim",
       "name": "Mara Hale",
-      "type": "person",
-    },
-    "witness": {
-      "id": "witness",
-      "name": "Sol Crane",
       "type": "person",
     },
     "witness_phone": {
@@ -51,6 +64,13 @@ exports[`golden snapshot > generates a stable case + rendered documents at (buri
     },
     {
       "object": "flat",
+      "predicate": "at-scene",
+      "subject": "culprit",
+      "text": "Cole Voss was at the victim's flat on Delmar.",
+      "truthful": true,
+    },
+    {
+      "object": "flat",
       "predicate": "location@2300",
       "subject": "culprit",
       "text": "Cole Voss was at the victim's flat on Delmar at 2300.",
@@ -59,8 +79,8 @@ exports[`golden snapshot > generates a stable case + rendered documents at (buri
     {
       "object": "flat",
       "predicate": "location@2300",
-      "subject": "witness",
-      "text": "Sol Crane was near the victim's flat on Delmar at 2300.",
+      "subject": "patron",
+      "text": "Vera Mott was near the victim's flat on Delmar at 2300.",
       "truthful": true,
     },
   ],
@@ -70,7 +90,7 @@ exports[`golden snapshot > generates a stable case + rendered documents at (buri
       "fidelity": "true",
       "id": "rec_casefile",
       "leads": [
-        "witness",
+        "patron",
         "culprit",
         "suspect_b",
         "flat",
@@ -89,10 +109,9 @@ exports[`golden snapshot > generates a stable case + rendered documents at (buri
         "across_town",
         "culprit",
       ],
-      "rendered": "Statement of Sol Crane
+      "rendered": "Statement of Vera Mott
 [witness-statement · fidelity recorded internally]
-  • Sol Crane states they were at the Westside bar at 2300.
-  • Sol Crane states Cole Voss was with them at the Westside bar at 2300.",
+  • Vera Mott swears they and Cole Voss were across town at the Westside bar at 2300.",
       "type": "witness-statement",
     },
     {
@@ -102,10 +121,22 @@ exports[`golden snapshot > generates a stable case + rendered documents at (buri
       "leads": [
         "flat",
       ],
-      "rendered": "Telephone records — Sol Crane
+      "rendered": "Telephone records — Vera Mott
 [phone-records · fidelity recorded internally]
-  • Sol Crane's line placed a call from beside the victim's flat on Delmar at 2300.",
+  • A call from Vera Mott's line hit the tower beside the victim's flat on Delmar at 2300 — not across town.",
       "type": "phone-records",
+    },
+    {
+      "clearanceCost": 1,
+      "fidelity": "true",
+      "id": "rec_property",
+      "leads": [
+        "patron",
+      ],
+      "rendered": "Property & associations
+[property-record · fidelity recorded internally]
+  • Cole Voss's effects place him near the victim's flat on Delmar.",
+      "type": "property-record",
     },
     {
       "clearanceCost": 1,
@@ -116,21 +147,33 @@ exports[`golden snapshot > generates a stable case + rendered documents at (buri
       ],
       "rendered": "Autopsy — Mara Hale
 [autopsy · fidelity recorded internally]
-  • Time of death fixed at 2300; struck during a late-night argument.
-  • Mara Hale died at the victim's flat on Delmar.",
+  • Time of death is fixed at 2300.
+  • The injuries are consistent with foul play — struck during a late-night argument.",
       "type": "autopsy",
     },
     {
       "clearanceCost": 1,
-      "fidelity": "true",
-      "id": "rec_property",
+      "fidelity": "biased",
+      "id": "rec_decoy_reporter",
       "leads": [
-        "witness",
+        "reporter",
       ],
-      "rendered": "Property & associations
-[property-record · fidelity recorded internally]
-  • Cole Voss and Sol Crane are long-time associates.",
-      "type": "property-record",
+      "rendered": "Anonymous tip — Iris Pike
+[witness-statement · fidelity recorded internally]
+  • Grapevine ties Iris Pike to Mara Hale's death — a contract job ordered from above.",
+      "type": "witness-statement",
+    },
+    {
+      "clearanceCost": 1,
+      "fidelity": "biased",
+      "id": "rec_decoy_editor",
+      "leads": [
+        "editor",
+      ],
+      "rendered": "Anonymous tip — Dale Frey
+[witness-statement · fidelity recorded internally]
+  • Grapevine ties Dale Frey to Mara Hale's death — a second hand at the scene.",
+      "type": "witness-statement",
     },
   ],
   "seed": 7,
@@ -140,12 +183,19 @@ exports[`golden snapshot > generates a stable case + rendered documents at (buri
       "rec_witness_stmt",
       "rec_phone",
     ],
+    "keyFact": "where",
     "predicate": "location@2300",
+    "trueAnswers": {
+      "how": "homicide",
+      "when": "2300",
+      "where": "flat",
+      "who": "culprit",
+    },
   },
   "suspects": [
     "culprit",
     "suspect_b",
-    "witness",
+    "patron",
   ],
 }
 `;

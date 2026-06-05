@@ -1,0 +1,486 @@
+// Mound City — The Registry schema, POSTGRES target (migration plan).
+//
+// This is the migrated form of prisma/schema.prisma (the SQLite dev schema):
+// the SQLite "shims" become native Postgres types — String-union "enums" become
+// real `enum`s (with @map for reserved/hyphenated values so the stored values are
+// unchanged), JSON-encoded array columns become `String[]`, and JSON objects
+// become `Json` (jsonb). Determinism is preserved (ids are seed-derived, copied
+// verbatim by the transfer script). Apply with:
+//   DATABASE_URL=postgresql://mound:mound@127.0.0.1:5432/registry \
+//     prisma db push --schema prisma/schema.postgres.prisma
+// Rollback = use prisma/schema.prisma (sqlite); it stays the committed default.
+//
+// AGE (graph) + PostGIS (zones) are enabled by prisma/postgres/extensions.sql when
+// the apache/age image is available; the foundation does not use them yet.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../server/generated/pg"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Fidelity {
+  fTrue    @map("true")
+  fPartial @map("partial")
+  fBiased  @map("biased")
+  fFalse   @map("false")
+}
+
+enum ReportType {
+  incident
+  arrest
+  accident
+  investigation
+  analytical
+  useOfForce      @map("use-of-force")
+  internalAffairs @map("internal-affairs")
+  criminalCase    @map("criminal-case")
+}
+
+enum MannerOfDeath {
+  natural
+  accident
+  suicide
+  homicide
+  undetermined
+}
+
+enum IADisposition {
+  sustained
+  notSustained @map("not-sustained")
+  exonerated
+  unfounded
+}
+
+enum UserRole {
+  clerk
+  detective
+  prosecutor
+  judge
+  auditor
+  admin
+}
+
+model PersonRegistration {
+  id       String           @id
+  name     String
+  aliases  String[]         @default([]) // native array (was JSON String)
+  features Json?            // jsonb (was JSON String)
+  binding  IdentityBinding?
+}
+
+model IdentityBinding {
+  id           String             @id
+  personId     String             @unique
+  person       PersonRegistration @relation(fields: [personId], references: [id])
+  trueName     String
+  trueFeatures Json?
+}
+
+model Location {
+  id     String  @id
+  name   String
+  kind   String  @default("address")
+  zoneId String?
+}
+
+model Organization {
+  id   String @id
+  name String
+  kind String @default("org")
+}
+
+model MorticianRecord {
+  id             String   @id
+  subjectId      String
+  causeOfDeath   String?
+  mannerHint     String?
+  notes          String?
+  enteredById    String
+  motive         String?
+  fidelity       Fidelity @default(fTrue)
+  lastEditedById String?
+  enteredAt      String?
+}
+
+model PoliceRecord {
+  id             String     @id
+  reportType     ReportType
+  subjectId      String?
+  locationId     String?
+  occurredAt     String?
+  narrative      String?
+  enteredById    String
+  motive         String?
+  fidelity       Fidelity   @default(fTrue)
+  lastEditedById String?
+
+  incident        IncidentReport?
+  arrest          ArrestReport?
+  accident        AccidentReport?
+  investigation   InvestigationReport?
+  analytical      AnalyticalReport?
+  useOfForce      UseOfForceReport?
+  internalAffairs InternalAffairsReport?
+  criminalCase    CriminalCaseReport?
+  cadDispatch     CADDispatchLog?
+  fieldInterview  FieldInterviewCard?
+  booking         BookingReport?
+  supplemental    SupplementalReport?
+  bolo            BOLO?
+  warrant         Warrant?
+  evidenceLog     EvidenceLog?
+}
+
+model IncidentReport {
+  id                         String       @id
+  policeRecordId             String       @unique
+  policeRecord               PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  involved                   String[]     @default([])
+  witnesses                  String[]     @default([])
+  conditions                 String?
+  preliminaryActions         String?
+  offenseCode                String?
+  victimOffenderRelationship String?
+  weapon                     String?
+  disposition                String?
+}
+
+model ArrestReport {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  arresteeId     String
+  charges        String[]     @default([])
+  probableCause  String?
+  evidence       String[]     @default([])
+  booking        String?
+  mirandaGiven   Boolean      @default(false)
+  offenseCode    String?
+  armedWith      String?
+  disposition    String?
+}
+
+model AccidentReport {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  weather        String?
+  vehicles       String[]     @default([])
+  driverId       String?
+  passengers     String[]     @default([])
+  injuries       String?
+  citations      String[]     @default([])
+}
+
+model InvestigationReport {
+  id                 String       @id
+  policeRecordId     String       @unique
+  policeRecord       PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  leadInvestigatorId String?
+  evidenceLog        String[]     @default([])
+  interviews         String[]     @default([])
+  personsOfInterest  String[]     @default([])
+  status             String?
+  findings           String?
+}
+
+model AnalyticalReport {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  dataSources    String[]     @default([])
+  method         String?
+  patterns       String?
+  scope          String?
+  conclusions    String?
+  analystId      String?
+}
+
+model UseOfForceReport {
+  id               String       @id
+  policeRecordId   String       @unique
+  policeRecord     PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  officers         String[]     @default([])
+  subjectId        String?
+  forceLevel       String?
+  justification    String?
+  injuries         String?
+  supervisorReview String?
+}
+
+model InternalAffairsReport {
+  id               String         @id
+  policeRecordId   String         @unique
+  policeRecord     PoliceRecord   @relation(fields: [policeRecordId], references: [id])
+  subjectOfficerId String?
+  complainantId    String?
+  allegation       String?
+  findings         String?
+  disposition      IADisposition?
+  confidentiality  String?
+}
+
+model CriminalCaseReport {
+  id                   String       @id
+  policeRecordId       String       @unique
+  policeRecord         PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  caseNumber           String?
+  defendants           String[]     @default([])
+  charges              String[]     @default([])
+  consolidatedEvidence String[]     @default([])
+  witnessList          String[]     @default([])
+  linkedReports        String[]     @default([])
+  prosecutorId         String?
+}
+
+model DeathCertificate {
+  id             String        @id
+  subjectId      String
+  mannerOfDeath  MannerOfDeath @default(undetermined)
+  causeOfDeath   String?
+  pronouncedAt   String?
+  certifierId    String?
+  enteredById    String
+  motive         String?
+  fidelity       Fidelity      @default(fTrue)
+  lastEditedById String?
+}
+
+model AutopsyReport {
+  id            String   @id
+  subjectId     String
+  deathCertId   String?
+  causeFindings String?
+  woundPattern  String?
+  timeOfDeath   String?
+  examinerId    String?
+  enteredById   String
+  motive        String?
+  fidelity      Fidelity @default(fTrue)
+}
+
+model ToxicologyReport {
+  id          String   @id
+  subjectId   String
+  autopsyId   String?
+  substances  String[] @default([])
+  levels      Json?
+  findings    String?
+  analystId   String?
+  enteredById String
+  fidelity    Fidelity @default(fTrue)
+}
+
+model MEInvestigationReport {
+  id             String   @id
+  subjectId      String
+  locationId     String?
+  sceneSummary   String?
+  bodyPosition   String?
+  investigatorId String?
+  enteredById    String
+  fidelity       Fidelity @default(fTrue)
+}
+
+model BodyChart {
+  id          String   @id
+  subjectId   String
+  diagram     String[] @default([])
+  notes       String?
+  enteredById String
+  fidelity    Fidelity @default(fTrue)
+}
+
+model ChainOfCustody {
+  id          String   @id
+  itemRef     String
+  events      String[] @default([])
+  enteredById String
+  fidelity    Fidelity @default(fTrue)
+}
+
+model BodyReleaseForm {
+  id          String   @id
+  subjectId   String
+  releasedTo  String?
+  releasedAt  String?
+  enteredById String
+  fidelity    Fidelity @default(fTrue)
+}
+
+model CourtRecord {
+  id             String   @id
+  caseRef        String?
+  court          String?
+  judgeId        String?
+  rulingType     String?
+  ruling         String?
+  ruledAt        String?
+  parties        String[] @default([])
+  enteredById    String
+  motive         String?
+  fidelity       Fidelity @default(fTrue)
+  lastEditedById String?
+}
+
+model CADDispatchLog {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  callType       String?
+  dispatchedAt   String?
+  units          String[]     @default([])
+  callerInfo     String?
+  timeline       String[]     @default([])
+}
+
+model FieldInterviewCard {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  intervieweeId  String?
+  contactInfo    String?
+  circumstances  String?
+  officerId      String?
+}
+
+model BookingReport {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  arresteeId     String?
+  charges        String[]     @default([])
+  property       String[]     @default([])
+  bookedAt       String?
+}
+
+model SupplementalReport {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  parentRecordId String
+  addendum       String?
+  supplementedAt String?
+}
+
+model BOLO {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  targetType     String?
+  description    String?
+  issuedAt       String?
+  active         Boolean      @default(true)
+}
+
+model Warrant {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  warrantType    String?
+  subjectId      String?
+  issuingJudgeId String?
+  charges        String[]     @default([])
+  bail           String?
+  issuedAt       String?
+}
+
+model EvidenceLog {
+  id             String       @id
+  policeRecordId String       @unique
+  policeRecord   PoliceRecord @relation(fields: [policeRecordId], references: [id])
+  items          String[]     @default([])
+  custodyId      String?
+  collectedAt    String?
+}
+
+model RegistryUser {
+  id        String   @id
+  name      String
+  role      UserRole @default(clerk)
+  clearance Int      @default(1)
+}
+
+model AuditLogEntry {
+  id         String @id
+  seq        Int    @unique
+  actorId    String
+  action     String
+  targetType String
+  targetId   String
+  payload    Json?
+  prevHash   String
+  hash       String
+  at         String
+}
+
+model SealedRecord {
+  id         String  @id
+  targetType String
+  targetId   String
+  tier       Int     @default(1)
+  reason     String?
+  sealedById String
+  sealedAt   String?
+}
+
+model UnsealPetition {
+  id             String   @id
+  sealedRecordId String
+  petitionerId   String
+  evidenceBundle String[] @default([])
+  status         String   @default("open")
+  filedAt        String?
+}
+
+model UnsealRuling {
+  id         String  @id
+  petitionId String  @unique
+  judgeId    String
+  granted    Boolean
+  reason     String?
+  ruledAt    String?
+}
+
+model Publication {
+  id            String  @id
+  targetType    String
+  targetId      String
+  publishedById String
+  publishedAt   String?
+}
+
+/// The hidden ground-truth log — the sim's answer key. NEVER exposed publicly.
+model GroundTruthLog {
+  id         String  @id
+  eventId    String  @unique
+  kind       String
+  culpritId  String
+  victimId   String?
+  locationId String?
+  at         String
+  truth      Json
+}
+
+/// A cold case the sim produced (player-facing; the answer lives in GroundTruthLog).
+model ColdCase {
+  id            String  @id
+  eventId       String
+  state         String  @default("cold")
+  determination String?
+}
+
+/// A sim-authored record (the distorted exhaust), persisted into the Registry.
+model SimRecord {
+  id          String @id
+  caseId      String
+  type        String
+  title       String
+  fidelity    String
+  claims      Json
+  enteredById String
+}

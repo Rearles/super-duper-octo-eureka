@@ -2,12 +2,22 @@ import type {
   AuthoredWorld,
   CaseCore,
   CaseRecord,
+  CaseRole,
   Claim,
   Entity,
   GameCase,
   Person,
   Solution,
 } from "./types";
+import {
+  CRUX_STRATEGIES,
+  THEORY_SLOTS,
+  contestedSlot,
+  cruxPredicate,
+  cruxTruth,
+  mkClue,
+  type CruxContext,
+} from "./crux";
 
 /** Deterministic seeded PRNG (mulberry32). Same seed → identical procgen. */
 function mulberry32(seed: number): () => number {
@@ -54,17 +64,62 @@ function requirePlace(world: AuthoredWorld, id: string): Entity {
   return place;
 }
 
+/** The cast the lie strategies need: the liar (`witness`) and the framed innocent. */
+interface ResolvedCast {
+  witness: Person;
+  framed: Person;
+}
+
+/**
+ * Resolve the witness (whose statement carries the alibi-style lie) and the
+ * framed innocent (the who-crux decoy) — preferring AUTHORED people so the cast
+ * the author wrote actually appears, with procgen strangers as the fallback.
+ *
+ * - **framed**: a factionless authored person reads as an innocent bystander
+ *   (e.g. the wrongly-accused driver). If none, a procgen stranger — never an
+ *   authored faction member (framing one of those isn't "innocent").
+ * - **witness** (the cover-up's mouthpiece): preferentially a member of the
+ *   culprit's OWN protective/vindictive faction, so the false statement is
+ *   sourced from the camp shielding the culprit; then any authored non-principal;
+ *   then a procgen stranger. Naming them later carries faction consequences.
+ */
+function resolveCast(
+  world: AuthoredWorld,
+  core: CaseCore,
+  rng: () => number,
+  uniqueName: () => string,
+): ResolvedCast {
+  const principals = new Set([core.culpritId, core.victimId]);
+  const pool = world.people.filter((p) => !principals.has(p.id));
+  const pick = (cands: Person[]): Person | undefined =>
+    cands.length ? cands[Math.floor(rng() * cands.length)] : undefined;
+
+  const factionless = pool.filter((p) => !p.factionId);
+  const framed: Person = pick(factionless) ?? { id: "suspect_b", type: "person", name: uniqueName() };
+
+  // The culprit's faction, if it's one that would cover for its own.
+  const culprit = world.people.find((p) => p.id === core.culpritId);
+  const culpritFaction = world.factions.find((f) => f.id === culprit?.factionId);
+  const shields = culpritFaction?.temperament === "protective" || culpritFaction?.temperament === "vindictive";
+  const others = pool.filter((p) => p.id !== framed.id);
+  const mouthpieces = shields ? others.filter((p) => p.factionId === culpritFaction?.id) : [];
+
+  const witness: Person =
+    pick(mouthpieces) ?? pick(others) ?? { id: "witness", type: "person", name: uniqueName() };
+
+  return { witness, framed };
+}
+
 /**
  * Generate one playable case from a HAND-AUTHORED world + a seed (§2.5 / §5.4).
  *
  * The author owns the hard truths (the `CaseCore` 5W+H + the `keyFact` crux);
- * this generator builds the record layer ON TOP — it casts the witness and a
- * bystander procedurally (deterministically from the seed), and **places the
- * lie against the `keyFact`**: a false alibi a true record (phone logs)
- * disproves. The authored culprit/victim/scene/time/method are never invented.
- *
- * `keyFact` currently realizes the where/when "alibi" crux (the Buried Witness
- * pattern); other crux dimensions fall back to it until more archetypes exist.
+ * this generator builds the record layer ON TOP. It **places the lie against the
+ * authored `keyFact`** by dispatching to the matching strategy in `crux.ts`
+ * (where=false alibi, who=framed innocent, when=shifted timeline, how/what=false
+ * ruling vs. true autopsy), casts the witness/framed from authored people when
+ * available, and wraps the strategy's records in a shared case-file + property
+ * record. The authored culprit/victim/scene/time/method are never invented.
  */
 export function generateCase(world: AuthoredWorld, seed: number, caseId?: string): GameCase {
   const core = resolveCore(world, caseId);
@@ -87,25 +142,39 @@ export function generateCase(world: AuthoredWorld, seed: number, caseId?: string
   const victim = requirePerson(world, core.victimId, "victim");
   const scene = requirePlace(world, core.whereId);
 
-  // Procgen-cast people + places (deterministic from the seed).
-  const witness: Person = { id: "witness", type: "person", name: uniqueName() };
-  const bystander: Person = { id: "suspect_b", type: "person", name: uniqueName() };
+  // Cast the liar + framed innocent (authored-first), plus fixed procgen props.
+  const { witness, framed } = resolveCast(world, core, rng, uniqueName);
   const bar: Entity = { id: "across_town", type: "place", name: "the Westside bar" };
   const phone: Entity = { id: "witness_phone", type: "phone", name: "the witness's telephone line" };
 
   const when = core.when;
-  const at = `location@${when}`; // the contested predicate the keyFact crux turns on
+  const predicate = cruxPredicate(core);
+  const ctx: CruxContext = {
+    core,
+    culprit,
+    victim,
+    scene,
+    witness,
+    framed,
+    elsewhere: bar,
+    phone,
+    when,
+    predicate,
+    claim,
+  };
 
-  const entities: Record<string, Entity> = Object.fromEntries(
-    [culprit, victim, scene, witness, bystander, bar, phone].map((e) => [e.id, e]),
-  );
+  // Place the lie against the authored crux (fallback: where/alibi).
+  const strategy = CRUX_STRATEGIES[core.keyFact] ?? CRUX_STRATEGIES.where;
+  const lie = strategy(ctx);
 
-  // Ground truth, projected from the authored core: culprit killed victim at the
-  // scene at `when`; the witness was there too.
+  const entities: Record<string, Entity> = {};
+  for (const e of [culprit, victim, scene, witness, framed, bar, phone]) entities[e.id] = e;
+
+  // Ground truth, projected from the authored core + the crux's canonical facts.
   const groundTruth: Claim[] = [
     claim(culprit.id, "killed", victim.id, true, `${culprit.name} killed ${victim.name}.`),
-    claim(culprit.id, at, scene.id, true, `${culprit.name} was at ${scene.name} at ${when}.`),
-    claim(witness.id, at, scene.id, true, `${witness.name} was near ${scene.name} at ${when}.`),
+    claim(culprit.id, "at-scene", scene.id, true, `${culprit.name} was at ${scene.name}.`),
+    ...cruxTruth(ctx),
   ];
 
   const caseFile: CaseRecord = {
@@ -117,52 +186,8 @@ export function generateCase(world: AuthoredWorld, seed: number, caseId?: string
     claims: [
       claim(victim.id, "found-dead", scene.id, true, `${victim.name} was found dead at ${scene.name}; ruled inconclusive.`),
     ],
-    leads: [witness.id, culprit.id, bystander.id, scene.id],
+    leads: [witness.id, culprit.id, framed.id, scene.id],
     clearanceCost: 0,
-  };
-
-  // THE LIE (placed against the keyFact): the witness falsely alibis the culprit
-  // (and themselves) across town at `when`.
-  const witnessStatement: CaseRecord = {
-    id: "rec_witness_stmt",
-    type: "witness-statement",
-    title: `Statement of ${witness.name}`,
-    source: witness.id,
-    fidelity: "false",
-    claims: [
-      claim(witness.id, at, bar.id, false, `${witness.name} states they were at ${bar.name} at ${when}.`),
-      claim(culprit.id, at, bar.id, false, `${witness.name} states ${culprit.name} was with them at ${bar.name} at ${when}.`),
-    ],
-    leads: [phone.id, bar.id, culprit.id],
-    clearanceCost: 1,
-  };
-
-  // THE PROOF: phone logs place the witness at the scene at `when` — disproving the statement.
-  const phoneRecords: CaseRecord = {
-    id: "rec_phone",
-    type: "phone-records",
-    title: `Telephone records — ${witness.name}`,
-    source: witness.id,
-    fidelity: "true",
-    claims: [
-      claim(witness.id, at, scene.id, true, `${witness.name}'s line placed a call from beside ${scene.name} at ${when}.`),
-    ],
-    leads: [scene.id],
-    clearanceCost: 1,
-  };
-
-  const autopsy: CaseRecord = {
-    id: "rec_autopsy",
-    type: "autopsy",
-    title: `Autopsy — ${victim.name}`,
-    source: victim.id,
-    fidelity: "true",
-    claims: [
-      claim(victim.id, "death-time", when, true, `Time of death fixed at ${when}; ${core.how}.`),
-      claim(victim.id, at, scene.id, true, `${victim.name} died at ${scene.name}.`),
-    ],
-    leads: [scene.id],
-    clearanceCost: 1,
   };
 
   const property: CaseRecord = {
@@ -178,20 +203,100 @@ export function generateCase(world: AuthoredWorld, seed: number, caseId?: string
     clearanceCost: 1,
   };
 
+  // A generic autopsy unless the crux strategy already produced one (how/what own it).
+  const strategyHasAutopsy = lie.records.some((r) => r.type === "autopsy");
+  const genericAutopsy: CaseRecord[] = strategyHasAutopsy
+    ? []
+    : [
+        {
+          id: "rec_autopsy",
+          type: "autopsy",
+          title: `Autopsy — ${victim.name}`,
+          source: victim.id,
+          fidelity: "true",
+          claims: [
+            claim(victim.id, "death-time", when, true, `Time of death fixed at ${when}; ${core.how}.`),
+            claim(victim.id, "died-at", scene.id, true, `${victim.name} died at ${scene.name}.`),
+          ],
+          leads: [scene.id],
+          clearanceCost: 1,
+        },
+      ];
+
+  // Red-herring decoys (capped at 2): the "someone else did it" theories the
+  // cover-up seeds, each an unverifiable rumor implicating ANOTHER faction member
+  // (the boss / second-hand theories). They add misdirection without touching the
+  // solvable spine — `keyContradiction` is set explicitly, and these aren't disproved.
+  const taken = new Set([culprit.id, victim.id, framed.id, witness.id]);
+  const decoyPool = world.people.filter((p) => p.factionId && !taken.has(p.id));
+  const theories = ["a contract job ordered from above", "a second hand at the scene"];
+  const decoys: CaseRecord[] = [];
+  for (const m of decoyPool) {
+    if (decoys.length >= 2) break;
+    entities[m.id] = m;
+    decoys.push({
+      id: `rec_decoy_${m.id}`,
+      type: "witness-statement",
+      title: `Anonymous tip — ${m.name}`,
+      source: m.id,
+      fidelity: "biased",
+      claims: [
+        claim(m.id, "rumored-involved", victim.id, false, `Grapevine ties ${m.name} to ${victim.name}'s death — ${theories[decoys.length]}.`),
+      ],
+      leads: [m.id],
+      clearanceCost: 1,
+    });
+  }
+
+  const records: CaseRecord[] = [caseFile, ...lie.records, property, ...genericAutopsy, ...decoys];
+
+  // True clues for the NON-contested theory slots, so the player can fill all four
+  // (the contested slot already carries its false+true pair from the strategy).
+  // Carrier records: who → property, where/when/how → the autopsy.
+  const contested = contestedSlot(core);
+  const autopsyRec = records.find((r) => r.type === "autopsy") ?? property;
+  const slotTrue: Record<string, { value: string; carrier: CaseRecord; text: string }> = {
+    who: { value: culprit.id, carrier: property, text: `${culprit.name}'s effects place him near ${scene.name}.` },
+    where: { value: scene.id, carrier: autopsyRec, text: `${victim.name}'s body was found at ${scene.name}.` },
+    when: { value: when, carrier: autopsyRec, text: `Time of death is fixed at ${when}.` },
+    how: { value: "homicide", carrier: autopsyRec, text: `The injuries are consistent with foul play — ${core.how}.` },
+  };
+  for (const slot of THEORY_SLOTS) {
+    if (slot === contested) continue;
+    const t = slotTrue[slot];
+    t.carrier.clues = [...(t.carrier.clues ?? []), mkClue(t.carrier.id, slot, t.value, "true", t.text)];
+  }
+
+  const clues = records.flatMap((rec) => rec.clues ?? []);
+
   const solution: Solution = {
     culpritId: culprit.id,
-    keyContradiction: [witnessStatement.id, phoneRecords.id],
-    predicate: at,
+    keyContradiction: lie.keyContradiction,
+    predicate,
+    keyFact: core.keyFact,
+    trueAnswers: { who: culprit.id, where: scene.id, when, how: "homicide" },
   };
+
+  const roles: Record<string, CaseRole> = {
+    [culprit.id]: "culprit",
+    [victim.id]: "victim",
+    [witness.id]: "witness",
+    [framed.id]: core.keyFact === "who" ? "person-of-interest" : "bystander",
+  };
+
+  // Accusable suspects: the culprit + the framed innocent + the witness (deduped).
+  const suspects = [...new Set([culprit.id, framed.id, witness.id])];
 
   return {
     seed,
     coreId: core.id,
     entities,
     groundTruth,
-    records: [caseFile, witnessStatement, phoneRecords, autopsy, property],
+    records,
+    clues,
     caseFileId: caseFile.id,
     solution,
-    suspects: [culprit.id, bystander.id, witness.id],
+    suspects,
+    roles,
   };
 }

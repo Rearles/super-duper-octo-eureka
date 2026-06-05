@@ -15,7 +15,8 @@ export type RecordType =
   | "witness-statement"
   | "phone-records"
   | "autopsy"
-  | "property-record";
+  | "property-record"
+  | "ruling";
 
 /** How faithfully a record reflects ground truth. */
 export type Fidelity = "true" | "partial" | "biased" | "false";
@@ -39,9 +40,38 @@ export interface CaseRecord {
   source: string; // the entity this record concerns / comes from
   fidelity: Fidelity;
   claims: Claim[];
+  /** atomic player-facing evidence (hypothesis-board layer); the player deduces from these */
+  clues?: Clue[];
   leads: string[]; // entity ids referenced (become requestable)
   clearanceCost: number;
 }
+
+/**
+ * One atomic piece of player-facing evidence that points a single case slot
+ * toward a value — the deduction currency of the hypothesis board. The player
+ * weighs clues to fill the WHO/WHERE/WHEN/HOW theory; `fidelity` is hidden, so a
+ * `false`/`biased` clue (the planted lie) must be outweighed by true ones. Unlike
+ * a `Claim`, a clue states EVIDENCE, never a conclusion.
+ */
+export interface Clue {
+  id: string;
+  /** the record this clue surfaced from */
+  recordId: string;
+  /** atomic evidence prose — never "X did it" */
+  text: string;
+  /** which 5W+H slot this clue speaks to */
+  slot: CaseFact;
+  /** the value it points the slot toward (entity id or literal token) */
+  value: string;
+  /** hidden truthfulness against ground truth */
+  fidelity: Fidelity;
+}
+
+/** The player's working hypothesis: a chosen value per slot (unset slots absent). */
+export type Theory = Partial<Record<CaseFact, string>>;
+
+/** Tiered solvability (refined Pillar 1 §1.2/§5.4): provable | crackable | underdetermined | blank. */
+export type Determination = "provable" | "crackable" | "underdetermined" | "blank";
 
 export interface Solution {
   culpritId: string;
@@ -49,6 +79,12 @@ export interface Solution {
   keyContradiction: [string, string];
   /** the predicate the contradiction turns on */
   predicate: string;
+  /** which authored crux the lie attacks (drives solver branching); defaults to "where" when absent */
+  keyFact?: CaseFact;
+  /** the true per-slot answers (who/where/when/how) — internal; never shown as a grade */
+  trueAnswers?: Theory;
+  /** tiered-solvability classification (refined Pillar 1); computed on demand, optional */
+  determination?: Determination;
 }
 
 export interface GameCase {
@@ -59,11 +95,15 @@ export interface GameCase {
   /** ground-truth facts as canonical (always-truthful) claims */
   groundTruth: Claim[];
   records: CaseRecord[];
+  /** flat aggregate of every record's clues (hypothesis-board layer) */
+  clues?: Clue[];
   /** the record handed to the player for free at the start */
   caseFileId: string;
   solution: Solution;
   /** entity ids the player may accuse */
   suspects: string[];
+  /** personId → role in this case (culprit/victim/witness/framed…); drives faction stake */
+  roles?: Record<string, CaseRole>;
 }
 
 // ---------------------------------------------------------------------------
@@ -142,6 +182,8 @@ export interface Faction {
   /** authored inter-faction web (GCD §2.5) — faction ids */
   allies?: string[];
   rivals?: string[];
+  /** the broad bloc this faction belongs to (fluid over the sim — GCD §2.5 v2.0) */
+  bloc?: BlocId;
 }
 
 /** The complete hand-authored base the generator builds on top of. */
@@ -151,6 +193,108 @@ export interface AuthoredWorld {
   people: Person[];
   /** authored place entities (scenes/locations) referenced by `CaseCore.whereId` and faction interests */
   places: Entity[];
+}
+
+// ---------------------------------------------------------------------------
+// Society-sim: blocs + allegiance portfolios (GCD §2.5 v2.0). Additive — the
+// authored Faction/FactionMember layer above stays the seed.
+// ---------------------------------------------------------------------------
+
+/** The seven broad blocs the society-sim is organized into. */
+export type BlocId =
+  | "press"
+  | "political-machine"
+  | "organized-crime"
+  | "unorganized-crime"
+  | "law-enforcement"
+  | "reform-civic"
+  | "business-industry";
+
+/** A broad faction bloc; sub-factions belong to one (fluidly). */
+export interface Bloc {
+  id: BlocId;
+  name: string;
+  description: string;
+}
+
+/**
+ * An allegiance tie from an actor (a person OR a faction, incl. the detective) to a
+ * faction. Affiliation is a PORTFOLIO, not a single membership: an actor may hold
+ * several ties, some secret. `strength` is 0..1; `since` is an in-world clock token.
+ * (The unifying mechanic for flipping, corruption, moles, and defection cascades.)
+ */
+export interface Allegiance {
+  actorId: string;
+  factionId: string;
+  strength: number;
+  /** public (what the world sees) vs secret (a mole / bought official) */
+  secret: boolean;
+  /** role/rank within the faction, if any */
+  role?: string;
+  /** in-world time the tie formed */
+  since: string;
+}
+
+/** An append-only allegiance-history event (so historical ties can be reconstructed). */
+export interface AllegianceChange {
+  actorId: string;
+  factionId: string;
+  kind: "formed" | "strengthened" | "weakened" | "broken" | "flipped";
+  at: string;
+  note?: string;
+}
+
+// ---------------------------------------------------------------------------
+// Society-sim: relationships, pacts & territory (diplomacy plan, GCD §2.5).
+// ---------------------------------------------------------------------------
+
+/** Disposition between two factions (across OR within a bloc). */
+export type Stance = "allied" | "aligned" | "neutral" | "rival" | "at-war";
+
+/** A relationship edge between two factions, with trust. Order-insensitive. */
+export interface Relationship {
+  aId: string;
+  bId: string;
+  stance: Stance;
+  /** -1 (hostile) .. 1 (trusting) */
+  trust: number;
+}
+
+/** A grievance one faction holds against another — feeds trust + pact stability. */
+export interface Grievance {
+  wrongedId: string;
+  byId: string;
+  kind: string;
+  when: string;
+  weight: number;
+}
+
+export type PactType =
+  | "non-aggression"
+  | "territory"
+  | "tribute"
+  | "alliance"
+  | "ceasefire"
+  | "protection";
+export type PactStatus = "active" | "strained" | "broken" | "betrayed";
+
+/** A first-class, temporal agreement between 2+ factions; forms/strains/breaks over ticks. */
+export interface Pact {
+  id: string;
+  type: PactType;
+  parties: string[];
+  terms?: string;
+  formedAt: string;
+  status: PactStatus;
+  /** 0 (collapsing) .. 1 (rock-solid) */
+  stability: number;
+}
+
+/** Which faction controls a zone, since when (append-only; territory changes over time). */
+export interface TerritoryControl {
+  zoneId: string;
+  factionId: string;
+  since: string;
 }
 
 // ---------------------------------------------------------------------------

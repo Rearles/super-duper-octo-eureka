@@ -37,16 +37,21 @@ export function verifySolvable(gameCase: GameCase): SolvabilityResult {
     return { solvable: false, reason: "No catchable contradiction (a lie a true record disproves)." };
   }
 
-  // 2. Exposing the lie must implicate the culprit (a false alibi on the key predicate).
-  const implicated = gameCase.records.some((r) =>
+  // 2. Exposing the lie must implicate the culprit. Two-pronged, so every crux
+  //    works: EITHER a false claim NAMES the culprit on the key predicate (the
+  //    where/who/when alibi-style cruxes), OR a truthful record claim ties the
+  //    culprit to the scene (the `at-scene` link the how/what strategies emit,
+  //    where the lie contests the victim's cause/event, not the culprit).
+  const culpritId = gameCase.solution.culpritId;
+  const implicatedByLie = gameCase.records.some((r) =>
     r.claims.some(
-      (cl) =>
-        cl.subject === gameCase.solution.culpritId &&
-        cl.predicate === gameCase.solution.predicate &&
-        !cl.truthful,
+      (cl) => cl.subject === culpritId && cl.predicate === gameCase.solution.predicate && !cl.truthful,
     ),
   );
-  if (!implicated) {
+  const linkedToCrime = gameCase.records.some((r) =>
+    r.claims.some((cl) => cl.subject === culpritId && cl.predicate === "at-scene" && cl.truthful),
+  );
+  if (!implicatedByLie && !linkedToCrime) {
     return { solvable: false, reason: "Culprit is not implicated by exposing the lie." };
   }
 
