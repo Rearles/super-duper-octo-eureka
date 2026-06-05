@@ -49,6 +49,7 @@ export const paperTrailWorld = defineWorld({
 
   factions: [
     defineFaction("the-syndicate", "The Calder Group")
+      .bloc("business-industry")
       .describe(
         "A development syndicate that buys what it needs and erases what it can't — insulated, moneyed, and protective of its own.",
       )
@@ -66,6 +67,7 @@ export const paperTrailWorld = defineWorld({
       .rivals("the-press"),
 
     defineFaction("the-press", "The City Ledger")
+      .bloc("press")
       .describe(
         "The city's paper of record, gutted by intimidation but not silenced — still chasing the story that killed June Marsh.",
       )
@@ -82,6 +84,7 @@ export const paperTrailWorld = defineWorld({
       .rivals("the-syndicate", "the-machine"),
 
     defineFaction("the-machine", "City Hall")
+      .bloc("political-machine")
       .describe(
         "The permits-and-coroner apparatus that issues tidy rulings — natural causes, accidental death — for the right friends.",
       )

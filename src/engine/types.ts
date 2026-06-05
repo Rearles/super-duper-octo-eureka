@@ -182,6 +182,8 @@ export interface Faction {
   /** authored inter-faction web (GCD §2.5) — faction ids */
   allies?: string[];
   rivals?: string[];
+  /** the broad bloc this faction belongs to (fluid over the sim — GCD §2.5 v2.0) */
+  bloc?: BlocId;
 }
 
 /** The complete hand-authored base the generator builds on top of. */
@@ -191,6 +193,55 @@ export interface AuthoredWorld {
   people: Person[];
   /** authored place entities (scenes/locations) referenced by `CaseCore.whereId` and faction interests */
   places: Entity[];
+}
+
+// ---------------------------------------------------------------------------
+// Society-sim: blocs + allegiance portfolios (GCD §2.5 v2.0). Additive — the
+// authored Faction/FactionMember layer above stays the seed.
+// ---------------------------------------------------------------------------
+
+/** The seven broad blocs the society-sim is organized into. */
+export type BlocId =
+  | "press"
+  | "political-machine"
+  | "organized-crime"
+  | "unorganized-crime"
+  | "law-enforcement"
+  | "reform-civic"
+  | "business-industry";
+
+/** A broad faction bloc; sub-factions belong to one (fluidly). */
+export interface Bloc {
+  id: BlocId;
+  name: string;
+  description: string;
+}
+
+/**
+ * An allegiance tie from an actor (a person OR a faction, incl. the detective) to a
+ * faction. Affiliation is a PORTFOLIO, not a single membership: an actor may hold
+ * several ties, some secret. `strength` is 0..1; `since` is an in-world clock token.
+ * (The unifying mechanic for flipping, corruption, moles, and defection cascades.)
+ */
+export interface Allegiance {
+  actorId: string;
+  factionId: string;
+  strength: number;
+  /** public (what the world sees) vs secret (a mole / bought official) */
+  secret: boolean;
+  /** role/rank within the faction, if any */
+  role?: string;
+  /** in-world time the tie formed */
+  since: string;
+}
+
+/** An append-only allegiance-history event (so historical ties can be reconstructed). */
+export interface AllegianceChange {
+  actorId: string;
+  factionId: string;
+  kind: "formed" | "strengthened" | "weakened" | "broken" | "flipped";
+  at: string;
+  note?: string;
 }
 
 // ---------------------------------------------------------------------------
