@@ -1,0 +1,11 @@
+# Every file — sole maintainer
+* @rearles
+
+# Core engine (determinism invariants — Pillar 1)
+/src/engine/ @rearles
+
+# Database schemas and raw SQL
+/prisma/ @rearles
+
+# CI/CD, Dependabot, and security workflows
+/.github/ @rearles
