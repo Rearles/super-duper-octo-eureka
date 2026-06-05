@@ -245,6 +245,59 @@ export interface AllegianceChange {
 }
 
 // ---------------------------------------------------------------------------
+// Society-sim: relationships, pacts & territory (diplomacy plan, GCD §2.5).
+// ---------------------------------------------------------------------------
+
+/** Disposition between two factions (across OR within a bloc). */
+export type Stance = "allied" | "aligned" | "neutral" | "rival" | "at-war";
+
+/** A relationship edge between two factions, with trust. Order-insensitive. */
+export interface Relationship {
+  aId: string;
+  bId: string;
+  stance: Stance;
+  /** -1 (hostile) .. 1 (trusting) */
+  trust: number;
+}
+
+/** A grievance one faction holds against another — feeds trust + pact stability. */
+export interface Grievance {
+  wrongedId: string;
+  byId: string;
+  kind: string;
+  when: string;
+  weight: number;
+}
+
+export type PactType =
+  | "non-aggression"
+  | "territory"
+  | "tribute"
+  | "alliance"
+  | "ceasefire"
+  | "protection";
+export type PactStatus = "active" | "strained" | "broken" | "betrayed";
+
+/** A first-class, temporal agreement between 2+ factions; forms/strains/breaks over ticks. */
+export interface Pact {
+  id: string;
+  type: PactType;
+  parties: string[];
+  terms?: string;
+  formedAt: string;
+  status: PactStatus;
+  /** 0 (collapsing) .. 1 (rock-solid) */
+  stability: number;
+}
+
+/** Which faction controls a zone, since when (append-only; territory changes over time). */
+export interface TerritoryControl {
+  zoneId: string;
+  factionId: string;
+  since: string;
+}
+
+// ---------------------------------------------------------------------------
 // Faction runtime (Plan 2 — the §2.5 tension engine, computed not authored).
 // ---------------------------------------------------------------------------
 
