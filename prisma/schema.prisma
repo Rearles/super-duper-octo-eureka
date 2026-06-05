@@ -54,6 +54,76 @@ model Organization {
   kind String @default("org") // "press" | "gang" | "party" | "business" | ...
 }
 
+// ---------------------------------------------------------------------------
+// Governance (access-tiers plan): users/roles, the tamper-evident audit log,
+// sealed-access (seal any record + unseal petitions), and publication.
+// ---------------------------------------------------------------------------
+
+/// A Registry user with a role + clearance (gates reads/writes/official acts).
+model RegistryUser {
+  id        String @id
+  name      String
+  role      String @default("clerk") // clerk|detective|prosecutor|judge|auditor|admin
+  clearance Int    @default(1)
+}
+
+/// Append-only, hash-chained audit entry (tamper-evident). Each row stores
+/// hash(prevHash + payload); recomputing the chain detects any edit/deletion.
+/// Doubles as the factions' sensor net (every view/edit is a logged event).
+model AuditLogEntry {
+  id         String @id
+  seq        Int    @unique
+  actorId    String
+  action     String // view|create|edit|publish|seal|unseal|petition|rule
+  targetType String
+  targetId   String
+  payload    String @default("{}") // JSON
+  prevHash   String
+  hash       String
+  at         String // clock token
+}
+
+/// A seal over ANY record (court ruling, IA file, personnel, warrant, grand-jury).
+model SealedRecord {
+  id         String  @id
+  targetType String
+  targetId   String
+  tier       Int     @default(1) // seal sensitivity tier
+  reason     String?
+  sealedById String
+  sealedAt   String?
+}
+
+/// A petition to unseal a SealedRecord — an evidence bundle a detective files.
+model UnsealPetition {
+  id             String  @id
+  sealedRecordId String
+  petitionerId   String
+  evidenceBundle String  @default("[]") // JSON record GUIDs
+  status         String  @default("open") // open|granted|denied
+  filedAt        String?
+}
+
+/// A judge's ruling on an unseal petition (a machine-owned judge can distort it).
+model UnsealRuling {
+  id         String  @id
+  petitionId String  @unique
+  judgeId    String
+  granted    Boolean
+  reason     String?
+  ruledAt    String?
+}
+
+/// A publication entry — a record made public ("Go Public"); the CQRS public
+/// read-model projects only these, and factions react to what's public.
+model Publication {
+  id            String  @id
+  targetType    String
+  targetId      String
+  publishedById String
+  publishedAt   String?
+}
+
 /// A forgeable mortician/death record (MVP base; the rich death cluster is a
 /// sibling plan). Forgeable fields nullable; enteredBy/motive/fidelity = the seam.
 model MorticianRecord {
