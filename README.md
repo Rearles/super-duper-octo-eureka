@@ -56,7 +56,10 @@ The v2.0 plan set is implemented and tested (**111 tests**):
 | Secret scanning | GitHub secret scanning + push protection |
 | Secret scan (CI) | gitleaks on every push/PR (full history) |
 | Repo health | OpenSSF Scorecard (weekly + on push to `develop`) |
-| Supply-chain | Socket.dev App — Phase 3 |
+| Vulnerability DB scan | OSV-Scanner → Security tab (OSV.dev breadth; PR-diff + full) |
+| Dependency signatures | `npm audit signatures` in CI (provenance/registry signatures) |
+| SBOM | CycloneDX, per push to `develop` + per release (build artifact) |
+| Malicious-package review | Socket.dev GitHub App — install to enable PR risk comments |
 
 Vulnerability disclosure: [SECURITY.md](SECURITY.md)  
 Full phased plan: [`.plans/research-security-and-pr-scanning-tooling_7b1e9c40.plan.md`](.plans/research-security-and-pr-scanning-tooling_7b1e9c40.plan.md)

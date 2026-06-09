@@ -128,24 +128,32 @@ free pick is chosen, the paid alternative is noted, then it lands additively.
       Rules verified with Semgrep 1.165 locally: 0 findings on `src/`+`server/`,
       fire correctly on fixtures, and the `crypto.randomUUID` *comment* in
       `ids.ts` does not false-positive (AST-based, not regex).
-      ⚠️ **Manual remaining:** add the `semgrep` check to branch-protection
-      required checks to make the invariant gate actually *block* merges
-      (today it runs and fails-red but isn't required).
-- [~] **Phase 2b — CodeQL advanced (`security-extended`).** Decision: switch
-      default→advanced. `.github/workflows/codeql.yml` added — matrix over
+      ✓ The `semgrep` check is now in branch-protection required checks, so
+      the invariant gate *blocks* merges (done by the user).
+- [x] **Phase 2b — CodeQL advanced (`security-extended`).** Switched
+      default→advanced. `.github/workflows/codeql.yml` — matrix over
       `javascript-typescript` (security-extended) + `actions` (default suite),
-      `build-mode: none`. Job names mirror default setup so branch-protection
-      required checks keep matching. Triggers scoped to `develop` so a
-      feature-branch push doesn't run it (avoids the default-setup conflict);
-      it first runs on the PR, after default setup is disabled.
-      **Ordered manual steps:** (1) disable CodeQL **default setup** (they
-      conflict — analyze fails otherwise); (2) merge the PR; (3) verify
-      branch-protection required checks still match `Analyze (...)`; drop any
-      separate `CodeQL` umbrella check if it was required (advanced doesn't
-      emit it). Confirm Copilot Autofix is on (free, GA).
-- [ ] **Phase 3 — supply-chain & SBOM.** Socket GitHub App; CycloneDX SBOM
-      artifact in CI; `npm audit signatures`; OSV-Scanner step; Dependabot-vs-
-      Renovate decision.
+      `build-mode: none`. Job names mirror default setup, so branch-protection
+      required checks kept matching with no change needed (advanced still
+      emits the `CodeQL`, `Analyze (javascript-typescript)`, `Analyze (actions)`
+      checks). Merged in #16 with default setup disabled first; all checks
+      green, no conflict. Copilot Autofix confirmed on.
+- [x] **Phase 3a — supply-chain & SBOM (build-it parts).**
+      `.github/workflows/sbom.yml` (CycloneDX via `@cyclonedx/cyclonedx-npm@4.2.1`,
+      verified locally: CycloneDX 1.6, 232 components; uploads an artifact on
+      push to `develop` + per release). `.github/workflows/osv-scanner.yml`
+      (Google's pinned `@v2.3.8` reusable workflows → Security tab; PR-diff +
+      full scan; advisory, not a required check). `npm audit signatures` added
+      to CI as an informational step. README control table updated.
+- [ ] **Phase 3b — supply-chain decisions (yours).**
+      (1) **Socket.dev GitHub App** — install from the GitHub Marketplace (free
+      tier) to get PR comments flagging risky installs (install scripts,
+      typosquats, exfil) that `npm audit`/CodeQL miss. UI-only; the CLI needs a
+      token (documented, not adopted).
+      (2) **Dependabot vs Renovate** — recommendation: **keep Dependabot**
+      (already grouped + security-updating, native, zero extra surface).
+      Renovate is noted as the heavier alternative (richer auto-merge), not
+      adopted now per the low-maintenance posture.
 - [ ] **Phase 4 — container/runtime (Docker env).** Trivy on the apache/age image
       + compose; note fast-check property tests + a DAST baseline for later.
 - [ ] Add a **"Security" section to `README.md`** linking every control (the
