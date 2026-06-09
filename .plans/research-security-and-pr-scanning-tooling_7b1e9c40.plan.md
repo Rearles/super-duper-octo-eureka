@@ -111,9 +111,15 @@ free pick is chosen, the paid alternative is noted, then it lands additively.
 - [x] **Phase 0b — Settings toggles (manual, GitHub UI).** Enabled in
       Settings → Code security: **Secret scanning**, **Push protection**,
       **Dependabot security updates** (auto-fix PRs for known advisories).
-- [ ] **Phase 1 — governance & visible wins.** OpenSSF Scorecard workflow + README
-      badge; `SECURITY.md`, `CODEOWNERS`, PR/issue templates, license; branch
-      protection on `develop`; gitleaks in CI; document commit signing.
+- [x] **Phase 1 — governance & visible wins.** OpenSSF Scorecard workflow
+      (`.github/workflows/scorecard.yml`) + README badge; `SECURITY.md`,
+      `.github/CODEOWNERS`, PR template, issue templates (bug/feature),
+      `CONTRIBUTING.md`, `LICENSE` (MIT); gitleaks as second CI job (full
+      history scan). README Security section added.
+      ⚠️ **Manual remaining:** (a) branch protection on `develop` — enable in
+      Settings → Branches: require PR, require checks (`typecheck · test · audit`
+      + `Analyze (javascript-typescript)`), block force-push, require linear
+      history; (b) commit signing — set up GPG or sigstore/gitsign locally.
 - [ ] **Phase 2 — SAST depth.** Semgrep workflow with the custom invariant rules
       (+ `p/typescript`); decide CodeQL default→advanced (`security-extended`).
       Advise first, then gate on high/critical.

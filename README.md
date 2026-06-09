@@ -44,6 +44,23 @@ The v2.0 plan set is implemented and tested (**111 tests**):
 - **Storage** — SQLite for dev, with a migration path to Postgres (native
   enums / `text[]` / `jsonb`, row-level security).
 
+## Security
+
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/Rearles/super-duper-octo-eureka/badge)](https://securityscorecards.dev/viewer/?uri=github.com/Rearles/super-duper-octo-eureka)
+
+| Control | Detail |
+|---|---|
+| Dependency updates | Dependabot — grouped weekly + security auto-fix PRs |
+| SAST | CodeQL (GitHub default setup) |
+| Secret scanning | GitHub secret scanning + push protection |
+| Secret scan (CI) | gitleaks on every push/PR (full history) |
+| Repo health | OpenSSF Scorecard (weekly + on push to `develop`) |
+| Supply-chain | Socket.dev App — Phase 3 |
+| Custom SAST rules | Semgrep (browser/Node boundary, determinism) — Phase 2 |
+
+Vulnerability disclosure: [SECURITY.md](SECURITY.md)  
+Full phased plan: [`.plans/research-security-and-pr-scanning-tooling_7b1e9c40.plan.md`](.plans/research-security-and-pr-scanning-tooling_7b1e9c40.plan.md)
+
 ## Architecture
 
 The **browser engine** ([src/](src/)) never imports Prisma. All database access
