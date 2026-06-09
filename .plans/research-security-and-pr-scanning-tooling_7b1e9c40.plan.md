@@ -120,9 +120,23 @@ free pick is chosen, the paid alternative is noted, then it lands additively.
       Settings → Branches: require PR, require checks (`typecheck · test · audit`
       + `Analyze (javascript-typescript)`), block force-push, require linear
       history; (b) commit signing — set up GPG or sigstore/gitsign locally.
-- [ ] **Phase 2 — SAST depth.** Semgrep workflow with the custom invariant rules
-      (+ `p/typescript`); decide CodeQL default→advanced (`security-extended`).
-      Advise first, then gate on high/critical.
+- [x] **Phase 2a — Semgrep SAST.** `.github/workflows/semgrep.yml` +
+      `.semgrep/mound-city.yml` (3 custom invariant rules: browser/Node
+      boundary, engine determinism, safe raw SQL). Two layers: a GATE step
+      (custom rules, `--error`, local — no network dependency) and an ADVISE
+      step (custom + `p/typescript` → SARIF to the Security tab, best-effort).
+      Rules verified with Semgrep 1.165 locally: 0 findings on `src/`+`server/`,
+      fire correctly on fixtures, and the `crypto.randomUUID` *comment* in
+      `ids.ts` does not false-positive (AST-based, not regex).
+      ⚠️ **Manual remaining:** add the `semgrep` check to branch-protection
+      required checks to make the invariant gate actually *block* merges
+      (today it runs and fails-red but isn't required).
+- [ ] **Phase 2b — CodeQL depth (decision).** Keep CodeQL **default setup**
+      (zero-maintenance, already running) or switch to **advanced** for the
+      `security-extended` query suite. Advanced requires *disabling default
+      setup first* (manual UI), then adding a `codeql.yml` — they conflict if
+      stacked. Recommendation: stay on default for now (solo/low-maintenance);
+      revisit if the Security tab looks thin. Confirm Copilot Autofix is on.
 - [ ] **Phase 3 — supply-chain & SBOM.** Socket GitHub App; CycloneDX SBOM
       artifact in CI; `npm audit signatures`; OSV-Scanner step; Dependabot-vs-
       Renovate decision.
