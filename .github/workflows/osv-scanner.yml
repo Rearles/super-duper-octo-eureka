@@ -23,16 +23,20 @@ permissions: {}
 jobs:
   scan-pr:
     if: github.event_name == 'pull_request'
-    uses: "google/osv-scanner/.github/workflows/osv-scanner-reusable-pr.yml@v2.3.8"
+    uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@v2.3.8"
     permissions:
       contents: read
       security-events: write
       actions: read
+    with:
+      fail-on-vuln: false # advisory: surface in the Security tab, don't fail the check
 
   scan:
     if: github.event_name != 'pull_request'
-    uses: "google/osv-scanner/.github/workflows/osv-scanner-reusable.yml@v2.3.8"
+    uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v2.3.8"
     permissions:
       contents: read
       security-events: write
       actions: read
+    with:
+      fail-on-vuln: false # advisory
