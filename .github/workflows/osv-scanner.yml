@@ -1,0 +1,42 @@
+name: OSV-Scanner
+
+# Scans the lockfile against the OSV.dev vulnerability database — broader
+# coverage than the npm advisory DB alone. Results flow to the Security tab
+# (code scanning). Advisory layer: not a required check, so it informs
+# without blocking (per the "gate criticals, advise the rest" posture).
+#
+# Uses Google's maintained reusable workflows (they handle SARIF upload):
+#   - PR runs scan only NEWLY-introduced vulnerabilities (diff-based), so a
+#     pre-existing advisory doesn't re-flag on every PR.
+#   - push/schedule runs scan the whole dependency tree.
+
+on:
+  push:
+    branches: ["develop"]
+  pull_request:
+    branches: ["develop"]
+  schedule:
+    - cron: "40 4 * * 3" # weekly, Wednesday 04:40 UTC
+
+permissions: {}
+
+jobs:
+  scan-pr:
+    if: github.event_name == 'pull_request'
+    uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable-pr.yml@v2.3.8"
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    with:
+      fail-on-vuln: false # advisory: surface in the Security tab, don't fail the check
+
+  scan:
+    if: github.event_name != 'pull_request'
+    uses: "google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v2.3.8"
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    with:
+      fail-on-vuln: false # advisory

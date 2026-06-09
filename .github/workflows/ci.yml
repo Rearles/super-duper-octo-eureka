@@ -52,6 +52,12 @@ jobs:
       - name: Audit all dependencies (informational)
         run: npm audit || true
 
+      # Verifies registry signatures / provenance attestations of the installed
+      # dependency tree (supply-chain integrity). Advisory: unsigned packages
+      # are common, so a failure here informs rather than blocks.
+      - name: Audit dependency signatures (informational)
+        run: npm audit signatures || true
+
   gitleaks:
     name: secret scan
     runs-on: ubuntu-latest
