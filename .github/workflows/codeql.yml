@@ -1,0 +1,65 @@
+name: "CodeQL"
+
+# Advanced CodeQL setup — replaces GitHub's *default* setup to unlock the
+# security-extended query suite (more security queries than the default).
+#
+# IMPORTANT: default setup and this advanced workflow CONFLICT. Default setup
+# MUST be disabled (Settings → Code security → Code scanning → CodeQL → switch
+# to Advanced / disable Default) before this runs, or the analyze step fails
+# with "CodeQL analyses ... cannot be processed when the default setup is
+# enabled." Triggers are scoped to develop so a feature-branch push alone does
+# not run it; it first runs on the PR that introduces it.
+#
+# Job names mirror default setup ("Analyze (javascript-typescript)",
+# "Analyze (actions)") so existing branch-protection required checks keep
+# matching after the switch.
+
+on:
+  push:
+    branches: ["develop"]
+  pull_request:
+    branches: ["develop"]
+  schedule:
+    - cron: "25 3 * * 2" # weekly, Tuesday 03:25 UTC
+
+permissions:
+  contents: read
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write # upload results to code scanning
+      packages: read
+      actions: read
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - language: javascript-typescript
+            build-mode: none
+            queries: security-extended
+          - language: actions
+            build-mode: none
+            queries: "" # default suite (security-extended targets JS/TS here)
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+          queries: ${{ matrix.queries }}
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"

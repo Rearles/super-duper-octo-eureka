@@ -131,12 +131,18 @@ free pick is chosen, the paid alternative is noted, then it lands additively.
       ⚠️ **Manual remaining:** add the `semgrep` check to branch-protection
       required checks to make the invariant gate actually *block* merges
       (today it runs and fails-red but isn't required).
-- [ ] **Phase 2b — CodeQL depth (decision).** Keep CodeQL **default setup**
-      (zero-maintenance, already running) or switch to **advanced** for the
-      `security-extended` query suite. Advanced requires *disabling default
-      setup first* (manual UI), then adding a `codeql.yml` — they conflict if
-      stacked. Recommendation: stay on default for now (solo/low-maintenance);
-      revisit if the Security tab looks thin. Confirm Copilot Autofix is on.
+- [~] **Phase 2b — CodeQL advanced (`security-extended`).** Decision: switch
+      default→advanced. `.github/workflows/codeql.yml` added — matrix over
+      `javascript-typescript` (security-extended) + `actions` (default suite),
+      `build-mode: none`. Job names mirror default setup so branch-protection
+      required checks keep matching. Triggers scoped to `develop` so a
+      feature-branch push doesn't run it (avoids the default-setup conflict);
+      it first runs on the PR, after default setup is disabled.
+      **Ordered manual steps:** (1) disable CodeQL **default setup** (they
+      conflict — analyze fails otherwise); (2) merge the PR; (3) verify
+      branch-protection required checks still match `Analyze (...)`; drop any
+      separate `CodeQL` umbrella check if it was required (advanced doesn't
+      emit it). Confirm Copilot Autofix is on (free, GA).
 - [ ] **Phase 3 — supply-chain & SBOM.** Socket GitHub App; CycloneDX SBOM
       artifact in CI; `npm audit signatures`; OSV-Scanner step; Dependabot-vs-
       Renovate decision.

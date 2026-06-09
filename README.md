@@ -51,7 +51,7 @@ The v2.0 plan set is implemented and tested (**111 tests**):
 | Control | Detail |
 |---|---|
 | Dependency updates | Dependabot — grouped weekly + security auto-fix PRs |
-| SAST | CodeQL (GitHub default setup) |
+| SAST | CodeQL — advanced setup, `security-extended` suite (JS/TS + Actions) |
 | Custom SAST rules | Semgrep — repo invariants gate CI (browser/Node boundary, determinism, safe raw SQL) + `p/typescript` advises |
 | Secret scanning | GitHub secret scanning + push protection |
 | Secret scan (CI) | gitleaks on every push/PR (full history) |
