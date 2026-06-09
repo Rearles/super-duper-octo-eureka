@@ -59,7 +59,7 @@ The v2.0 plan set is implemented and tested (**111 tests**):
 | Vulnerability DB scan | OSV-Scanner → Security tab (OSV.dev breadth; PR-diff + full) |
 | Dependency signatures | `npm audit signatures` in CI (provenance/registry signatures) |
 | SBOM | CycloneDX, per push to `develop` + per release (build artifact) |
-| Malicious-package review | Socket.dev GitHub App — install to enable PR risk comments |
+| Malicious-package review | Socket.dev GitHub App — PR comments on risky installs (typosquats, install scripts, exfil) |
 
 Vulnerability disclosure: [SECURITY.md](SECURITY.md)  
 Full phased plan: [`.plans/research-security-and-pr-scanning-tooling_7b1e9c40.plan.md`](.plans/research-security-and-pr-scanning-tooling_7b1e9c40.plan.md)

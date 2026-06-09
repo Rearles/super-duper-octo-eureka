@@ -145,19 +145,19 @@ free pick is chosen, the paid alternative is noted, then it lands additively.
       (Google's pinned `@v2.3.8` reusable workflows → Security tab; PR-diff +
       full scan; advisory, not a required check). `npm audit signatures` added
       to CI as an informational step. README control table updated.
-- [ ] **Phase 3b — supply-chain decisions (yours).**
-      (1) **Socket.dev GitHub App** — install from the GitHub Marketplace (free
-      tier) to get PR comments flagging risky installs (install scripts,
-      typosquats, exfil) that `npm audit`/CodeQL miss. UI-only; the CLI needs a
-      token (documented, not adopted).
-      (2) **Dependabot vs Renovate** — recommendation: **keep Dependabot**
-      (already grouped + security-updating, native, zero extra surface).
-      Renovate is noted as the heavier alternative (richer auto-merge), not
-      adopted now per the low-maintenance posture.
+- [x] **Phase 3b — supply-chain decisions (yours).**
+      (1) **Socket.dev GitHub App** — decision: **adopt**; the user is
+      installing it from the Marketplace (free tier, UI-only) for PR comments
+      on risky installs (install scripts, typosquats, exfil) that
+      `npm audit`/CodeQL miss. README row marked active.
+      (2) **Dependabot vs Renovate** — decision: **keep Dependabot** (already
+      grouped + security-updating, native, zero extra surface). Renovate
+      considered and declined per the low-maintenance posture.
 - [ ] **Phase 4 — container/runtime (Docker env).** Trivy on the apache/age image
       + compose; note fast-check property tests + a DAST baseline for later.
-- [ ] Add a **"Security" section to `README.md`** linking every control (the
-      portfolio artifact); record an assist-project `security` fact for the baseline.
+- [x] Add a **"Security" section to `README.md`** linking every control (the
+      portfolio artifact) — added in Phase 1, extended through Phase 3; recorded
+      an assist-project `security` baseline fact.
 - [ ] Verify after each phase: CI stays green; only high/critical gate; commit per phase.
 
 ## Definition of done — the "world-class" checklist
