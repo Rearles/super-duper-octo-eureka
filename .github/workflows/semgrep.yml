@@ -1,0 +1,68 @@
+name: Semgrep
+
+# Static analysis (SAST). Two layers, matching the repo's "gate criticals,
+# advise the rest" posture:
+#   1. GATE  — the custom invariant rules in .semgrep/ (local files, no network).
+#              ERROR severity; fails the run on a violation. The codebase is
+#              clean of all three today, so this passes now and catches future
+#              regressions. To make it BLOCK merges, add the "semgrep" check to
+#              branch protection's required checks.
+#   2. ADVISE — the same custom rules plus the registry p/typescript suite,
+#              emitted as SARIF to the Security tab. Best-effort: a registry
+#              outage can't break the gate because it's a separate step.
+
+on:
+  push:
+    branches: ["develop"]
+  pull_request:
+    branches: ["develop"]
+  schedule:
+    - cron: "20 2 * * 1" # weekly, Monday 02:20 UTC — picks up registry updates
+
+permissions:
+  contents: read
+
+concurrency:
+  group: semgrep-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  semgrep:
+    name: semgrep
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write # upload SARIF to code scanning
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Semgrep
+        run: pip install semgrep
+
+      # ADVISE: full ruleset → SARIF for the Security tab. Tolerant of a
+      # registry hiccup (|| true) and of findings (--no-error) — this layer
+      # never fails the build; the gate below does.
+      - name: Semgrep scan (advisory → SARIF)
+        run: |
+          semgrep scan \
+            --config .semgrep/ \
+            --config p/typescript \
+            --sarif --output semgrep.sarif \
+            --no-error --metrics off || true
+
+      - name: Upload SARIF to code scanning
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: semgrep.sarif
+          category: semgrep
+
+      # GATE: custom invariant rules only. Local files, no network dependency.
+      # Fails the run on any violation of the browser/Node boundary,
+      # determinism (Pillar 1), or safe-raw-SQL invariants.
+      - name: Semgrep gate (custom invariants)
+        run: semgrep scan --config .semgrep/ --error --metrics off

@@ -1,0 +1,89 @@
+# Mound City custom Semgrep rules — encode the repo's hard invariants.
+# These are ERROR severity and gate CI (the codebase is clean of all three
+# today, so they pass now and catch future regressions). AST-based patterns,
+# not regex, so comments/strings mentioning these APIs don't false-positive.
+#
+# Verified locally: zero findings against src/ and server/ on the develop tip.
+
+rules:
+  # ── Invariant 1: browser/Node boundary ──────────────────────────────────
+  # src/ is the browser engine and must NEVER import Prisma. Prisma is
+  # Node-only; all DB access lives in server/. The browser reaches the server
+  # over HTTP via src/registryClient.ts. (CLAUDE.md, "Stack + conventions")
+  - id: browser-engine-no-prisma-import
+    languages: [typescript]
+    severity: ERROR
+    message: >-
+      src/ (the browser engine) must not import Prisma ('$MOD'). Prisma is
+      Node-only — keep all DB access in server/ and reach it over HTTP via
+      src/registryClient.ts.
+    metadata:
+      category: security
+      confidence: HIGH
+      subcategory: [audit]
+      references:
+        - https://github.com/Rearles/super-duper-octo-eureka/blob/develop/CLAUDE.md
+    paths:
+      include:
+        - "/src/"
+    patterns:
+      - pattern-either:
+          - pattern: import $X from "$MOD"
+          - pattern: import * as $X from "$MOD"
+          - pattern: import { ... } from "$MOD"
+          - pattern: import "$MOD"
+          - pattern: require("$MOD")
+          - pattern: import("$MOD")
+      - metavariable-regex:
+          metavariable: $MOD
+          regex: ^(@prisma/.*|.*generated/prisma.*)$
+
+  # ── Invariant 2: determinism (Pillar 1) ─────────────────────────────────
+  # World content is seed-derived (src/engine/ids.ts, rng.ts). Non-seeded
+  # sources of entropy or wall-clock time break reproducibility, so they are
+  # forbidden in the engine. Use the seeded rng instead.
+  - id: engine-determinism-no-entropy
+    languages: [typescript]
+    severity: ERROR
+    message: >-
+      Non-deterministic source in src/engine — world content must be
+      seed-derived (Pillar 1). Use the seeded rng (src/engine/rng.ts) / id
+      helpers (src/engine/ids.ts) instead of crypto.randomUUID, randomUUID,
+      Math.random, Date.now, or new Date.
+    metadata:
+      category: correctness
+      confidence: HIGH
+      subcategory: [audit]
+    paths:
+      include:
+        - "/src/engine/"
+    pattern-either:
+      - pattern: crypto.randomUUID(...)
+      - pattern: $X.crypto.randomUUID(...)
+      - pattern: randomUUID(...)
+      - pattern: Math.random(...)
+      - pattern: Date.now(...)
+      - pattern: new Date(...)
+
+  # ── Invariant 3: safe raw SQL ───────────────────────────────────────────
+  # The server uses Prisma $queryRaw / $executeRaw tagged templates (which
+  # parameterize input). The *Unsafe variants interpolate strings directly
+  # and invite SQL injection — never use them.
+  - id: no-prisma-raw-unsafe
+    languages: [typescript]
+    severity: ERROR
+    message: >-
+      Avoid $queryRawUnsafe / $executeRawUnsafe — they interpolate strings
+      and risk SQL injection. Use the $queryRaw / $executeRaw tagged-template
+      forms, which parameterize input.
+    metadata:
+      category: security
+      confidence: HIGH
+      cwe:
+        - "CWE-89: Improper Neutralization of Special Elements used in an SQL Command"
+      owasp:
+        - A03:2021 - Injection
+      subcategory: [vuln]
+    pattern-either:
+      - pattern: $X.$queryRawUnsafe(...)
+      - pattern: $X.$executeRawUnsafe(...)
